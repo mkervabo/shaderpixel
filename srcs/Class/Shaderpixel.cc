@@ -21,7 +21,6 @@ Shaderpixel::Shaderpixel()
 
 
 void				Shaderpixel::setMouseLastPos(Vec2 pos)
-
 {
 	this->mouseLastPos = pos;
 }

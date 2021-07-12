@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+         #
+#    By: gperez <gperez@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/06 13:36:11 by gperez            #+#    #+#              #
-#    Updated: 2021/07/12 11:15:12 by maiwenn          ###   ########.fr        #
+#    Updated: 2021/07/12 22:00:14 by gperez           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -54,12 +54,9 @@ RED = \033[38;5;203m
 COLOR1 = \033[38;5;75m
 COLOR2 = \033[38;5;178m
 
-LIB_L = libs/libft/libft.a
-
 LIB_G = libs/glfw_mac/lib-macos/libglfw3.a 
 
-LIBS_H =	libs/libft/includes \
-			libs/includes/ \
+LIBS_H =	libs/includes/ \
 			libs/glfw_mac/include/GLFW \
 			libs/glad/include/glad \
 			libs/ \
@@ -77,10 +74,7 @@ OBJ = $(SRC:.cc=.o)
 
 all : $(NAME)
 
-$(LIB_L) :
-	@make -C libs/libft
-
-$(NAME) : $(LIB_L) $(OBJ)
+$(NAME) : $(OBJ)
 	@gcc $(FLAG) -o srcs/glad.o -c libs/glad/src/glad.c
 	@g++ $(FLAG) $(FLAGCPP) $(FLAG_OPENCL) $(FLAG_OPENGL) $(LIB_G) srcs/glad.o $^ -o $(NAME)
 	@printf "$(BOLD)$(COLOR1)%20s : $(RS_BL)$(RS_BO)$(GREEN)succesfuly made!$(NC)%20s\n" $(NAME)
@@ -91,12 +85,10 @@ $(NAME) : $(LIB_L) $(OBJ)
 	@printf "\r"
 
 clean :
-	@make -C libs/libft clean
 	@/bin/rm -rf srcs/*.o
 	@/bin/rm -rf srcs/Class/*.o
 
 fclean : clean
 	@/bin/rm -rf $(NAME)
-	@/bin/rm -rf $(LIB_L)
 
 re : fclean all

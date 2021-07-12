@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cc                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 15:29:41 by gperez            #+#    #+#             */
-/*   Updated: 2021/07/12 13:40:32 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/07/12 21:11:01 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int		main(void)
 		std::cout << e.what() << "\n";
 		return (1);
 	}
-	if (shader.loadShader((char*)VERTEX, (char*)FRAGMENT))
+	if (shader.loadShader(VERTEX, FRAGMENT))
 		return (1);
 	cam.setProjMatrix(perspective(FOV, RATIO, 0.1f, (float)RENDER_DIST)); // Erreur dans la perspective
 	cam.translate(0.0, 2.5, 10);
