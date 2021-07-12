@@ -133,7 +133,7 @@ void	Shaderpixel::loadVBO()
 
 	glGenBuffers(1, &this->ebo);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->ebo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(g_ebo), NULL, GL_DYNAMIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(g_ebo), &g_ebo[0], GL_DYNAMIC_DRAW);
 
 	int location = 0;
 	glEnableVertexAttribArray(location);
