@@ -13,19 +13,13 @@
 #ifndef __SHADERPIXEL_HPP__
 # define __SHADERPIXEL_HPP__
 
-extern "C"
-{
-	# include "glad.h" // Implementation OpenGl
-}
-
 # include <iostream>
-# include "glfw3.h" // Load fenetre
 # include "Error.hpp"
-# include "Camera.hpp"
-# include "Shader.hpp"
 # include <queue>
 # include "Vec2.hpp"
-#include "TimeMs.hpp"
+# include "TimeMs.hpp"
+# include "Mesh.hpp"
+# include "glfw3.h" // Load fenetre
 
 # define WIDTH 1024
 # define HEIGHT 768
@@ -40,48 +34,24 @@ extern "C"
 enum	e_vsync {VSYNC_OFF, VSYNC_ON};
 enum	e_stateKey {KEY_PRESS, KEY_DONE, KEY_RELEASE};
 
-
-
-static Vec3 g_vbo[8] = {
-	{Vec3(-0.5, 0.5, 0.5)},
-	{Vec3(-0.5, -0.5, 0.5)},
-	{Vec3(0.5, -0.5, 0.5)},
-	{Vec3(0.5, 0.5, 0.5)},
-	{Vec3(-0.5, 0.5, -0.5)},
-	{Vec3(-0.5, -0.5, -0.5)},
-	{Vec3(0.5, -0.5, -0.5)},
-	{Vec3(0.5, 0.5, -0.5)}
-};
-
-static unsigned int g_ebo[] = {
-	0, 1, 2,		0, 3, 2,
-	3, 2, 6,		3, 7, 6,
-	7, 6, 5,		7, 4, 5,
-	4, 5, 1,		4, 0, 1,
-	4, 0, 3,		4, 7, 3,
-	1, 5, 6,		1, 2, 6};
-
 class Shaderpixel
 {
 	private:
 		GLFWwindow					*window;
 		Camera						cam;
-		Shader						shader;
 		Vec2						mouseLastPos;
 		bool						firstMoove;
 		char						keys[GLFW_KEY_END];
 		std::queue<char>			queue;
 		void						setKey(unsigned int key, char state);
 		void						inputKey(unsigned int key);
-		unsigned int							vbo;
-		unsigned int							vao;
-		unsigned int							ebo;
-		TimeMs						time;				
+		Mesh						mesh;
+		// TimeMs						time;
 	public:
 		Shaderpixel();
 		void						initWindow(void);
-		void						init(void);
-		void						update(void);	
+		bool						init(void);
+		void						update(Camera &cam);	
 		void						checkKeys(void);
 		void 						loadVBO();
 
@@ -89,9 +59,6 @@ class Shaderpixel
 		unsigned int				getState(unsigned int k);
 		GLFWwindow					*getWindow(void);
 		Camera						&getCam(void);
-		Shader						&getShader(void);
-		unsigned int				getVao(void);
-		unsigned int				getBuffer(unsigned int b);
 		Vec2						getMouseLastPos(void);
 
 		void						setMouseLastPos(Vec2 pos);

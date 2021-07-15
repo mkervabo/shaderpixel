@@ -47,24 +47,6 @@ Camera				&Shaderpixel::getCam(void)
 	return (this->cam);
 }
 
-Shader				&Shaderpixel::getShader(void)
-{
-	return (this->shader);
-}
-
-unsigned int		Shaderpixel::getVao(void)
-{
-	return (this->vao);
-}
-
-unsigned int		Shaderpixel::getBuffer(unsigned int b)
-{
-	if (b == 0)
-		return (this->vbo);
-	return (this->vao);
-}
-
-
 void				Shaderpixel::setFirst(bool isFirst)
 {
 	this->firstMoove = isFirst;
@@ -121,39 +103,18 @@ void				Shaderpixel::initWindow(void)
 	glfwSwapInterval(VSYNC_OFF);
 }
 
-void	Shaderpixel::loadVBO()
+bool				Shaderpixel::init(void)
 {
-	glGenVertexArrays(1, &this->vao);
-	glBindVertexArray(this->vao);
-
-	glGenBuffers(1, &this->vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vbo), &g_vbo[0], GL_DYNAMIC_DRAW);
-
-	glGenBuffers(1, &this->ebo);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->ebo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(g_ebo), &g_ebo[0], GL_DYNAMIC_DRAW);
-
-	int location = 0;
-	glEnableVertexAttribArray(location);
-	glVertexAttribPointer(location, 3, GL_FLOAT, GL_FALSE, sizeof(Vec3), 0);
-
-	
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	if (this->mesh.loadMesh(PATH_TREE))
+		return (1);
+	// this->time.setTime();
+	return (0);
 }
 
-void				Shaderpixel::init(void)
+void				Shaderpixel::update(Camera &cam)
 {
-	loadVBO();
-	this->time.setTime();
-}
-
-void				Shaderpixel::update(void)
-{
-	if (this->time.getTimeSeconds() > FRAME_RATE)
-	{
-		this->time.setTime();
-	}
+	this->mesh.render(cam);
+	// this->time.setTime();
 }
 
 void				Shaderpixel::inputKey(unsigned int key)
@@ -207,11 +168,7 @@ bool				Shaderpixel::isFirst(void)
 
 Shaderpixel::~Shaderpixel()
 {
-	glDeleteBuffers(1, &this->vbo);
-	glDeleteBuffers(1, &this->ebo);
-	glDeleteVertexArrays(1, &this->vao);
-
-	this->shader.freeProgram();
+	this->mesh.clear();
 	glfwDestroyWindow(this->window);
 	glfwTerminate();
 }

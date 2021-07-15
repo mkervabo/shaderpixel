@@ -6,21 +6,17 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/25 17:47:37 by gperez            #+#    #+#             */
-/*   Updated: 2021/07/12 22:00:19 by gperez           ###   ########.fr       */
+/*   Updated: 2021/07/14 15:57:21 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef _SHADER_HPP_
 # define _SHADER_HPP_
 
-extern "C"
-{
-	# include "glad.h" // Implementation OpenGl
-}
-
-#include <iostream>
-#include <string>
-#include <fstream>
+# include <iostream>
+# include <string>
+# include <fstream>
+# include "MeshEntry.hpp"
 
 # define VERTEX "shader/vertex.glsl"
 # define FRAGMENT "shader/fragment.glsl"

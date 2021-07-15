@@ -64,6 +64,23 @@
 		"vector": "cpp",
 		"fstream": "cpp",
 		"iomanip": "cpp",
-		"stack": "cpp"
+		"stack": "cpp",
+		"__tree": "cpp",
+		"hash_map": "cpp",
+		"hash_set": "cpp",
+		"filesystem": "cpp",
+		"forward_list": "cpp",
+		"list": "cpp",
+		"map": "cpp",
+		"set": "cpp",
+		"unordered_set": "cpp",
+		"cinttypes": "cpp",
+		"codecvt": "cpp",
+		"compare": "cpp",
+		"numeric": "cpp",
+		"random": "cpp",
+		"regex": "cpp",
+		"thread": "cpp",
+		"glad.h": "c"
 	}
 }

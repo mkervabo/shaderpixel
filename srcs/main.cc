@@ -6,31 +6,33 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 15:29:41 by gperez            #+#    #+#             */
-/*   Updated: 2021/07/12 21:11:01 by gperez           ###   ########.fr       */
+/*   Updated: 2021/07/15 13:05:56 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "Shaderpixel.hpp"
 
-void	display(Shaderpixel &env, Shader &shader)
+// void	display(Shaderpixel &env, Shader &shader)
+// {
+// 	glClearColor(0.8f, 0.8f, 0.8f, 1.0f);
+//     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+// 	glBindVertexArray(env.getVao());
+// 	glUseProgram(shader.getProgram());
+// 	glUniformMatrix4fv(glGetUniformLocation(shader.getProgram(),
+// 		"view"), 1, GL_FALSE, &(env.getCam().getMatrix(true)[0][0]));
+// 	glUniformMatrix4fv(glGetUniformLocation(shader.getProgram(),
+// 		"projection"), 1, GL_FALSE,&(env.getCam().getProjMatrix()[0][0]));
+// 	glDrawElements(GL_TRIANGLES, 6 * (2 * 3), GL_UNSIGNED_INT, NULL); // NbMeshs * NbFaces * NbPoints (EBO)
+// 	glBindVertexArray(0);
+// }
+
+void	exec(Shaderpixel &env)
 {
 	glClearColor(0.8f, 0.8f, 0.8f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glBindVertexArray(env.getVao());
-	glUseProgram(shader.getProgram());
-	glUniformMatrix4fv(glGetUniformLocation(shader.getProgram(),
-		"view"), 1, GL_FALSE, &(env.getCam().getMatrix(true)[0][0]));
-	glUniformMatrix4fv(glGetUniformLocation(shader.getProgram(),
-		"projection"), 1, GL_FALSE,&(env.getCam().getProjMatrix()[0][0]));
-	glDrawElements(GL_TRIANGLES, 6 * (2 * 3), GL_UNSIGNED_INT, NULL); // NbMeshs * NbFaces * NbPoints (EBO)
-	glBindVertexArray(0);
-}
-
-void	exec(Shaderpixel &env, Shader &shader)
-{
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	env.getKeys();
 	env.checkKeys();
-	display(env, shader);
+	env.update(env.getCam());
 	glfwSwapBuffers(env.getWindow());
 	glfwPollEvents();
 }
@@ -38,8 +40,7 @@ void	exec(Shaderpixel &env, Shader &shader)
 int		main(void)
 {
 	Shaderpixel			env;
-	Shader			&shader = env.getShader();
-	Camera			&cam = env.getCam();
+	Camera				&cam = env.getCam();
 
 	// Init //
 	try{
@@ -49,19 +50,15 @@ int		main(void)
 		std::cout << e.what() << "\n";
 		return (1);
 	}
-	if (shader.loadShader(VERTEX, FRAGMENT))
-		return (1);
 	cam.setProjMatrix(perspective(FOV, RATIO, 0.1f, (float)RENDER_DIST)); // Erreur dans la perspective
 	cam.translate(0.0, 2.5, 10);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	try {
-		env.init();}
-	catch (Error const &e)
+	if (env.init())
 	{
-		std::cout << e.what() << std::endl;
+		std::cout << "Error in the initialization\n";
 		return (1);
 	}
 
@@ -69,7 +66,7 @@ int		main(void)
 	while(!glfwWindowShouldClose(env.getWindow()))
 	{
 		try {
-			exec(env, shader);}
+			exec(env);}
 		catch (Error const &e)
 		{
 			std::cout << e.what() << std::endl;
