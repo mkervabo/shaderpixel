@@ -6,7 +6,7 @@
 #    By: gperez <gperez@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/06 13:36:11 by gperez            #+#    #+#              #
-#    Updated: 2021/07/15 15:22:31 by gperez           ###   ########.fr        #
+#    Updated: 2021/07/15 15:26:23 by gperez           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -82,7 +82,7 @@ INC =	includes/Shaderpixel.hpp \
 OBJ = $(SRC:.cc=.o)
 
 COND1 := $(shell [ -f libs/assimp/bin/assimp ] && echo 1 || echo 0)
-COND_CLONE_ASSIMP := $(shell [ -f libs/assimp ] && echo 1 || echo 0)
+COND_CLONE_ASSIMP := $(shell [ -d libs/assimp ] && echo 1 || echo 0)
 COND2 := $(shell [ -f libs/assimp/bin/unit ] && echo 1 || echo 0)
 
 all : assimp $(NAME)
