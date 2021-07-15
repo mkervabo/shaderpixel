@@ -6,7 +6,7 @@
 #    By: gperez <gperez@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/06 13:36:11 by gperez            #+#    #+#              #
-#    Updated: 2021/07/14 17:00:59 by gperez           ###   ########.fr        #
+#    Updated: 2021/07/15 15:19:19 by gperez           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -84,7 +84,7 @@ OBJ = $(SRC:.cc=.o)
 COND1 := $(shell [ -f libs/assimp/bin/assimp ] && echo 1 || echo 0)
 COND2 := $(shell [ -f libs/assimp/bin/unit ] && echo 1 || echo 0)
 
-all : $(NAME) assimp
+all : assimp $(NAME)
 
 $(NAME) : $(OBJ)
 	@gcc $(FLAG) -o srcs/glad.o -c libs/glad/src/glad.c
