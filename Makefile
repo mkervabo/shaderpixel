@@ -6,7 +6,7 @@
 #    By: gperez <gperez@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/06 13:36:11 by gperez            #+#    #+#              #
-#    Updated: 2021/07/15 15:19:19 by gperez           ###   ########.fr        #
+#    Updated: 2021/07/15 15:22:31 by gperez           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -82,6 +82,7 @@ INC =	includes/Shaderpixel.hpp \
 OBJ = $(SRC:.cc=.o)
 
 COND1 := $(shell [ -f libs/assimp/bin/assimp ] && echo 1 || echo 0)
+COND_CLONE_ASSIMP := $(shell [ -f libs/assimp ] && echo 1 || echo 0)
 COND2 := $(shell [ -f libs/assimp/bin/unit ] && echo 1 || echo 0)
 
 all : assimp $(NAME)
@@ -93,12 +94,18 @@ $(NAME) : $(OBJ)
 
 assimp :
 ifeq ($(COND1), 0)
+ifeq ($COND_CLONE_ASSIMP, 1)
+	rm -rf libs/assimp
+endif
 	git clone https://github.com/assimp/assimp.git libs/assimp
 	cmake libs/assimp/CMakeLists.txt
 	cmake --build libs/assimp/.
 endif
 ifeq ($(COND2), 0)
 ifeq ($(COND1), 1)
+ifeq ($COND_CLONE_ASSIMP, 1)
+	rm -rf libs/assimp
+endif
 	git clone https://github.com/assimp/assimp.git libs/assimp
 	cmake libs/assimp/CMakeLists.txt
 	cmake --build libs/assimp/.
