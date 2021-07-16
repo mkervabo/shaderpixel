@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/14 12:16:17 by gperez            #+#    #+#             */
-/*   Updated: 2021/07/15 12:28:12 by gperez           ###   ########.fr       */
+/*   Updated: 2021/07/15 16:59:30 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,12 @@ extern "C"
 # include "Vec2.hpp"
 # include <vector>
 
-struct	t_vertex
+typedef struct	s_vertex
 {
 	Vec3		pos;
 	Vec2		text;
 	Vec3		norm;
-}				;
+}				t_vertex;
 
 class MeshEntry {
 	public:
@@ -41,6 +41,7 @@ class MeshEntry {
 		GLuint			getVbo(void);
 		GLuint			getEbo(void);
 		unsigned int	getNumIndices(void);
+		unsigned int	getMatIdx(void);
 	private:
 		GLuint			vao;
 		GLuint			vbo;

@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 16:57:27 by gperez            #+#    #+#             */
-/*   Updated: 2021/07/15 13:47:31 by gperez           ###   ########.fr       */
+/*   Updated: 2021/07/16 13:52:23 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,47 +51,49 @@ void	Mesh::initMesh(unsigned int Index, const aiMesh* paiMesh)
 	m_Entries[Index].init(vertices, indices);
 }
 
-bool Mesh::initMaterials(const aiScene* pScene, const std::string& filename)
+bool Mesh::initMaterials(const aiScene* pScene, const t_objPath& path)
 {
 	bool	ret = false;
 	(void)pScene;
-	(void)filename;
 
-	// for (unsigned int i = 0 ; i < pScene->mNumMaterials ; i++)
-	// {
-	// 	const aiMaterial* pMaterial = pScene->mMaterials[i];
-	// 	m_Textures[i] = NULL;
-	// 	if (pMaterial->GetTextureCount(aiTextureType_DIFFUSE) > 0)
-	// 	{
-	// 		aiString Path;
-	// 		if (pMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &Path,
-	// 			NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS)
-	// 		{
-	// 			std::string Dir = PATH_TREE_TXT1;
-	// 			std::string FullPath = Dir + "/" + Path.data;
-	// 			m_Textures[i] = new Texture(GL_TEXTURE_2D, FullPath.c_str());
-
-	// 			if (!m_Textures[i]->Load())
-	// 			{
-	// 				printf("Error loading texture '%s'\n", FullPath.c_str());
-	// 				delete m_Textures[i];
-	// 				m_Textures[i] = NULL;
-	// 				ret = false;
-	// 			}
-	// 		}
-	// 	}
-	// 	if (!m_Textures[i])
-	// 	{
-	// 		m_Textures[i] = new Texture(GL_TEXTURE_2D, "../Content/white.png");
-	// 		ret = m_Textures[i]->Load();
-	// 	}
-	// }
+	std::cout << "Number Materials " << pScene->mNumMaterials << "\n";
+	for (unsigned int i = 0 ; i < pScene->mNumMaterials ; i++)
+	{
+		const aiMaterial* pMaterial = pScene->mMaterials[i];
+		m_Textures[i] = NULL;
+		// for (int i = 0; i < 18; i++)
+		// 	std::cout << i << " materials " << pMaterial->GetTextureCount((aiTextureType)i) << "\n";
+		// std::cout << "\n";
+		if (pMaterial->GetTextureCount(aiTextureType_DIFFUSE) > 0)
+		{
+			aiString pathFromAssimp;
+			if (pMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &pathFromAssimp,
+				NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS)
+			{
+				std::string Dir = path.textPath;
+				std::string fullPath = Dir + pathFromAssimp.data;
+				m_Textures[i] = new Texture();
+				std::cout << fullPath << "\n";
+				if (m_Textures[i]->load(GL_TEXTURE_2D, (char*)fullPath.c_str()))
+				{
+					printf("Error loading texture '%s'\n", fullPath.c_str());
+					delete m_Textures[i];
+					m_Textures[i] = NULL;
+					ret = true;
+				}
+			}
+		}
+		if (!m_Textures[i])
+		{
+			m_Textures[i] = new Texture();
+			ret = m_Textures[i]->load(GL_TEXTURE_2D, (char*)PATH_DEFAULT_TEXTURE);
+		}
+	}
 	return (ret);
 }
 
-bool	Mesh::initFromScene(const aiScene* pScene, const std::string& filename)
+bool	Mesh::initFromScene(const aiScene* pScene, const t_objPath& path)
 {
-	(void)filename;
 	this->m_Entries.resize(pScene->mNumMeshes);
 	this->m_Textures.resize(pScene->mNumMaterials);
 
@@ -102,10 +104,10 @@ bool	Mesh::initFromScene(const aiScene* pScene, const std::string& filename)
 		initMesh(i, paiMesh);
 	}
 
-	return (initMaterials(pScene, filename));
+	return (initMaterials(pScene, path));
 }
 
-bool	Mesh::loadMesh(std::string pathMesh, std::string pathVertex, std::string pathFragment)
+bool	Mesh::loadMesh(t_objPath pathMesh, std::string pathVertex, std::string pathFragment)
 {
 	bool				ret = false;
 	Assimp::Importer	importer;
@@ -113,19 +115,19 @@ bool	Mesh::loadMesh(std::string pathMesh, std::string pathVertex, std::string pa
 	this->clear();
 	if (this->shader.loadShader(pathVertex, pathFragment))
 		return (true);
-	const aiScene* pScene = importer.ReadFile(pathMesh.c_str(),
+	const aiScene* pScene = importer.ReadFile(pathMesh.path.c_str(),
 		aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs);
 	if (pScene)
 		ret = initFromScene(pScene, pathMesh);
 	else
 	{
-		printf("Error parsing '%s': '%s'\n", pathMesh.c_str(), importer.GetErrorString());
+		printf("Error parsing '%s': '%s'\n", pathMesh.path.c_str(), importer.GetErrorString());
 		return (true);
 	}
 	return (ret);
 }
 
-bool	Mesh::loadMesh(std::string pathMesh)
+bool	Mesh::loadMesh(t_objPath pathMesh)
 {
 	bool			ret = this->loadMesh(pathMesh, VERTEX, FRAGMENT);
 	return (ret);
@@ -141,10 +143,9 @@ void	Mesh::render(Camera &cam)
 		glBindVertexArray(this->m_Entries[i].getVao());
  		glUseProgram(this->shader.getProgram());
 
-		// glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->m_Entries[i].getEbo());
-		// const unsigned int materialIndex = this->m_Entries[i].MaterialIndex;
-		// if (materialIndex < m_Textures.size() && m_Textures[materialIndex])
-		// 	m_Textures[materialIndex]->Bind(GL_TEXTURE0);
+		const unsigned int materialIndex = this->m_Entries[i].getMatIdx();
+		if (materialIndex < m_Textures.size() && m_Textures[materialIndex])
+			m_Textures[materialIndex]->bind(GL_TEXTURE0);
 
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
 			"model"), 1, GL_FALSE, &(this->mat.getMatrix(true)[0][0]));
@@ -160,10 +161,23 @@ void	Mesh::render(Camera &cam)
 	// glDisableVertexAttribArray(2);
 }
 
+void	Mesh::clearTextures(void)
+{
+	for (unsigned int i = 0; i < this->m_Textures.size(); i++)
+	{
+		if (this->m_Textures[i])
+		{
+			delete this->m_Textures[i];
+			this->m_Textures[i] = NULL;
+		}
+	}
+}
+
 void	Mesh::clear(void)
 {
 	this->shader.freeProgram();
 	this->m_Entries.clear();
+	this->clearTextures();
 	this->m_Textures.clear();
 	// Rajouter le reste
 }

@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/14 12:23:21 by gperez            #+#    #+#             */
-/*   Updated: 2021/07/15 12:29:54 by gperez           ###   ########.fr       */
+/*   Updated: 2021/07/15 17:00:10 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,11 @@ GLuint			MeshEntry::getEbo(void)
 unsigned int	MeshEntry::getNumIndices(void)
 {
 	return (this->numIndices);
+}
+
+unsigned int	MeshEntry::getMatIdx(void)
+{
+	return (this->materialIndex);
 }
 
 MeshEntry::~MeshEntry()

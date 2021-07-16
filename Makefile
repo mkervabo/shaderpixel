@@ -6,7 +6,7 @@
 #    By: gperez <gperez@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/06 13:36:11 by gperez            #+#    #+#              #
-#    Updated: 2021/07/15 15:26:23 by gperez           ###   ########.fr        #
+#    Updated: 2021/07/15 15:55:19 by gperez           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,6 +32,7 @@ SRC =	srcs/main.cc \
 		srcs/Class/TimeMs.cc \
 		srcs/Class/Mesh.cc \
 		srcs/Class/MeshEntry.cc \
+		srcs/Class/Texture.cc \
 
 NC = \033[0m
 BOLD =\033[1m
@@ -66,6 +67,7 @@ LIBS_H =	libs/includes/ \
 			libs/glfw_mac/include/GLFW \
 			libs/glad/include/glad \
 			libs/ \
+			libs/stb/ \
 			includes/ \
 			libs/assimp/include/assimp/ \
 
@@ -78,6 +80,7 @@ INC =	includes/Shaderpixel.hpp \
 		includes/TimeMs.hpp \
 		includes/Mesh.hpp \
 		includes/MeshEntry.hpp \
+		includes/Texture.hpp \
 
 OBJ = $(SRC:.cc=.o)
 

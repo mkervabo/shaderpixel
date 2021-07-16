@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 17:01:05 by gperez            #+#    #+#             */
-/*   Updated: 2021/07/15 13:44:49 by gperez           ###   ########.fr       */
+/*   Updated: 2021/07/16 13:45:11 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,12 @@
 # include "Shader.hpp"
 # include "Mat.hpp"
 
-# define PATH_DEFAULT_TEXTURE "objToLoad/white.png"
-# define PATH_TREE "objToLoad/tree/tree.3ds"
-# define PATH_TREE_TXT1 "objToLoad/tree/"
-
 class Mesh
 {
 	public:
 		Mesh();
-		bool			loadMesh(std::string pathMesh);
-		bool			loadMesh(std::string pathMesh, std::string pathVertex, std::string pathFragment);
+		bool			loadMesh(t_objPath pathMesh);
+		bool			loadMesh(t_objPath pathMesh, std::string pathVertex, std::string pathFragment);
 		void			render(Camera &cam);
 		void			clear(void);
 		~Mesh();
@@ -40,12 +36,13 @@ class Mesh
 		// unsigned int	id;
 		Shader			shader;
 		Mat				mat;
-		bool			initFromScene(const aiScene* pScene, const std::string& filename);
+		bool			initFromScene(const aiScene* pScene, const t_objPath& path);
 		void			initMesh(unsigned int Index, const aiMesh* paiMesh);
-		bool			initMaterials(const aiScene* pScene, const std::string& filename);
+		bool			initMaterials(const aiScene* pScene, const t_objPath& path);
+		void			clearTextures(void);
 
 		std::vector<MeshEntry> m_Entries;
-		std::vector<MeshEntry> m_Textures;
+		std::vector<Texture*> m_Textures;
 };
 
 #endif
