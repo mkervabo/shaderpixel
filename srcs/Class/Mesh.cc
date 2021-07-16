@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 16:57:27 by gperez            #+#    #+#             */
-/*   Updated: 2021/07/16 13:52:23 by gperez           ###   ########.fr       */
+/*   Updated: 2021/07/16 14:22:35 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ Mesh::Mesh()
 	this->mat.rotate(Vec3(-90., 0., 0.));
 }
 
-void	Mesh::initMesh(unsigned int Index, const aiMesh* paiMesh)
+void	Mesh::initMesh(unsigned int Index, const aiMesh* paiMesh) // Remplit un MeshEntry avec des vertices et des faces et l'ajoute au vector m_Entries
 {
 	m_Entries[Index].setMatIdx(paiMesh->mMaterialIndex);
 
@@ -51,7 +51,7 @@ void	Mesh::initMesh(unsigned int Index, const aiMesh* paiMesh)
 	m_Entries[Index].init(vertices, indices);
 }
 
-bool Mesh::initMaterials(const aiScene* pScene, const t_objPath& path)
+bool Mesh::initMaterials(const aiScene* pScene, const t_objPath& path) // Genere les textures de l'objet et les ajoutes au vector m_Textures
 {
 	bool	ret = false;
 	(void)pScene;
@@ -67,14 +67,14 @@ bool Mesh::initMaterials(const aiScene* pScene, const t_objPath& path)
 		if (pMaterial->GetTextureCount(aiTextureType_DIFFUSE) > 0)
 		{
 			aiString pathFromAssimp;
-			if (pMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &pathFromAssimp,
+			if (pMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &pathFromAssimp, // On recupere le chemin relatif de la texture
 				NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS)
 			{
 				std::string Dir = path.textPath;
-				std::string fullPath = Dir + pathFromAssimp.data;
+				std::string fullPath = Dir + pathFromAssimp.data; // On ajoute le chemin relatif afin de le transformer en chemin absolue
 				m_Textures[i] = new Texture();
 				std::cout << fullPath << "\n";
-				if (m_Textures[i]->load(GL_TEXTURE_2D, (char*)fullPath.c_str()))
+				if (m_Textures[i]->load(GL_TEXTURE_2D, (char*)fullPath.c_str())) // On charge la texture et la genere pour openGL
 				{
 					printf("Error loading texture '%s'\n", fullPath.c_str());
 					delete m_Textures[i];
@@ -92,9 +92,9 @@ bool Mesh::initMaterials(const aiScene* pScene, const t_objPath& path)
 	return (ret);
 }
 
-bool	Mesh::initFromScene(const aiScene* pScene, const t_objPath& path)
+bool	Mesh::initFromScene(const aiScene* pScene, const t_objPath& path) // Remplit notre classe Mesh
 {
-	this->m_Entries.resize(pScene->mNumMeshes);
+	this->m_Entries.resize(pScene->mNumMeshes); // Les differents mesh qui composent l'objet
 	this->m_Textures.resize(pScene->mNumMaterials);
 
 	// Initialise les maillages de la scène, un par un
@@ -115,7 +115,7 @@ bool	Mesh::loadMesh(t_objPath pathMesh, std::string pathVertex, std::string path
 	this->clear();
 	if (this->shader.loadShader(pathVertex, pathFragment))
 		return (true);
-	const aiScene* pScene = importer.ReadFile(pathMesh.path.c_str(),
+	const aiScene* pScene = importer.ReadFile(pathMesh.path.c_str(), // On lit le fichier et on le stock dans une scene avec les faces triangulé.
 		aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs);
 	if (pScene)
 		ret = initFromScene(pScene, pathMesh);
@@ -129,11 +129,10 @@ bool	Mesh::loadMesh(t_objPath pathMesh, std::string pathVertex, std::string path
 
 bool	Mesh::loadMesh(t_objPath pathMesh)
 {
-	bool			ret = this->loadMesh(pathMesh, VERTEX, FRAGMENT);
-	return (ret);
+	return (this->loadMesh(pathMesh, VERTEX, FRAGMENT));
 }
 
-void	Mesh::render(Camera &cam)
+void	Mesh::render(Camera &cam) // On parcours tous les mesh de notre objet et on l'affiche avec la texture qui lui est lier
 {
 	// glEnableVertexAttribArray(0);
 	// glEnableVertexAttribArray(1);
@@ -144,8 +143,8 @@ void	Mesh::render(Camera &cam)
  		glUseProgram(this->shader.getProgram());
 
 		const unsigned int materialIndex = this->m_Entries[i].getMatIdx();
-		if (materialIndex < m_Textures.size() && m_Textures[materialIndex])
-			m_Textures[materialIndex]->bind(GL_TEXTURE0);
+		if (materialIndex < this->m_Textures.size() && this->m_Textures[materialIndex])
+			this->m_Textures[materialIndex]->bind(GL_TEXTURE0);
 
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
 			"model"), 1, GL_FALSE, &(this->mat.getMatrix(true)[0][0]));

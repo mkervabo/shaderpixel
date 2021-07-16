@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 17:01:05 by gperez            #+#    #+#             */
-/*   Updated: 2021/07/16 13:45:11 by gperez           ###   ########.fr       */
+/*   Updated: 2021/07/16 14:19:53 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ class Mesh
 		bool			initMaterials(const aiScene* pScene, const t_objPath& path);
 		void			clearTextures(void);
 
-		std::vector<MeshEntry> m_Entries;
-		std::vector<Texture*> m_Textures;
+		std::vector<MeshEntry>	m_Entries;
+		std::vector<Texture*>	m_Textures;
 };
 
 #endif
