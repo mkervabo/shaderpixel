@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gperez <gperez@student.42.fr>              +#+  +:+       +#+         #
+#    By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/06 13:36:11 by gperez            #+#    #+#              #
-#    Updated: 2021/07/15 15:55:19 by gperez           ###   ########.fr        #
+#    Updated: 2021/07/19 11:49:07 by maiwenn          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ FLAGCPP = -std=c++11
 
 FLAG = -Wall -Werror -Wextra -g
 
-FLAG_OPENGL = -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
+FLAG_OPENGL = -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo -lz
 
 APP = -framework AppKit
 
@@ -59,9 +59,7 @@ COLOR2 = \033[38;5;178m
 
 LIB_G = libs/glfw_mac/lib-macos/libglfw3.a
 
-LIB_ASSIMP =	libs/assimp/bin/libassimp.5.0.1.dylib \
-				libs/assimp/bin/libassimp.5.dylib \
-				libs/assimp/bin/libassimp.dylib \
+LIB_ASSIMP =	libs/assimp/lib/libassimp.a
 
 LIBS_H =	libs/includes/ \
 			libs/glfw_mac/include/GLFW \
@@ -69,7 +67,7 @@ LIBS_H =	libs/includes/ \
 			libs/ \
 			libs/stb/ \
 			includes/ \
-			libs/assimp/include/assimp/ \
+			libs/assimp/include/ \
 
 LIBS = $(addprefix -I,$(LIBS_H))
 
@@ -84,47 +82,34 @@ INC =	includes/Shaderpixel.hpp \
 
 OBJ = $(SRC:.cc=.o)
 
-COND1 := $(shell [ -f libs/assimp/bin/assimp ] && echo 1 || echo 0)
-COND_CLONE_ASSIMP := $(shell [ -d libs/assimp ] && echo 1 || echo 0)
-COND2 := $(shell [ -f libs/assimp/bin/unit ] && echo 1 || echo 0)
-
-all : assimp $(NAME)
+.PHONY : all
+all : $(LIB_ASSIMP) $(NAME)
 
 $(NAME) : $(OBJ)
 	@gcc $(FLAG) -o srcs/glad.o -c libs/glad/src/glad.c
 	@g++ $(FLAG) $(FLAGCPP) $(FLAG_OPENCL) $(FLAG_OPENGL) $(LIB_G) $(LIB_ASSIMP) srcs/glad.o $^ -o $(NAME)
 	@printf "$(BOLD)$(COLOR1)%20s : $(RS_BL)$(RS_BO)$(GREEN)succesfuly made!$(NC)%20s\n" $(NAME)
 
-assimp :
-ifeq ($(COND1), 0)
-ifeq ($COND_CLONE_ASSIMP, 1)
-	rm -rf libs/assimp
-endif
-	git clone https://github.com/assimp/assimp.git libs/assimp
-	cmake libs/assimp/CMakeLists.txt
-	cmake --build libs/assimp/.
-endif
-ifeq ($(COND2), 0)
-ifeq ($(COND1), 1)
-ifeq ($COND_CLONE_ASSIMP, 1)
-	rm -rf libs/assimp
-endif
-	git clone https://github.com/assimp/assimp.git libs/assimp
-	cmake libs/assimp/CMakeLists.txt
-	cmake --build libs/assimp/.
-endif
-endif
+libs/assimp/CMakeLists.txt :
+	git clone https://github.com/assimp/assimp.git libs/assimp --depth 1 -b v5.0.1
+
+$(LIB_ASSIMP) : libs/assimp/CMakeLists.txt
+	cmake libs/assimp/CMakeLists.txt -D BUILD_SHARED_LIBS=OFF
+	cmake --build libs/assimp/. -j$$(nproc) #build faster
 
 %.o : %.cc $(INC)
 	@printf "$(BOLD)$(COLOR1)%20s : $(RS_BO)$(COLOR2)%20s$(WHITE) ...$(NC)" $(NAME) $(<F)
 	@g++ $(FLAG) $(FLAGCPP) $(LIBS) -o $@ -c $<
 	@printf "\r"
 
+.PHONY : clean
 clean :
 	@/bin/rm -rf srcs/*.o
 	@/bin/rm -rf srcs/Class/*.o
 
+.PHONY : fclean
 fclean : clean
 	@/bin/rm -rf $(NAME)
 
+.PHONY : re
 re : fclean all

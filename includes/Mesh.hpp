@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Mesh.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 17:01:05 by gperez            #+#    #+#             */
-/*   Updated: 2021/07/16 14:19:53 by gperez           ###   ########.fr       */
+/*   Updated: 2021/07/19 11:09:18 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 
 # include <iostream>
 # include <string>
-# include <Importer.hpp>		// C++ importer interface
-# include <scene.h>				// Output data structure
-# include <postprocess.h>		// Post processing flags
+# include <assimp/Importer.hpp>		// C++ importer interface
+# include <assimp/scene.h>				// Output data structure
+# include <assimp/postprocess.h>		// Post processing flags
 
 # include "Camera.hpp"
 # include "Shader.hpp"
