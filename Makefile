@@ -6,7 +6,7 @@
 #    By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/06 13:36:11 by gperez            #+#    #+#              #
-#    Updated: 2021/07/19 11:49:07 by maiwenn          ###   ########.fr        #
+#    Updated: 2021/07/19 15:14:22 by maiwenn          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -91,11 +91,11 @@ $(NAME) : $(OBJ)
 	@printf "$(BOLD)$(COLOR1)%20s : $(RS_BL)$(RS_BO)$(GREEN)succesfuly made!$(NC)%20s\n" $(NAME)
 
 libs/assimp/CMakeLists.txt :
-	git clone https://github.com/assimp/assimp.git libs/assimp --depth 1 -b v5.0.1
+	git clone https://github.com/assimp/assimp.git libs/assimp --depth 1
 
 $(LIB_ASSIMP) : libs/assimp/CMakeLists.txt
 	cmake libs/assimp/CMakeLists.txt -D BUILD_SHARED_LIBS=OFF
-	cmake --build libs/assimp/. -j$$(nproc) #build faster
+	cmake --build libs/assimp/. -j$$(nproc)  #build faster
 
 %.o : %.cc $(INC)
 	@printf "$(BOLD)$(COLOR1)%20s : $(RS_BO)$(COLOR2)%20s$(WHITE) ...$(NC)" $(NAME) $(<F)
