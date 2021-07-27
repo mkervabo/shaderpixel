@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Mesh.cc                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 16:57:27 by gperez            #+#    #+#             */
-/*   Updated: 2021/07/19 11:08:30 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/07/27 14:58:30 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,33 +60,55 @@ bool Mesh::initMaterials(const aiScene* pScene, const t_objPath& path) // Genere
 	for (unsigned int i = 0 ; i < pScene->mNumMaterials ; i++)
 	{
 		const aiMaterial* pMaterial = pScene->mMaterials[i];
-		m_Textures[i] = NULL;
-		// for (int i = 0; i < 18; i++)
-		// 	std::cout << i << " materials " << pMaterial->GetTextureCount((aiTextureType)i) << "\n";
-		// std::cout << "\n";
-		if (pMaterial->GetTextureCount(aiTextureType_DIFFUSE) > 0)
+
+		for (int i = 0; i < 19; i++)
+			std::cout << i << " materials " << pMaterial->GetTextureCount((aiTextureType)i) << "\n";
+		std::cout << "\n";
+
+		bool isTexture = false;
+
+		for (int i = 0; i < 19 && !isTexture; i++)
+			if (pMaterial->GetTextureCount((aiTextureType)i))
+				isTexture = true;
+
+		if (!isTexture) // Si le materiaux ne contient pas de texture mais une couleur de base
 		{
-			aiString pathFromAssimp;
-			if (pMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &pathFromAssimp, // On recupere le chemin relatif de la texture
-				NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS)
+			aiColor4D	color;
+
+			aiGetMaterialColor(pMaterial, AI_MATKEY_COLOR_DIFFUSE, &color);
+			std::cout << color.r << " " << color.g << " " << color.b << "\n";
+			this->m_Materials[i].setIsText(false);
+			this->m_Materials[i].setColor(Vec3(color.r, color.g, color.b));
+		}
+
+		else
+		{
+			if (pMaterial->GetTextureCount(aiTextureType_DIFFUSE) > 0)
 			{
-				std::string Dir = path.textPath;
-				std::string fullPath = Dir + pathFromAssimp.data; // On ajoute le chemin relatif afin de le transformer en chemin absolue
-				m_Textures[i] = new Texture();
-				std::cout << fullPath << "\n";
-				if (m_Textures[i]->load(GL_TEXTURE_2D, (char*)fullPath.c_str())) // On charge la texture et la genere pour openGL
+				aiString pathFromAssimp;
+				if (pMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &pathFromAssimp, // On recupere le chemin relatif de la texture
+					NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS)
 				{
-					printf("Error loading texture '%s'\n", fullPath.c_str());
-					delete m_Textures[i];
-					m_Textures[i] = NULL;
-					ret = true;
+					std::string Dir = path.textPath;
+					std::string fullPath = Dir + pathFromAssimp.data; // On ajoute le chemin relatif afin de le transformer en chemin absolue
+					this->m_Materials[i].newTexture();
+					// = new Texture();
+					std::cout << fullPath << "\n";
+					if (this->m_Materials[i].getTexture()->load(GL_TEXTURE_2D, (char*)fullPath.c_str())) // On charge la texture et la genere pour openGL
+					{
+						printf("Error loading texture '%s'\n", fullPath.c_str());
+						this->m_Materials[i].deleteTexture();
+						//delete this->m_Materials[i];
+						// this->m_Materials[i] = NULL;
+						ret = true;
+					}
 				}
 			}
-		}
-		if (!m_Textures[i])
-		{
-			m_Textures[i] = new Texture();
-			ret = m_Textures[i]->load(GL_TEXTURE_2D, (char*)PATH_DEFAULT_TEXTURE);
+			else if (!this->m_Materials[i].getTexture())
+			{
+				this->m_Materials[i].newTexture();
+				ret = this->m_Materials[i].getTexture()->load(GL_TEXTURE_2D, (char*)PATH_DEFAULT_TEXTURE);
+			}
 		}
 	}
 	return (ret);
@@ -95,7 +117,7 @@ bool Mesh::initMaterials(const aiScene* pScene, const t_objPath& path) // Genere
 bool	Mesh::initFromScene(const aiScene* pScene, const t_objPath& path) // Remplit notre classe Mesh
 {
 	this->m_Entries.resize(pScene->mNumMeshes); // Les differents mesh qui composent l'objet
-	this->m_Textures.resize(pScene->mNumMaterials);
+	this->m_Materials.resize(pScene->mNumMaterials);
 
 	// Initialise les maillages de la scène, un par un
 	for (unsigned int i = 0 ; i < m_Entries.size() ; i++)
@@ -134,6 +156,7 @@ bool	Mesh::loadMesh(t_objPath pathMesh)
 
 void	Mesh::render(Camera &cam) // On parcours tous les mesh de notre objet et on l'affiche avec la texture qui lui est lier
 {
+	int		boolValue = 1;
 	// glEnableVertexAttribArray(0);
 	// glEnableVertexAttribArray(1);
 	// glEnableVertexAttribArray(2);
@@ -142,10 +165,18 @@ void	Mesh::render(Camera &cam) // On parcours tous les mesh de notre objet et on
 		glBindVertexArray(this->m_Entries[i].getVao());
  		glUseProgram(this->shader.getProgram());
 
+		// On check si le materiaux est une texture ou non
 		const unsigned int materialIndex = this->m_Entries[i].getMatIdx();
-		if (materialIndex < this->m_Textures.size() && this->m_Textures[materialIndex])
-			this->m_Textures[materialIndex]->bind(GL_TEXTURE0);
+		if (materialIndex < this->m_Materials.size() && this->m_Materials[materialIndex].getTexture())
+			this->m_Materials[materialIndex].getTexture()->bind(GL_TEXTURE0);
+		else
+			boolValue = 0;
+		glUniform1ui(glGetUniformLocation(this->shader.getProgram(),
+			"isText"), (GLuint)boolValue);
 
+		Vec3	c = this->m_Materials[materialIndex].getColor();
+		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
+			"colorMat"), 1, (const GLfloat*)&c);
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
 			"model"), 1, GL_FALSE, &(this->mat.getMatrix(true)[0][0]));
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
@@ -162,14 +193,8 @@ void	Mesh::render(Camera &cam) // On parcours tous les mesh de notre objet et on
 
 void	Mesh::clearTextures(void)
 {
-	for (unsigned int i = 0; i < this->m_Textures.size(); i++)
-	{
-		if (this->m_Textures[i])
-		{
-			delete this->m_Textures[i];
-			this->m_Textures[i] = NULL;
-		}
-	}
+	for (unsigned int i = 0; i < this->m_Materials.size(); i++)
+		this->m_Materials[i].clearMaterial();
 }
 
 void	Mesh::clear(void)
@@ -177,7 +202,7 @@ void	Mesh::clear(void)
 	this->shader.freeProgram();
 	this->m_Entries.clear();
 	this->clearTextures();
-	this->m_Textures.clear();
+	this->m_Materials.clear();
 	// Rajouter le reste
 }
 

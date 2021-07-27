@@ -3,15 +3,19 @@
 out vec4	FragColor;
 in	vec4	color;
 in	vec2	textureCoord;
+in	vec3	norm;
 
-uniform sampler2D text;
+uniform sampler2D	text;
+uniform vec3		colorMat;
+uniform int			isText;
 
 void	main()
 {
-	// vec3	alphaC = vec3(0.9, 0.9, 0.9);
-	vec4	textColor = texture(text, textureCoord);
-	// if (textColor.r > alphaC.r && textColor.g > alphaC.g && textColor.b > alphaC.b)
-	// 	FragColor = vec4(0., 0., 0., 0.);
-	// else
-	FragColor = textColor;
+	if (isText == 1)
+	{
+		vec4	textColor = texture(text, textureCoord);
+		FragColor = textColor;
+	}
+	else
+		FragColor = vec4(colorMat, 1.);
 }

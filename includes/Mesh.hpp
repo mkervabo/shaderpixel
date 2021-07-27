@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Mesh.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 17:01:05 by gperez            #+#    #+#             */
-/*   Updated: 2021/07/19 11:09:18 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/07/27 14:34:37 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@
 
 # include "Camera.hpp"
 # include "Shader.hpp"
-# include "Mat.hpp"
 
 class Mesh
 {
@@ -42,7 +41,7 @@ class Mesh
 		void			clearTextures(void);
 
 		std::vector<MeshEntry>	m_Entries;
-		std::vector<Texture*>	m_Textures;
+		std::vector<Material>	m_Materials;
 };
 
 #endif

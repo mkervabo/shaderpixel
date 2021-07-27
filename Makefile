@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+         #
+#    By: gperez <gperez@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/06 13:36:11 by gperez            #+#    #+#              #
-#    Updated: 2021/07/19 15:14:22 by maiwenn          ###   ########.fr        #
+#    Updated: 2021/07/27 15:04:14 by gperez           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,6 +33,7 @@ SRC =	srcs/main.cc \
 		srcs/Class/Mesh.cc \
 		srcs/Class/MeshEntry.cc \
 		srcs/Class/Texture.cc \
+		srcs/Class/Material.cc \
 
 NC = \033[0m
 BOLD =\033[1m
@@ -79,6 +80,7 @@ INC =	includes/Shaderpixel.hpp \
 		includes/Mesh.hpp \
 		includes/MeshEntry.hpp \
 		includes/Texture.hpp \
+		includes/Material.hpp \
 
 OBJ = $(SRC:.cc=.o)
 
@@ -95,7 +97,7 @@ libs/assimp/CMakeLists.txt :
 
 $(LIB_ASSIMP) : libs/assimp/CMakeLists.txt
 	cmake libs/assimp/CMakeLists.txt -D BUILD_SHARED_LIBS=OFF
-	cmake --build libs/assimp/. -j$$(nproc)  #build faster
+	cmake --build libs/assimp/.  #build faster
 
 %.o : %.cc $(INC)
 	@printf "$(BOLD)$(COLOR1)%20s : $(RS_BO)$(COLOR2)%20s$(WHITE) ...$(NC)" $(NAME) $(<F)
