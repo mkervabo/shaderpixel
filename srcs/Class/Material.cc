@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/27 14:26:47 by gperez            #+#    #+#             */
-/*   Updated: 2021/07/27 15:03:42 by gperez           ###   ########.fr       */
+/*   Updated: 2021/07/27 15:13:00 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 Material::Material()
 {
 	this->text = NULL;
-	this->colorD = Vec3(1., 1., 1.);
+	this->colorD = Vec3(0., 1., 1.);
 	this->isText = true;
 }
 
@@ -58,6 +58,7 @@ void	Material::deleteTexture(void)
 {
 	if (this->text)
 		delete this->text;
+	this->text = NULL;
 }
 
 void	Material::clearMaterial(void)

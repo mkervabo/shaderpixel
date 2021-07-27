@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 16:57:27 by gperez            #+#    #+#             */
-/*   Updated: 2021/07/27 14:58:30 by gperez           ###   ########.fr       */
+/*   Updated: 2021/07/27 15:27:32 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ bool Mesh::initMaterials(const aiScene* pScene, const t_objPath& path) // Genere
 			if (pMaterial->GetTextureCount((aiTextureType)i))
 				isTexture = true;
 
+		std::cout << isTexture << "\n";
 		if (!isTexture) // Si le materiaux ne contient pas de texture mais une couleur de base
 		{
 			aiColor4D	color;
@@ -80,7 +81,6 @@ bool Mesh::initMaterials(const aiScene* pScene, const t_objPath& path) // Genere
 			this->m_Materials[i].setIsText(false);
 			this->m_Materials[i].setColor(Vec3(color.r, color.g, color.b));
 		}
-
 		else
 		{
 			if (pMaterial->GetTextureCount(aiTextureType_DIFFUSE) > 0)
@@ -92,14 +92,11 @@ bool Mesh::initMaterials(const aiScene* pScene, const t_objPath& path) // Genere
 					std::string Dir = path.textPath;
 					std::string fullPath = Dir + pathFromAssimp.data; // On ajoute le chemin relatif afin de le transformer en chemin absolue
 					this->m_Materials[i].newTexture();
-					// = new Texture();
 					std::cout << fullPath << "\n";
 					if (this->m_Materials[i].getTexture()->load(GL_TEXTURE_2D, (char*)fullPath.c_str())) // On charge la texture et la genere pour openGL
 					{
 						printf("Error loading texture '%s'\n", fullPath.c_str());
 						this->m_Materials[i].deleteTexture();
-						//delete this->m_Materials[i];
-						// this->m_Materials[i] = NULL;
 						ret = true;
 					}
 				}
@@ -160,6 +157,7 @@ void	Mesh::render(Camera &cam) // On parcours tous les mesh de notre objet et on
 	// glEnableVertexAttribArray(0);
 	// glEnableVertexAttribArray(1);
 	// glEnableVertexAttribArray(2);
+
 	for (unsigned int i = 0 ; i < this->m_Entries.size() ; i++)
 	{
 		glBindVertexArray(this->m_Entries[i].getVao());
@@ -171,9 +169,8 @@ void	Mesh::render(Camera &cam) // On parcours tous les mesh de notre objet et on
 			this->m_Materials[materialIndex].getTexture()->bind(GL_TEXTURE0);
 		else
 			boolValue = 0;
-		glUniform1ui(glGetUniformLocation(this->shader.getProgram(),
+		glUniform1i(glGetUniformLocation(this->shader.getProgram(),
 			"isText"), (GLuint)boolValue);
-
 		Vec3	c = this->m_Materials[materialIndex].getColor();
 		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
 			"colorMat"), 1, (const GLfloat*)&c);
