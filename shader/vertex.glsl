@@ -19,6 +19,6 @@ void main()
 	color = vec4(aPos,1.0);
 	textureCoord = aTex;
 	norm = aNorm;
-	pos = projection * view * model * vec4(aPos, 1.0);
-	gl_Position = pos;
+	pos = vec4(aPos, 1.);
+	gl_Position = projection * view * model * vec4(aPos, 1.0);
 }

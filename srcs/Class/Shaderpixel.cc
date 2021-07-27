@@ -105,7 +105,7 @@ void				Shaderpixel::initWindow(void)
 
 bool				Shaderpixel::init(void)
 {
-	if (this->mesh.loadMesh(g_objPath[E_PBALL]))
+	if (this->mesh.loadMesh(g_objPath[E_PDRAGON]))
 		return (1);
 	// this->time.setTime();
 	return (0);

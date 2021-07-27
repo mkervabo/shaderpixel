@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/13 17:42:19 by gperez            #+#    #+#             */
-/*   Updated: 2021/07/27 13:39:24 by gperez           ###   ########.fr       */
+/*   Updated: 2021/07/27 16:00:46 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,10 @@
 # define PATH_TEXTURE_TREE "objToLoad/tree/"
 # define PATH_BALL "objToLoad/Ballon/Ball.obj"
 # define PATH_TEXTURE_BALL "objToLoad/Ballon/"
+# define PATH_DRAGON "objToLoad/BlackDragon/Dragon 2.5_ply.ply"
+# define PATH_TEXTURE_DRAGON "objToLoad/BlackDragon/textures/"
 
-enum	e_pathObj {E_PTREE, E_PBALL, E_PEND};
+enum	e_pathObj {E_PTREE, E_PBALL, E_PDRAGON, E_PEND};
 
 typedef struct	s_objPath
 {
@@ -33,6 +35,7 @@ typedef struct	s_objPath
 static t_objPath	g_objPath[]{
 	{PATH_TREE, PATH_TEXTURE_TREE},
 	{PATH_BALL, PATH_TEXTURE_BALL},
+	{PATH_DRAGON, PATH_TEXTURE_DRAGON},
 	{"", ""}
 };
 
