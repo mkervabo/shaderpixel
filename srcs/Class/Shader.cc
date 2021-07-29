@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/25 17:47:10 by gperez            #+#    #+#             */
-/*   Updated: 2021/07/16 12:19:25 by gperez           ###   ########.fr       */
+/*   Updated: 2021/07/29 17:46:23 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,11 @@ static int		readShader(t_shader &shader, const std::string fileName, char glsl)
 	return (1);
 }
 
-static int		shaderError(int i_s, std::string info, std::string error_msg)
+static int		shaderError(int i_s, std::string error_msg)
 {
-	glGetShaderInfoLog(i_s, 1024, NULL, (char*)info.c_str());
+	char	info[1024];
+
+	glGetShaderInfoLog(i_s, 1024, NULL, info);
 	std::cout << error_msg << "\n";
 	std::cout << info << "\n";
 	return (1);
@@ -54,8 +56,7 @@ void			Shader::setProgram(unsigned int p)
 	this->shaderProgram = p;
 }
 
-int				Shader::createShader(std::string info, const std::string vertex_path,
-	const std::string frag_path)
+int				Shader::createShader(const std::string vertex_path, const std::string frag_path)
 {
 	t_shader		shader;
 	int				success;
@@ -71,7 +72,7 @@ int				Shader::createShader(std::string info, const std::string vertex_path,
 	glGetShaderiv(shader.i_v, GL_COMPILE_STATUS, &success);
 	if (!success)
 	{
-		shaderError(shader.i_v, info, (char*)VERTEX_FAILED);
+		shaderError(shader.i_v, (char*)VERTEX_FAILED);
 		glDeleteShader(shader.i_v);
 		return (1);
 	}
@@ -83,7 +84,7 @@ int				Shader::createShader(std::string info, const std::string vertex_path,
 	glGetShaderiv(shader.i_f, GL_COMPILE_STATUS, &success);
 	if (!success)
 	{
-		shaderError(shader.i_f, info, (char*)FRAGMENT_FAILED);
+		shaderError(shader.i_f, (char*)FRAGMENT_FAILED);
 		glDeleteShader(shader.i_v);
 		glDeleteShader(shader.i_f);
 		return (1);
@@ -95,7 +96,7 @@ int				Shader::createShader(std::string info, const std::string vertex_path,
 	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
 	if (!success)
 	{
-		shaderError(shaderProgram, info, (char*)LINK_SHADER_FAILED);
+		shaderError(shaderProgram, (char*)LINK_SHADER_FAILED);
 		glDeleteShader(shader.i_v);
 		glDeleteShader(shader.i_f);
 		return (1);
@@ -107,11 +108,9 @@ int				Shader::createShader(std::string info, const std::string vertex_path,
 
 int				Shader::loadShader(std::string vertexPath, std::string fragPath)
 {
-	std::string			info;
-
 	if (vertexPath.size() && fragPath.size())
 	{
-		if (createShader(info, vertexPath, fragPath))
+		if (createShader(vertexPath, fragPath))
 			return (1);
 	}
 	return (0);

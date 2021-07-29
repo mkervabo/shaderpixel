@@ -45,15 +45,17 @@ class Shaderpixel
 		std::queue<char>			queue;
 		void						setKey(unsigned int key, char state);
 		void						inputKey(unsigned int key);
-		Mesh						mesh;
-		// TimeMs						time;
+		std::vector<Mesh>			meshes;
+		TimeMs						time;
 	public:
 		Shaderpixel();
 		void						initWindow(void);
 		bool						init(void);
 		void						update(Camera &cam);	
 		void						checkKeys(void);
-		void 						loadVBO();
+		void 						loadVBO(void);
+		bool						loadMesh(t_objPath obj);
+		bool						loadMesh(t_objPath obj, std::string pathVertex, std::string pathFragment);
 
 		void						getKeys(void);
 		unsigned int				getState(unsigned int k);

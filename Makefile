@@ -6,7 +6,7 @@
 #    By: gperez <gperez@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/06 13:36:11 by gperez            #+#    #+#              #
-#    Updated: 2021/07/27 15:04:14 by gperez           ###   ########.fr        #
+#    Updated: 2021/07/29 17:40:45 by gperez           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -76,6 +76,7 @@ INC =	includes/Shaderpixel.hpp \
 		includes/Mat.hpp \
 		includes/Mat4.hpp \
 		includes/Vec3.hpp \
+		includes/Shader.hpp \
 		includes/TimeMs.hpp \
 		includes/Mesh.hpp \
 		includes/MeshEntry.hpp \

@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/25 17:47:37 by gperez            #+#    #+#             */
-/*   Updated: 2021/07/27 14:31:15 by gperez           ###   ########.fr       */
+/*   Updated: 2021/07/29 17:46:19 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,9 @@
 
 # define VERTEX "shader/vertex.glsl"
 # define FRAGMENT "shader/fragment.glsl"
+
+# define VERTEX_RAYMARCH "shader/vertexRaymarch.glsl"
+# define FRAGMENT_RAYMARCH "shader/fragmentRaymarch.glsl"
 
 # define FAILED_OPEN_FILE "Failed open file"
 # define VERTEX_FAILED "Shader vertex compilation failed"
@@ -38,8 +41,7 @@ class Shader
 {
 	private:
 		unsigned int	shaderProgram;
-		int				createShader(std::string info, std::string vertex_path,
-			std::string frag_path);
+		int				createShader(std::string vertex_path, std::string frag_path);
 	public:
 		Shader(void);
 		unsigned int	getProgram(void);

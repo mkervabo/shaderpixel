@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 16:57:27 by gperez            #+#    #+#             */
-/*   Updated: 2021/07/27 15:27:32 by gperez           ###   ########.fr       */
+/*   Updated: 2021/07/29 17:59:22 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,9 @@ bool Mesh::initMaterials(const aiScene* pScene, const t_objPath& path) // Genere
 	{
 		const aiMaterial* pMaterial = pScene->mMaterials[i];
 
-		for (int i = 0; i < 19; i++)
-			std::cout << i << " materials " << pMaterial->GetTextureCount((aiTextureType)i) << "\n";
-		std::cout << "\n";
+		// for (int i = 0; i < 19; i++)
+		// 	std::cout << i << " materials " << pMaterial->GetTextureCount((aiTextureType)i) << "\n";
+		// std::cout << "\n";
 
 		bool isTexture = false;
 
@@ -71,13 +71,12 @@ bool Mesh::initMaterials(const aiScene* pScene, const t_objPath& path) // Genere
 			if (pMaterial->GetTextureCount((aiTextureType)i))
 				isTexture = true;
 
-		std::cout << isTexture << "\n";
 		if (!isTexture) // Si le materiaux ne contient pas de texture mais une couleur de base
 		{
 			aiColor4D	color;
 
 			aiGetMaterialColor(pMaterial, AI_MATKEY_COLOR_DIFFUSE, &color);
-			std::cout << color.r << " " << color.g << " " << color.b << "\n";
+			// std::cout << color.r << " " << color.g << " " << color.b << "\n";
 			this->m_Materials[i].setIsText(false);
 			this->m_Materials[i].setColor(Vec3(color.r, color.g, color.b));
 		}
@@ -151,8 +150,13 @@ bool	Mesh::loadMesh(t_objPath pathMesh)
 	return (this->loadMesh(pathMesh, VERTEX, FRAGMENT));
 }
 
-void	Mesh::render(Camera &cam) // On parcours tous les mesh de notre objet et on l'affiche avec la texture qui lui est lier
+void	Mesh::render(Camera &cam, float timeS) // On parcours tous les mesh de notre objet et on l'affiche avec la texture qui lui est lier
 {
+	if (!this->shader.getProgram() || !this->m_Entries.size())
+	{
+		std::cout << "No shader\n";
+		return ;
+	}
 	int		boolValue = 1;
 	// glEnableVertexAttribArray(0);
 	// glEnableVertexAttribArray(1);
@@ -181,6 +185,13 @@ void	Mesh::render(Camera &cam) // On parcours tous les mesh de notre objet et on
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
 			"projection"), 1, GL_FALSE, &(cam.getProjMatrix()[0][0]));
 
+		c = cam.getPosition();
+		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
+			"eye"), 1, (const GLfloat*)&c);
+
+		glUniform1fv(glGetUniformLocation(this->shader.getProgram(),
+			"time"), 1, (const GLfloat*)&timeS);
+
 		glDrawElements(GL_TRIANGLES, this->m_Entries[i].getNumIndices(), GL_UNSIGNED_INT, NULL);
 	}
 	// glDisableVertexAttribArray(0);
@@ -201,6 +212,11 @@ void	Mesh::clear(void)
 	this->clearTextures();
 	this->m_Materials.clear();
 	// Rajouter le reste
+}
+
+void	Mesh::translate(Vec3 t)
+{
+	this->mat.translate(t);
 }
 
 Mesh::~Mesh()

@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 17:01:05 by gperez            #+#    #+#             */
-/*   Updated: 2021/07/27 14:34:37 by gperez           ###   ########.fr       */
+/*   Updated: 2021/07/29 17:57:27 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,9 @@
 
 class Mesh
 {
-	public:
-		Mesh();
-		bool			loadMesh(t_objPath pathMesh);
-		bool			loadMesh(t_objPath pathMesh, std::string pathVertex, std::string pathFragment);
-		void			render(Camera &cam);
-		void			clear(void);
-		~Mesh();
 	private:
+		std::vector<MeshEntry>	m_Entries;
+		std::vector<Material>	m_Materials;
 		// unsigned int	id;
 		Shader			shader;
 		Mat				mat;
@@ -39,9 +34,14 @@ class Mesh
 		void			initMesh(unsigned int Index, const aiMesh* paiMesh);
 		bool			initMaterials(const aiScene* pScene, const t_objPath& path);
 		void			clearTextures(void);
-
-		std::vector<MeshEntry>	m_Entries;
-		std::vector<Material>	m_Materials;
+	public:
+		Mesh();
+		bool			loadMesh(t_objPath pathMesh);
+		bool			loadMesh(t_objPath pathMesh, std::string pathVertex, std::string pathFragment);
+		void			render(Camera &cam, float timeS);
+		void			clear(void);
+		void			translate(Vec3 t);
+		~Mesh();
 };
 
 #endif
