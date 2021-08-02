@@ -45,7 +45,7 @@ class Shaderpixel
 		std::queue<char>			queue;
 		void						setKey(unsigned int key, char state);
 		void						inputKey(unsigned int key);
-		std::vector<Mesh>			meshes;
+		std::vector<Mesh*>			meshes;
 		TimeMs						time;
 	public:
 		Shaderpixel();

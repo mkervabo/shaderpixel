@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 17:01:05 by gperez            #+#    #+#             */
-/*   Updated: 2021/07/29 17:57:27 by gperez           ###   ########.fr       */
+/*   Updated: 2021/08/02 14:02:09 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ class Mesh
 		void			render(Camera &cam, float timeS);
 		void			clear(void);
 		void			translate(Vec3 t);
+		unsigned int	getShaderProgram(void);
 		~Mesh();
 };
 

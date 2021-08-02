@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Camera.cc                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/04 23:48:55 by gperez            #+#    #+#             */
-/*   Updated: 2021/06/17 16:56:55 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/08/02 17:58:50 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,12 @@ Mat4	Camera::getProjMatrix(void)
 void	Camera::setProjMatrix(Mat4 mat)
 {
 	this->projection = mat;
+	this->inverseProjection = this->projection.inverse();
+}
+
+Mat4	Camera::getInverseProjection(void)
+{
+	return (this->inverseProjection);
 }
 
 Vec3	Camera::createRay(Vec2 pos, float width, float height)

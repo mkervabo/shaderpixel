@@ -1,6 +1,14 @@
 #version 410 core
 
-out vec4 FragColor;
+out vec4		FragColor;
+in	vec2		textureCoord;
+in	vec3		norm;
+in	vec4		pos;
+
+uniform mat4	model;
+uniform mat4	view;
+uniform vec3	eye;
+uniform float	time;
 
 const int MAX_ITERATIONS = 10;
 const int MAX_STEPS = 100;
@@ -58,9 +66,27 @@ float MandelbulbDE(vec3 pos, float power)
 	return (0.5 * log(r) * r / dr);
 }
 
+float boxDE(vec3 p, vec3 b)
+{
+  vec3 q = abs(p) - b;
+  return (length(max(q, 0.0)) + min(max(q.x, max(q.y, q.z)), 0.0));
+}
+
+float planSphereDE(vec3 z)
+{
+  z.xy = mod((z.xy),1.0)-vec3(0.5).xy; // instance on xy-plane
+  return length(z)-0.3;             // sphere DE
+}
+
+float sphereDE(vec3 p, float rayon)
+{
+    return (length(p) - rayon);
+}
+
 float DistanceEstimation(vec3 p)
 {
-	return (MandelbulbDE(p, 10.));
+	return (planSphereDE(p));
+	// return (MandelbulbDE(p, 10.));
 }
 
 float refShortestDistanceToSurface(vec3 eyeP, vec3 marchinDir, float start, float end)
@@ -95,13 +121,6 @@ float ShortestDistanceToSurface(vec3 eyeP, vec3 marchinDir, float start, float e
 			return end;
 	}
 	return (end);
-}
-
-vec3 calculateMarchinDir(float fov, vec2 resolutionSize, vec2 fragCoord)
-{
-	vec2 xy = fragCoord - resolutionSize / 2.0;
-	float z = resolutionSize.y / tan(radians(fov));
-	return (normalize(vec3(xy, -z)));
 }
 
 vec3 estimateNormal(vec3 p)
@@ -206,49 +225,56 @@ float shadows(in vec3 posHit, in vec3 vPL, float minDist, float maxDist, float k
 vec3 calculateColor(s_light light[2], vec3 eye, vec3 pos, vec3 norm)
 {
 	vec3 colorObj = COLOR_OBJ;
-	vec3 ambiantLight = colorObj * ambientOcclusion(pos, norm, 2., 1.2) * K_A;
+	// vec3 ambiantLight = colorObj * ambientOcclusion(pos, norm, 2., 1.2) * K_A;
 	vec3 vEP = normalize(eye - pos);
-	vec3 color;
+	vec3 color = vec3(0.);
 		
 	color += phongLight(light[0], vEP, norm, pos, colorObj);
 		
-	pos += norm * 0.01;
-	float sh = shadows(pos, normalize(light[0].pos - pos),
-		0., distance(light[0].pos, pos), 10.);
+	// pos += norm * 0.01;
+	// float sh = shadows(pos, normalize(light[0].pos - pos),
+	// 	0., distance(light[0].pos, pos), 10.);
 		
-	color *= sh;
-	color += ambiantLight;
+	// color *= sh;
+	// color += ambiantLight;
 	return (color);
 
 }
 
-in vec3 pos;
+uniform mat4 inverseView;
+uniform mat4 inverseProj;
+uniform mat4 proj;
 
-uniform mat4		model;
-uniform mat4		view;
-uniform vec3		eye;
-uniform float		time;
+vec3	calculateMarchinDir(float fov, vec2 resolutionSize, vec2 fragCoord)
+{
+	vec2 xy = fragCoord - resolutionSize / 2.0;
+	float z = resolutionSize.y / tan(radians(fov));
+	return (normalize(vec3(xy, -z)));
+}
 
-void main()
+
+void	main()
 {
 	vec2	iResolution = vec2(1920., 1080.);
 
-	vec3	dir = calculateMarchinDir(45., iResolution.xy, pos.xy);
+	vec3	dir = calculateMarchinDir(45., iResolution.xy, gl_FragCoord.xy);
 
+	// vec3	worldDir = (vec4(dir, 0.0)).xyz;
+	vec3	worldDir = (inverseView * vec4(dir, 0.0)).xyz;
 		
-	vec3 worldDir = (view * vec4(dir, 0.0)).xyz;
-		
-	float dist = ShortestDistanceToSurface(eye, worldDir, MIN_DIST, MAX_DIST);
+	float	dist = ShortestDistanceToSurface(eye, worldDir, MIN_DIST, MAX_DIST);
 
-	vec3 posHit = eye + worldDir * dist;
-	vec3 norm = estimateNormal(posHit);
+	vec3	posHit = eye + worldDir * dist;
+	vec3	norm = estimateNormal(posHit);
 
 	if (dist > MAX_DIST - EPSILON)
 	{
 		FragColor = vec4(0.);
+		gl_FragDepth = 100.;
 		return ;
 	}
 	s_light light[2];
+	// light[0].pos = vec3(3. , 1., 3.);
 	light[0].pos = vec3(3. * cos(time * 0.5), 1., 3. * sin(time * 0.5));
 	light[0].colorLight = vec3(1.0, 1.0, 1.0);
 	light[0].intensity = 0.5;
@@ -272,5 +298,10 @@ void main()
 	// 	else 
 	// 		color += K_R * calculateColor(light, eye, posHit, norm) * float((MAX_REFLECTIONS - i) / MAX_REFLECTIONS);
 	// }
+
+	float zc = ( inverseProj * vec4( posHit, 1.0 ) ).z;
+	float wc = ( inverseProj * vec4( posHit, 1.0 ) ).w;
+	gl_FragDepth = zc / wc;
+
 	FragColor = vec4(color, 1.0);
 }

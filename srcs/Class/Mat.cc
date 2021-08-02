@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Mat.cc                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/04 23:19:34 by gperez            #+#    #+#             */
-/*   Updated: 2021/06/17 16:41:51 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/08/02 17:59:58 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,11 @@ Mat4	Mat::getMatrix(bool calculate)
 	if (calculate)
 		this->calc();
 	return (mat);
+}
+
+Mat4	Mat::getInverseMat(void)
+{
+	return (this->inverseMat);
 }
 
 void	Mat::setMatrix(Mat4 m)
@@ -123,6 +128,7 @@ void	Mat::lookAt(Vec3 look)
 	m[3][2] = -this->pos.dot(camera_forward);
 
 	this->setMatrix(m);
+	this->inverseMat = this->mat.inverse();
 }
 
 void	Mat::lookAt(void)

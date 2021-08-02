@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 16:57:27 by gperez            #+#    #+#             */
-/*   Updated: 2021/07/29 17:59:22 by gperez           ###   ########.fr       */
+/*   Updated: 2021/08/02 19:03:26 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 Mesh::Mesh()
 {
-	this->mat.rotate(Vec3(-90., 0., 0.));
+	// this->mat.rotate(Vec3(-90., 0., 0.));
 }
 
 void	Mesh::initMesh(unsigned int Index, const aiMesh* paiMesh) // Remplit un MeshEntry avec des vertices et des faces et l'ajoute au vector m_Entries
@@ -133,6 +133,7 @@ bool	Mesh::loadMesh(t_objPath pathMesh, std::string pathVertex, std::string path
 	this->clear();
 	if (this->shader.loadShader(pathVertex, pathFragment))
 		return (true);
+	std::cout << this->shader.getProgram() << "\n";
 	const aiScene* pScene = importer.ReadFile(pathMesh.path.c_str(), // On lit le fichier et on le stock dans une scene avec les faces triangulé.
 		aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs);
 	if (pScene)
@@ -183,6 +184,10 @@ void	Mesh::render(Camera &cam, float timeS) // On parcours tous les mesh de notr
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
 			"view"), 1, GL_FALSE, &(cam.getMatrix(true)[0][0]));
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
+			"inverseView"), 1, GL_FALSE, &(cam.getInverseMat()[0][0]));
+		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
+			"inverseProj"), 1, GL_FALSE, &(cam.getInverseProjection()[0][0]));
+		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
 			"projection"), 1, GL_FALSE, &(cam.getProjMatrix()[0][0]));
 
 		c = cam.getPosition();
@@ -217,6 +222,11 @@ void	Mesh::clear(void)
 void	Mesh::translate(Vec3 t)
 {
 	this->mat.translate(t);
+}
+
+unsigned int	Mesh::getShaderProgram(void)
+{
+	return (this->shader.getProgram());
 }
 
 Mesh::~Mesh()

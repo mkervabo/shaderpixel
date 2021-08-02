@@ -110,12 +110,12 @@ bool						Shaderpixel::loadMesh(t_objPath obj)
 
 bool						Shaderpixel::loadMesh(t_objPath obj, std::string pathVertex, std::string pathFragment)
 {
-	Mesh	m;
+	Mesh	*m = new Mesh;
 
 	this->meshes.push_back(m);
 	if (!this->meshes.size())
 		return (1);
-	if (this->meshes[this->meshes.size() - 1].loadMesh(obj, pathVertex, pathFragment))
+	if (this->meshes[this->meshes.size() - 1]->loadMesh(obj, pathVertex, pathFragment))
 	{
 		this->meshes.pop_back();
 		return (1);
@@ -125,11 +125,12 @@ bool						Shaderpixel::loadMesh(t_objPath obj, std::string pathVertex, std::stri
 
 bool				Shaderpixel::init(void)
 {
-	if (this->loadMesh(g_objPath[E_PBALL]))
-		return (1);
 	if (this->loadMesh(g_objPath[E_PBALL], VERTEX_RAYMARCH, FRAGMENT_RAYMARCH))
 		return (1);
-	this->meshes[1].translate(Vec3(1.5, 2., 0.));
+	if (this->loadMesh(g_objPath[E_PBALL], VERTEX, FRAGMENT))
+		return (1);
+	this->meshes[1]->translate(Vec3(1.5, 2., 0.));
+	std::cout << this->meshes[0]->getShaderProgram() << " " << this->meshes[1]->getShaderProgram() << "\n";
 	this->time.setTime();
 	return (0);
 }
@@ -137,7 +138,7 @@ bool				Shaderpixel::init(void)
 void				Shaderpixel::update(Camera &cam)
 {
 	for (unsigned int i = 0; i < this->meshes.size(); i++)
-		this->meshes[i].render(cam, this->time.getTimeSeconds());
+		this->meshes[i]->render(cam, this->time.getTimeSeconds());
 }
 
 void				Shaderpixel::inputKey(unsigned int key)
@@ -192,7 +193,7 @@ bool				Shaderpixel::isFirst(void)
 Shaderpixel::~Shaderpixel()
 {
 	for (unsigned int i = 0; i < this->meshes.size(); i++)
-		this->meshes[i].clear();
+		delete meshes[i];
 	glfwDestroyWindow(this->window);
 	glfwTerminate();
 }
