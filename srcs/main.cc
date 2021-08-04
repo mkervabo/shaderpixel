@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 15:29:41 by gperez            #+#    #+#             */
-/*   Updated: 2021/07/27 15:05:54 by gperez           ###   ########.fr       */
+/*   Updated: 2021/08/03 18:09:20 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,8 @@ int		main(void)
 		std::cout << e.what() << "\n";
 		return (1);
 	}
-	cam.setProjMatrix(perspective(FOV, RATIO, 0.1f, (float)RENDER_DIST)); // Erreur dans la perspective
-	cam.translate(0.0, 2.5, 10);
+	cam.setProjMatrix(perspective(FOV, RATIO, (float)NEAR_Z, (float)FAR_Z));
+	cam.translate(0.0, 0., 10);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

@@ -25,7 +25,8 @@
 # define HEIGHT 768
 # define RATIO (float)WIDTH / (float)HEIGHT
 # define PROG_NAME "Shaderpixel"
-# define RENDER_DIST 100
+# define NEAR_Z 0.1f
+# define FAR_Z 100
 # define FRAME_RATE 1.0f / 30.0f
 
 # define VBO_SIZE 24

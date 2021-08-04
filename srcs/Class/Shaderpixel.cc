@@ -125,7 +125,7 @@ bool						Shaderpixel::loadMesh(t_objPath obj, std::string pathVertex, std::stri
 
 bool				Shaderpixel::init(void)
 {
-	if (this->loadMesh(g_objPath[E_PBALL], VERTEX_RAYMARCH, FRAGMENT_RAYMARCH))
+	if (this->loadMesh(g_objPath[E_PCUBE], VERTEX_RAYMARCH, FRAGMENT_RAYMARCH))
 		return (1);
 	if (this->loadMesh(g_objPath[E_PBALL], VERTEX, FRAGMENT))
 		return (1);

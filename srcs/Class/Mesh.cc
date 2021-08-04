@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 16:57:27 by gperez            #+#    #+#             */
-/*   Updated: 2021/08/02 19:03:26 by gperez           ###   ########.fr       */
+/*   Updated: 2021/08/04 14:45:33 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,6 +163,11 @@ void	Mesh::render(Camera &cam, float timeS) // On parcours tous les mesh de notr
 	// glEnableVertexAttribArray(1);
 	// glEnableVertexAttribArray(2);
 
+	Mat		modelMat;
+
+	modelMat.rotate(Vec3(0., timeS * 10., 0.));
+	modelMat.getMatrix(true);
+
 	for (unsigned int i = 0 ; i < this->m_Entries.size() ; i++)
 	{
 		glBindVertexArray(this->m_Entries[i].getVao());
@@ -180,7 +185,7 @@ void	Mesh::render(Camera &cam, float timeS) // On parcours tous les mesh de notr
 		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
 			"colorMat"), 1, (const GLfloat*)&c);
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
-			"model"), 1, GL_FALSE, &(this->mat.getMatrix(true)[0][0]));
+			"model"), 1, GL_FALSE, &(this->mat.getMatrix(true).inverse()[0][0]));
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
 			"view"), 1, GL_FALSE, &(cam.getMatrix(true)[0][0]));
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
@@ -189,6 +194,8 @@ void	Mesh::render(Camera &cam, float timeS) // On parcours tous les mesh de notr
 			"inverseProj"), 1, GL_FALSE, &(cam.getInverseProjection()[0][0]));
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
 			"projection"), 1, GL_FALSE, &(cam.getProjMatrix()[0][0]));
+		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
+			"modelMat"), 1, GL_FALSE, &(modelMat.getInverseMat()[0][0]));
 
 		c = cam.getPosition();
 		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
