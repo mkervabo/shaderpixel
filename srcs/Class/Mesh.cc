@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 16:57:27 by gperez            #+#    #+#             */
-/*   Updated: 2021/08/04 14:45:33 by gperez           ###   ########.fr       */
+/*   Updated: 2021/08/05 00:19:14 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,58 +151,61 @@ bool	Mesh::loadMesh(t_objPath pathMesh)
 	return (this->loadMesh(pathMesh, VERTEX, FRAGMENT));
 }
 
-void	Mesh::render(Camera &cam, float timeS) // On parcours tous les mesh de notre objet et on l'affiche avec la texture qui lui est lier
+void	Mesh::render(Camera &cam, float timeS, Vec3 &lightPos) // On parcours tous les mesh de notre objet et on l'affiche avec la texture qui lui est lier
 {
-	if (!this->shader.getProgram() || !this->m_Entries.size())
-	{
-		std::cout << "No shader\n";
-		return ;
-	}
 	int		boolValue = 1;
+	Vec3	camPos;
+	Mat		modelMat;
+	Vec3	color;
+	float	farNear[2] = {FAR_Z, NEAR_Z};
+	float	fov = FOV;
+	Vec2	resolution = Vec2(WIDTH, HEIGHT);
+
 	// glEnableVertexAttribArray(0);
 	// glEnableVertexAttribArray(1);
 	// glEnableVertexAttribArray(2);
-
-	Mat		modelMat;
-
-	modelMat.rotate(Vec3(0., timeS * 10., 0.));
-	modelMat.getMatrix(true);
 
 	for (unsigned int i = 0 ; i < this->m_Entries.size() ; i++)
 	{
 		glBindVertexArray(this->m_Entries[i].getVao());
  		glUseProgram(this->shader.getProgram());
-
 		// On check si le materiaux est une texture ou non
 		const unsigned int materialIndex = this->m_Entries[i].getMatIdx();
 		if (materialIndex < this->m_Materials.size() && this->m_Materials[materialIndex].getTexture())
 			this->m_Materials[materialIndex].getTexture()->bind(GL_TEXTURE0);
 		else
 			boolValue = 0;
-		glUniform1i(glGetUniformLocation(this->shader.getProgram(),
-			"isText"), (GLuint)boolValue);
-		Vec3	c = this->m_Materials[materialIndex].getColor();
-		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
-			"colorMat"), 1, (const GLfloat*)&c);
+		color = this->m_Materials[materialIndex].getColor();
+
+		modelMat.rotate(Vec3(0., timeS * 10., 0.));
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
-			"model"), 1, GL_FALSE, &(this->mat.getMatrix(true).inverse()[0][0]));
+			"modelMat"), 1, GL_FALSE, &(modelMat.getInverseMat()[0][0]));
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
-			"view"), 1, GL_FALSE, &(cam.getMatrix(true)[0][0]));
+			"model"), 1, GL_FALSE, &(mat.getMatrix(false).inverse()[0][0]));
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
-			"inverseView"), 1, GL_FALSE, &(cam.getInverseMat()[0][0]));
-		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
-			"inverseProj"), 1, GL_FALSE, &(cam.getInverseProjection()[0][0]));
+			"view"), 1, GL_FALSE, &(cam.getMatrix(false)[0][0]));
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
 			"projection"), 1, GL_FALSE, &(cam.getProjMatrix()[0][0]));
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
-			"modelMat"), 1, GL_FALSE, &(modelMat.getInverseMat()[0][0]));
-
-		c = cam.getPosition();
+			"inverseView"), 1, GL_FALSE, &(cam.getInverseMat()[0][0]));
+		camPos = cam.getPosition();
 		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
-			"eye"), 1, (const GLfloat*)&c);
-
+			"eye"), 1, (const GLfloat*)&camPos);
 		glUniform1fv(glGetUniformLocation(this->shader.getProgram(),
 			"time"), 1, (const GLfloat*)&timeS);
+		glUniform1fv(glGetUniformLocation(this->shader.getProgram(),
+			"farNear"), 2, (const GLfloat*)&farNear);
+		glUniform1fv(glGetUniformLocation(this->shader.getProgram(),
+			"u_fov"), 1, (const GLfloat*)&fov);
+		glUniform2fv(glGetUniformLocation(this->shader.getProgram(),
+			"u_resolution"), 1, (const GLfloat*)&resolution);
+		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
+			"u_lightPos"), 1, (const GLfloat*)&lightPos);
+
+		glUniform1i(glGetUniformLocation(this->shader.getProgram(), // BASIC_SHADER
+			"isText"), (GLuint)boolValue);
+		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
+			"colorMat"), 1, (const GLfloat*)&color);
 
 		glDrawElements(GL_TRIANGLES, this->m_Entries[i].getNumIndices(), GL_UNSIGNED_INT, NULL);
 	}
@@ -229,6 +232,11 @@ void	Mesh::clear(void)
 void	Mesh::translate(Vec3 t)
 {
 	this->mat.translate(t);
+}
+
+void	Mesh::setPosition(Vec3 p)
+{
+	this->mat.setPosition(p);
 }
 
 unsigned int	Mesh::getShaderProgram(void)

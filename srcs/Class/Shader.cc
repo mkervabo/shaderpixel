@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/25 17:47:10 by gperez            #+#    #+#             */
-/*   Updated: 2021/08/02 15:42:31 by gperez           ###   ########.fr       */
+/*   Updated: 2021/08/04 21:25:26 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,6 @@ int				Shader::loadShader(std::string vertexPath, std::string fragPath)
 	}
 	return (0);
 }
-
 
 void			Shader::freeProgram(void)
 {

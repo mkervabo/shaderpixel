@@ -125,11 +125,13 @@ bool						Shaderpixel::loadMesh(t_objPath obj, std::string pathVertex, std::stri
 
 bool				Shaderpixel::init(void)
 {
-	if (this->loadMesh(g_objPath[E_PCUBE], VERTEX_RAYMARCH, FRAGMENT_RAYMARCH))
+	if (this->loadMesh(g_objPath[E_PCUBE], VERTEX_MANDELBULB, FRAGMENT_MANDELBULB))
 		return (1);
 	if (this->loadMesh(g_objPath[E_PBALL], VERTEX, FRAGMENT))
 		return (1);
-	this->meshes[1]->translate(Vec3(1.5, 2., 0.));
+	if (this->loadMesh(g_objPath[E_PBALL], VERTEX_LIGHT, FRAGMENT_LIGHT))
+		return (1);
+	this->meshes[1]->translate(Vec3(0., 0., -3.5));
 	std::cout << this->meshes[0]->getShaderProgram() << " " << this->meshes[1]->getShaderProgram() << "\n";
 	this->time.setTime();
 	return (0);
@@ -137,8 +139,11 @@ bool				Shaderpixel::init(void)
 
 void				Shaderpixel::update(Camera &cam)
 {
+	float	time = this->time.getTimeSeconds();
+	Vec3	lightPos = Vec3(1. * cos(time * 0.5), 1., 1. * sin(time * 0.5));
+	this->meshes[2]->setPosition(lightPos);
 	for (unsigned int i = 0; i < this->meshes.size(); i++)
-		this->meshes[i]->render(cam, this->time.getTimeSeconds());
+		this->meshes[i]->render(cam, time, lightPos);
 }
 
 void				Shaderpixel::inputKey(unsigned int key)

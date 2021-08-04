@@ -17,6 +17,6 @@ void main()
 {
 	textureCoord = aTex;
 	norm = aNorm;
-	pos = view * model * vec4(aPos, 1.);
-	gl_Position = projection * view * model * vec4(aPos, 1.0);
+	pos = vec4(aPos, 1.);
+	gl_Position = projection * view * model * vec4(aPos / 8., 1.0);
 }

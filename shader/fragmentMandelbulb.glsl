@@ -3,7 +3,6 @@
 out vec4		FragColor;
 in	vec2		textureCoord;
 in	vec3		norm;
-in	vec4		pos;
 
 uniform mat4	modelMat;
 uniform mat4	view;
@@ -15,8 +14,6 @@ const int MAX_STEPS = 100; // 100
 const int MAX_STEPS_REF = 10;
 const int MAX_AO_STEPS = 5;
 const int MAX_REFLECTIONS = 1;
-const float MIN_DIST = 0.0;
-const float MAX_DIST = 100.0; // 100
 const float EPSILON = 0.0025;
 const float EPSILON_REF = 0.01;
 
@@ -224,18 +221,19 @@ float shadows(in vec3 posHit, in vec3 vPL, float minDist, float maxDist, float k
 	return (0.);
 }
 
-vec3 calculateColor(s_light light[2], vec3 eye, vec3 pos, vec3 norm)
+vec3 calculateColor(s_light light, vec3 eye, vec3 pos, vec3 norm)
 {
 	vec3 colorObj = COLOR_OBJ;
+	// vec3 ambiantLight = colorObj * K_A; // * ambientOcclusion(pos, norm, 2., 1.2) * K_A;
 	vec3 ambiantLight = colorObj * ambientOcclusion(pos, norm, 2., 1.2) * K_A;
 	vec3 vEP = normalize(eye - pos);
 	vec3 color = vec3(0.);
 		
-	color += phongLight(light[0], vEP, norm, pos, colorObj);
+	color += phongLight(light, vEP, norm, pos, colorObj);
 		
 	pos += norm * 0.01;
-	float sh = shadows(pos, normalize(light[0].pos - pos),
-		0., distance(light[0].pos, pos), 10.);
+	float sh = shadows(pos, normalize(light.pos - pos),
+		0., distance(light.pos, pos), 10.);
 		
 	color *= sh;
 	color += ambiantLight;
@@ -243,41 +241,52 @@ vec3 calculateColor(s_light light[2], vec3 eye, vec3 pos, vec3 norm)
 
 }
 
-uniform mat4 inverseView;
-uniform mat4 proj;
+uniform mat4	inverseView;
+uniform mat4	projection;
+uniform float	farNear[2];
+uniform float	u_fov;
+uniform vec2	u_resolution;
+uniform vec3	u_lightPos;
 
 vec3	calculateMarchinDir(float fov, vec2 resolutionSize, vec2 fragCoord)
 {
-	vec2 xy = fragCoord - resolutionSize / 2.0 ;
-	float z = resolutionSize.y / tan(radians(fov));
-	return (normalize(vec3(xy, -z)));
+
+	// vec2 xy = fragCoord - resolutionSize / 2.0 ;
+	// float z = resolutionSize.y / tan(radians(fov));
+	// return (normalize(vec3(xy, -z)));
+
+	float	ratio = resolutionSize.x / resolutionSize.y;
+	vec2	xy = (fragCoord - 0.5) / resolutionSize;
+	//from [0,1] to [-1, 1]
+	xy.x = (2 * xy.x - 1) * ratio * tan(radians(fov / 2.));
+	xy.y = (2 * xy.y - 1) * tan(radians(fov / 2.));
+	return (normalize(vec3(xy, -1)));
 }
 
 void	main()
 {
-	vec2	iResolution = vec2(1024, 768);
-
-	vec3	dir = calculateMarchinDir(45., iResolution.xy, gl_FragCoord.xy / 2);
-
+	vec3	dir = calculateMarchinDir(u_fov, u_resolution, gl_FragCoord.xy / 2.);
+	float	cosA = dir.z;
 	vec3	worldDir = (inverseView * vec4(dir, 0.0)).xyz;
 
-	float	dist = ShortestDistanceToSurface(eye, worldDir, MIN_DIST, MAX_DIST);
+	float	dist = ShortestDistanceToSurface(eye, worldDir, farNear[1], farNear[0]);
+	// float	dist = ShortestDistanceToSurface(eye, worldDir, MIN_DIST, MAX_DIST);
 
 	vec3	posHit = eye + worldDir * dist;
 	vec3	norm = estimateNormal(posHit);
 
-	if (dist > MAX_DIST - EPSILON)
+	if (dist > farNear[0] - EPSILON)
 	{
+		gl_FragDepth = farNear[0];
 		FragColor = vec4(0.);
-		gl_FragDepth = 9999.;
 		return ;
 	}
 	s_light light[2];
-	light[0].pos = vec3(3. * cos(time * 0.5), 1., 3. * sin(time * 0.5));
+	light[0].pos = u_lightPos;
 	light[0].colorLight = vec3(1.0, 1.0, 1.0);
 	light[0].intensity = 0.5;
 
-	vec3 color = calculateColor(light, eye, posHit, norm);
+	vec3 color = calculateColor(light[0], eye, posHit, norm);
 
 	// for (int i = 0; i < MAX_REFLECTIONS; i++) // Reflexion
 	// {
@@ -297,9 +306,17 @@ void	main()
 	// 		color += K_R * calculateColor(light, eye, posHit, norm) * float((MAX_REFLECTIONS - i) / MAX_REFLECTIONS);
 	// }
 
-	float zc = (proj * vec4( posHit, 1.0 ) ).z;
-	float wc = (proj * vec4( posHit, 1.0 ) ).w;
-	gl_FragDepth = zc / wc;
+	// float zc = (projection * vec4( posHit, 1.0 ) ).z;
+	// float wc = (projection * vec4( posHit, 1.0 ) ).w;
+	// gl_FragDepth = zc/wc;
+
+	float	p10 = projection[2].z;
+	float	p11 = projection[3].z;
+	float eyeHitZ  = -dist * dot(worldDir, (vec3(0.,0.,-1.) * mat3(view)));
+	float ndcDepth = -p10 + -p11 / eyeHitZ;
+	// from [-1,1] to [0,1]
+    float dep = ((gl_DepthRange.diff * ndcDepth) + gl_DepthRange.near + gl_DepthRange.far) / 2.0;
+    gl_FragDepth = dep;
 
 	FragColor = vec4(color, 1.0);
 }
