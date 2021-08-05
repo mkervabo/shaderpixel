@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/25 17:47:37 by gperez            #+#    #+#             */
-/*   Updated: 2021/08/05 00:16:57 by gperez           ###   ########.fr       */
+/*   Updated: 2021/08/05 00:39:33 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 
 # define VERTEX_MANDELBULB "shader/vertexMandelbulb.glsl"
 # define FRAGMENT_MANDELBULB "shader/fragmentMandelbulb.glsl"
+
+# define FRAGMENT_TETRAHEDRON "shader/fragmentTetrahedron.glsl"
 
 # define VERTEX_LIGHT "shader/vertexLight.glsl"
 # define FRAGMENT_LIGHT "shader/fragmentLight.glsl"

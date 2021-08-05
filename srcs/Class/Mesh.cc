@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 16:57:27 by gperez            #+#    #+#             */
-/*   Updated: 2021/08/05 00:19:14 by gperez           ###   ########.fr       */
+/*   Updated: 2021/08/05 00:53:33 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,11 +151,10 @@ bool	Mesh::loadMesh(t_objPath pathMesh)
 	return (this->loadMesh(pathMesh, VERTEX, FRAGMENT));
 }
 
-void	Mesh::render(Camera &cam, float timeS, Vec3 &lightPos) // On parcours tous les mesh de notre objet et on l'affiche avec la texture qui lui est lier
+void	Mesh::render(Camera &cam, float timeS, Vec3 &lightPos, Mat &modelMat) // On parcours tous les mesh de notre objet et on l'affiche avec la texture qui lui est lier
 {
 	int		boolValue = 1;
 	Vec3	camPos;
-	Mat		modelMat;
 	Vec3	color;
 	float	farNear[2] = {FAR_Z, NEAR_Z};
 	float	fov = FOV;
@@ -177,7 +176,6 @@ void	Mesh::render(Camera &cam, float timeS, Vec3 &lightPos) // On parcours tous 
 			boolValue = 0;
 		color = this->m_Materials[materialIndex].getColor();
 
-		modelMat.rotate(Vec3(0., timeS * 10., 0.));
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
 			"modelMat"), 1, GL_FALSE, &(modelMat.getInverseMat()[0][0]));
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),

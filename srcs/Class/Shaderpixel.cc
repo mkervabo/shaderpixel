@@ -140,10 +140,12 @@ bool				Shaderpixel::init(void)
 void				Shaderpixel::update(Camera &cam)
 {
 	float	time = this->time.getTimeSeconds();
+	Mat		modelMat;
+	modelMat.rotate(Vec3(time * 7., time * 10., time * 5.));
 	Vec3	lightPos = Vec3(1. * cos(time * 0.5), 1., 1. * sin(time * 0.5));
 	this->meshes[2]->setPosition(lightPos);
 	for (unsigned int i = 0; i < this->meshes.size(); i++)
-		this->meshes[i]->render(cam, time, lightPos);
+		this->meshes[i]->render(cam, time, lightPos, modelMat);
 }
 
 void				Shaderpixel::inputKey(unsigned int key)
