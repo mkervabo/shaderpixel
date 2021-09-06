@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 16:57:27 by gperez            #+#    #+#             */
-/*   Updated: 2021/08/05 00:53:33 by gperez           ###   ########.fr       */
+/*   Updated: 2021/08/05 16:46:39 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,7 @@ bool	Mesh::loadMesh(t_objPath pathMesh)
 
 void	Mesh::render(Camera &cam, float timeS, Vec3 &lightPos, Mat &modelMat) // On parcours tous les mesh de notre objet et on l'affiche avec la texture qui lui est lier
 {
-	int		boolValue = 1;
+	int		boolValue = 0;
 	Vec3	camPos;
 	Vec3	color;
 	float	farNear[2] = {FAR_Z, NEAR_Z};
@@ -171,9 +171,10 @@ void	Mesh::render(Camera &cam, float timeS, Vec3 &lightPos, Mat &modelMat) // On
 		// On check si le materiaux est une texture ou non
 		const unsigned int materialIndex = this->m_Entries[i].getMatIdx();
 		if (materialIndex < this->m_Materials.size() && this->m_Materials[materialIndex].getTexture())
+		{
 			this->m_Materials[materialIndex].getTexture()->bind(GL_TEXTURE0);
-		else
-			boolValue = 0;
+			boolValue = 1;
+		}
 		color = this->m_Materials[materialIndex].getColor();
 
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
