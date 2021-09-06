@@ -224,19 +224,19 @@ float shadows(in vec3 posHit, in vec3 vPL, float minDist, float maxDist, float k
 vec3 calculateColor(s_light light, vec3 eye, vec3 pos, vec3 norm)
 {
 	vec3 colorObj = COLOR_OBJ;
-	 vec3 ambiantLight = colorObj * K_A;
-	//vec3 ambiantLight = colorObj * ambientOcclusion(pos, norm, 2., 1.2) * K_A;
+	// vec3 ambiantLight = colorObj * K_A;
+	vec3 ambiantLight = colorObj * ambientOcclusion(pos, norm, 2., 1.2) * K_A;
 	vec3 vEP = normalize(eye - pos);
 	vec3 color = vec3(0.);
 		
 	color += phongLight(light, vEP, norm, pos, colorObj);
 		
 	pos += norm * 0.01;
-	//float sh = shadows(pos, normalize(light.pos - pos),
-	//	0., distance(light.pos, pos), 10.);
+	float sh = shadows(pos, normalize(light.pos - pos),
+		0., distance(light.pos, pos), 10.);
 		
-	//color *= sh;
-	//color += ambiantLight;
+	color *= sh;
+	color += ambiantLight;
 	return (color);
 
 }
