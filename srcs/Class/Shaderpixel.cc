@@ -14,6 +14,11 @@
 
 Shaderpixel::Shaderpixel()
 {
+	this->time.setTime();
+	this->frameNb = 0;
+	this->currentFrameNb = 0;
+	this->lastTime = 0.;
+	this->deltaTime = 0.;
 	this->firstMoove = true;
 	for (unsigned int i = 0; i < GLFW_KEY_END; i++)
 		this->keys[i] = KEY_RELEASE;
@@ -123,14 +128,21 @@ bool						Shaderpixel::loadMesh(t_objPath obj, std::string pathVertex, std::stri
 	return (0);
 }
 
+bool				Shaderpixel::load(e_pathObj enu, std::string vertex, std::string fragment)
+{
+	if (enu >= E_PEND)
+		return (1);
+	return (this->loadMesh(g_objPath[enu], vertex, fragment));
+}
+
 bool				Shaderpixel::init(void)
 {
-	if (this->loadMesh(g_objPath[E_PCUBE], VERTEX_MANDELBULB, FRAGMENT_MANDELBULB))
+	if (this->hud.init())
 		return (1);
-	if (this->loadMesh(g_objPath[E_PBALL], VERTEX, FRAGMENT))
-		return (1);
-	if (this->loadMesh(g_objPath[E_PBALL], VERTEX_LIGHT, FRAGMENT_LIGHT))
-		return (1);
+	if (load(E_PCUBE, VERTEX, FRAGMENT)
+		|| load(E_PBALL, VERTEX, FRAGMENT)
+		|| load(E_PBALL, VERTEX_LIGHT, FRAGMENT_LIGHT))
+			return (1);
 	this->meshes[1]->translate(Vec3(0., 0., -3.5));
 	std::cout << this->meshes[0]->getShaderProgram() << " " << this->meshes[1]->getShaderProgram() << "\n";
 	this->time.setTime();
@@ -141,11 +153,22 @@ void				Shaderpixel::update(Camera &cam)
 {
 	float	time = this->time.getTimeSeconds();
 	Mat		modelMat;
-	modelMat.rotate(Vec3(time * 7., time * 10., time * 5.));
+	//modelMat.rotate(Vec3(time * 7., time * 10., time * 5.));
 	Vec3	lightPos = Vec3(1. * cos(time * 0.5), 1., 1. * sin(time * 0.5));
 	this->meshes[2]->setPosition(lightPos);
 	for (unsigned int i = 0; i < this->meshes.size(); i++)
 		this->meshes[i]->render(cam, time, lightPos, modelMat);
+	this->currentFrameNb++;
+}
+
+void				Shaderpixel::displayHud(void)
+{
+	if (this->isTimeToDisplay())
+	{
+		this->frameNb = currentFrameNb;
+		this->currentFrameNb = 0;
+	}
+	this->hud.display(this->getFrameNb());
 }
 
 void				Shaderpixel::inputKey(unsigned int key)
@@ -195,6 +218,27 @@ void				Shaderpixel::checkKeys(void)
 bool				Shaderpixel::isFirst(void)
 {
 	return (this->firstMoove);
+}
+
+void				Shaderpixel::calcTime(void)
+{
+	float currentTime = this->time.getTimeSeconds();
+	this->deltaTime = currentTime - this->lastTime;
+	this->lastTime = currentTime;
+}
+
+bool				Shaderpixel::isTimeToDisplay(void)
+{
+	this->addedTime += this->deltaTime;
+	if (this->addedTime < 1. + PREC)
+		return (false);
+	this->addedTime = 0.;
+	return (true);
+}
+
+int					Shaderpixel::getFrameNb(void)
+{
+	return (this->frameNb);
 }
 
 Shaderpixel::~Shaderpixel()

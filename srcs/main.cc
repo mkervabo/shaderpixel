@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 15:29:41 by gperez            #+#    #+#             */
-/*   Updated: 2021/08/04 22:19:44 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/03 21:06:48 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ void	exec(Shaderpixel &env)
 	env.getKeys();
 	env.checkKeys();
 	env.update(env.getCam());
+	env.calcTime();
+	env.displayHud();
 	glfwSwapBuffers(env.getWindow());
 	glfwPollEvents();
 }
@@ -61,7 +63,6 @@ int		main(void)
 		std::cout << "Error in the initialization\n";
 		return (1);
 	}
-
 	// Boucle Exec //
 	while(!glfwWindowShouldClose(env.getWindow()))
 	{

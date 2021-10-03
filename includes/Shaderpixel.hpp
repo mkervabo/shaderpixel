@@ -15,6 +15,7 @@
 
 # include <iostream>
 # include "Error.hpp"
+# include "Hud.hpp"
 # include <queue>
 # include "Vec2.hpp"
 # include "TimeMs.hpp"
@@ -35,20 +36,33 @@ class Shaderpixel
 {
 	private:
 		GLFWwindow					*window;
+		Hud							hud;
+		TimeMs						time;
+		int							frameNb;
+		int							currentFrameNb;
+		float						lastTime;
+		float						deltaTime;
+		float						addedTime;
+
 		Camera						cam;
 		Vec2						mouseLastPos;
 		bool						firstMoove;
-		char						keys[GLFW_KEY_END];
+
+		// Keys //
 		std::queue<char>			queue;
+		char						keys[GLFW_KEY_END];
 		void						setKey(unsigned int key, char state);
 		void						inputKey(unsigned int key);
+	
+		bool						load(e_pathObj enu, std::string vertex, std::string fragment);
 		std::vector<Mesh*>			meshes;
-		TimeMs						time;
+
 	public:
 		Shaderpixel();
 		void						initWindow(void);
 		bool						init(void);
-		void						update(Camera &cam);	
+		void						update(Camera &cam);
+		void						displayHud(void);
 		void						checkKeys(void);
 		void 						loadVBO(void);
 		bool						loadMesh(t_objPath obj);
@@ -66,6 +80,10 @@ class Shaderpixel
 		void						generateBuffers(void);
 		
 		bool						isFirst(void);
+
+		void						calcTime(void);
+		bool						isTimeToDisplay(void);
+		int							getFrameNb(void);
 		~Shaderpixel();
 };
 

@@ -6,7 +6,7 @@
 #    By: gperez <gperez@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/06 13:36:11 by gperez            #+#    #+#              #
-#    Updated: 2021/07/29 17:40:45 by gperez           ###   ########.fr        #
+#    Updated: 2021/10/03 21:21:02 by gperez           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,6 +34,8 @@ SRC =	srcs/main.cc \
 		srcs/Class/MeshEntry.cc \
 		srcs/Class/Texture.cc \
 		srcs/Class/Material.cc \
+		srcs/Class/Hud.cc \
+		srcs/Class/HudElement.cc \
 
 NC = \033[0m
 BOLD =\033[1m
@@ -82,6 +84,8 @@ INC =	includes/Shaderpixel.hpp \
 		includes/MeshEntry.hpp \
 		includes/Texture.hpp \
 		includes/Material.hpp \
+		includes/Hud.hpp \
+		includes/HudElement.hpp \
 
 OBJ = $(SRC:.cc=.o)
 
