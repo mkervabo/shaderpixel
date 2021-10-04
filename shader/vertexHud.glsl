@@ -3,6 +3,7 @@ layout (location = 0) in vec2 aPos;
 
 uniform mat4	view;
 uniform int		number;
+uniform vec3	scale;
 
 out	vec2		tCoords;
 
@@ -13,9 +14,9 @@ void main()
 
 	offset.x = number % 4;
 	offset.y = number / 4;
-	tCoords = (aPos + 1) / 2;
+	tCoords = (aPos + 1.) / 2.;
 	tCoords.x = (tCoords.x / 4.0) + (1.0 / 4.0) * offset.x;
-	tCoords.y = (tCoords.y / 3.0 + 2.0 / 3.0) - (1.0 / 3.0) * offset.y;
-	pos4 = vec4(aPos, 0.0, 1.0);
+	tCoords.y = (tCoords.y / 3.0 + 2. / 3.) - (1.0 / 3.0) * offset.y;
+	pos4 = vec4(aPos * scale.xy, 0.0, 1.0);
 	gl_Position = view * pos4;
 }

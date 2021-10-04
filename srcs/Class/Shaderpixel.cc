@@ -165,6 +165,7 @@ void				Shaderpixel::displayHud(void)
 {
 	if (this->isTimeToDisplay())
 	{
+		std::cout << this->frameNb << "\n";
 		this->frameNb = currentFrameNb;
 		this->currentFrameNb = 0;
 	}
