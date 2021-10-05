@@ -105,7 +105,7 @@ void				Shaderpixel::initWindow(void)
 	glfwSetCursorPosCallback(this->window, mouse_callback);
 	glfwSetWindowUserPointer(this->window, this);
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-	glfwSwapInterval(VSYNC_OFF);
+	glfwSwapInterval(VSYNC_ON);
 }
 
 bool						Shaderpixel::loadMesh(t_objPath obj)
@@ -139,12 +139,12 @@ bool				Shaderpixel::init(void)
 {
 	if (this->hud.init())
 		return (1);
-	if (load(E_PCUBE, VERTEX, FRAGMENT)
+	if (load(E_PBALL, VERTEX_LIGHT, FRAGMENT_LIGHT)
 		|| load(E_PBALL, VERTEX, FRAGMENT)
-		|| load(E_PBALL, VERTEX_LIGHT, FRAGMENT_LIGHT))
+		|| load(E_PCUBE, VERTEX_FIELD, FRAGMENT_FIELD))
 			return (1);
 	this->meshes[1]->translate(Vec3(0., 0., -3.5));
-	std::cout << this->meshes[0]->getShaderProgram() << " " << this->meshes[1]->getShaderProgram() << "\n";
+	// std::cout << this->meshes[0]->getShaderProgram() << " " << this->meshes[1]->getShaderProgram() << "\n";
 	this->time.setTime();
 	return (0);
 }
@@ -155,7 +155,7 @@ void				Shaderpixel::update(Camera &cam)
 	Mat		modelMat;
 	//modelMat.rotate(Vec3(time * 7., time * 10., time * 5.));
 	Vec3	lightPos = Vec3(1. * cos(time * 0.5), 1., 1. * sin(time * 0.5));
-	this->meshes[2]->setPosition(lightPos);
+	this->meshes[0]->setPosition(lightPos);
 	for (unsigned int i = 0; i < this->meshes.size(); i++)
 		this->meshes[i]->render(cam, time, lightPos, modelMat);
 	this->currentFrameNb++;

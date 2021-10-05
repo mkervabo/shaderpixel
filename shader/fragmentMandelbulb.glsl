@@ -314,8 +314,8 @@ void	main()
 	float eyeHitZ  = -dist * dot(worldDir, (vec3(0.,0.,-1.) * mat3(view)));
 	float ndcDepth = -p10 + -p11 / eyeHitZ;
 	// from [-1,1] to [0,1]
-    float dep = ((gl_DepthRange.diff * ndcDepth) + gl_DepthRange.near + gl_DepthRange.far) / 2.0;
-    gl_FragDepth = dep;
+	float dep = ((gl_DepthRange.diff * ndcDepth) + gl_DepthRange.near + gl_DepthRange.far) / 2.0;
+	gl_FragDepth = dep;
 
 	FragColor = vec4(color, 1.0);
 }

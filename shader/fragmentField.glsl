@@ -1,3 +1,20 @@
+#version 410 core
+
+in vec4			pos;
+out vec4		FragColor;
+
+uniform mat4	modelMat;
+uniform mat4	view;
+uniform vec3	eye;
+uniform float	time;
+
+uniform mat4	inverseView;
+uniform mat4	projection;
+uniform float	farNear[2];
+uniform float	u_fov;
+uniform vec2	u_resolution;
+uniform vec3	u_lightPos;
+
 const int MAX_STEPS = 200;
 const int MAX_AO_STEPS = 10;
 const float MIN_DIST = 0.0;
@@ -17,7 +34,6 @@ struct s_light
 	vec3 colorLight;
 	float intensity;
 };
-
 
 float smin( float a, float b, float k )
 {
@@ -101,9 +117,12 @@ float ShortestDistanceToSurface(vec3 eyeP, vec3 marchinDir, float start,
 
 vec3 calculateMarchinDir(float fov, vec2 resolutionSize, vec2 fragCoord)
 {
-	vec2 xy = fragCoord - resolutionSize / 2.0;
-	float z = resolutionSize.y / tan(radians(fov));
-	return (normalize(vec3(xy, -z)));
+	float	ratio = resolutionSize.x / resolutionSize.y;
+	vec2	xy = (fragCoord - 0.5) / resolutionSize;
+	//from [0,1] to [-1, 1]
+	xy.x = (2 * xy.x - 1) * ratio * tan(radians(fov / 2.));
+	xy.y = (2 * xy.y - 1) * tan(radians(fov / 2.));
+	return (normalize(vec3(xy, -1)));
 }
 
 vec3 estimateNormal(vec3 p, float octaves)
@@ -130,9 +149,9 @@ vec3 phongLight(s_light light, vec3 vPToEye, vec3 norm, vec3 pos, vec3 colorObj)
 	{
 		return (light.intensity * (colorObj * diffuse));
 	}
-	vec3 ret;
+	vec3 ret = vec3(0.);
 
-	ret += light.intensity * (colorObj * diffuse);
+	ret = light.intensity * (colorObj * diffuse);
 	ret += light.intensity * (light.colorLight * pow(specular, K_SHIN) * K_S);
 	return (ret);
 }
@@ -153,60 +172,68 @@ mat4 viewMatrix(vec3 eye, vec3 pToLook, vec3 up)
 
 vec3 calculateColor(s_light light, vec3 eye, vec3 norm, vec3 pos, float dist, vec3 skyColor)
 {
-	vec3 color;
-	vec3 vPToEye = normalize(eye - pos);
-  
-	float rand = random(pos.xz);
-	vec3 rockColor = vec3(158. / 255., 100. / 255., 48. / 255.) / 2.;
-	color += mix(vec3(0.3, 0.42, 0.3), rockColor, smoothstep(0.3, 0.8, pos.y));
+	// return (vec3(pos.y));
 	
-	float smoothSnow = smoothstep(0.9, 1., pos.y);
+	float posY = pos.y;
+
+	vec3 color = vec3(0.);// = vec3(1., 0., 1.);
+	vec3 vPToEye = normalize(eye - pos);
+
+	vec3 rockColor = vec3(158. / 255., 100. / 255., 48. / 255.) / 2.;
+	vec3 forestColor = vec3(0.3, 0.42, 0.3);
+	color = mix(forestColor, rockColor, smoothstep(0.3, 0.8, posY));
+	// color += mix(vec3(0.3, 0.42, 0.3), rockColor, smoothstep(-100., 200., posY));
+	
+	// float smoothSnow = smoothstep(100., 500., posY);
+	float smoothSnow = smoothstep(0.9, 1., posY);
 	color += smoothSnow * vec3(1.);
-		
+	
 	color = phongLight(light, vPToEye, norm, pos, color);
-	color = mix(color, skyColor, smoothstep(0., 8., dist));
+	color = mix(color, skyColor, smoothstep(-4., 8., dist));
 	return (color);
 }
 
-void mainImage( out vec4 fragColor, in vec2 fragCoord )
+void main(void)
 {
-	vec3 dir = calculateMarchinDir(45., iResolution.xy, fragCoord );
-	vec3 eye = vec3(0., 2., iTime * 0.5);
-	//vec3 eye = vec3(1.5 * cos(iTime * 0.5), 1., 1.5 * sin(iTime * 0.5));
+	vec3 dir = calculateMarchinDir(u_fov, u_resolution, gl_FragCoord.xy / 2.);
+	
+	//vec3 eyeP = eye + vec3(0., 2., 0.5);
+	//float moove = time * 0.5;
+	float moove = 0.;
+	vec3 eyeP = eye + vec3(0., 1.5, moove);
 
-	mat4 viewToWorld = viewMatrix(eye, vec3(0.0, 0.0, 5.0 + iTime * 0.5),
-		vec3(0.0, 1.0, 0.0));
-
-	vec3 worldDir = (viewToWorld * vec4(dir, 0.0)).xyz;
+	vec3 worldDir = (inverseView * vec4(dir, 0.0)).xyz;
 
 	vec3 skyColor = mix(vec3(.7, .8, 1.), vec3(0.1, 0.1, .2), sat(worldDir.y + 0.5));
 
-	float dist = ShortestDistanceToSurface(eye, worldDir, MIN_DIST, MAX_DIST, 16.);
-	vec3 posHit = eye + worldDir * dist;
-	float octaves = dist < 3. ? 128. : 16.;
+	float dist = ShortestDistanceToSurface(eyeP, worldDir, MIN_DIST, MAX_DIST, 128.);
+	vec3 posHit = eyeP + worldDir * dist;
+	float octaves;
 
 	if (dist < 4.)
-		octaves = 128.;
+		octaves = 128.; // 128
 	else if (dist < 8.)
-		octaves = 64.;
+		octaves = 64.; // 64
 	else
-		octaves = 8.;
+		octaves = 8.; // 8
+	
 	vec3 norm = estimateNormal(posHit, octaves);
+
 	if (dist > MAX_DIST - EPSILON)
 	{
-		fragColor = vec4(skyColor, 1.);
+		FragColor = vec4(skyColor, 0.98);
 		return ;
 	}
 	s_light light;
-	light.pos = vec3(100.0, 200.0, 100.0);
+	// light.pos = eye;
+	light.pos = vec3(0., 10., 0.);
+	// light.pos = vec3(u_lightPos);
+	//light.pos.z += moove;
 	light.colorLight = vec3(1.0, 1.0, 1.0);
 	light.intensity = 0.5;
 
-	vec3 color = calculateColor(light[0], eye, norm, posHit, dist, skyColor);
-
-	//float ambiantCoef = ambientOcclusion(posHit, norm, 2., 1.9) * K_A;
-	//vec3 ambiantLight = dColorObj * ambiantCoef;
-	//vec3 color = ambiantLight;
-		
-	fragColor = vec4(color, 1.0);
+	float distToObj = distance(pos.xyz, eye);
+	dist = distToObj < 0. ? dist : dist - distToObj;
+	vec3 color = calculateColor(light, eyeP, norm, posHit, dist, skyColor);
+	FragColor = vec4(color, 1.0);
 }

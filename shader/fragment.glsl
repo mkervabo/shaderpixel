@@ -9,7 +9,7 @@ in	vec4	pos;
 uniform sampler2D	text;
 uniform vec3		colorMat;
 uniform int			isText;
-uniform vec3	u_lightPos;
+uniform vec3		u_lightPos;
 
 #define AMBIENT_COEF 0.1 
 #define LIGHT_COL vec3(1.0, 1.0, 1.0)
@@ -18,7 +18,7 @@ void	main()
 {
 	vec3	ambient = AMBIENT_COEF * LIGHT_COL;
 	vec3	lightDir = normalize(u_lightPos - pos.xyz);
-	float	diff = max(dot(norm, lightDir), 0.0);
+	float	diff = max(dot(lightDir, norm), 0.0);
 	vec3	diffuse = diff * LIGHT_COL;
 
 	if (isText == 1)
