@@ -141,7 +141,7 @@ bool				Shaderpixel::init(void)
 		return (1);
 	if (load(E_PBALL, VERTEX_LIGHT, FRAGMENT_LIGHT)
 		|| load(E_PBALL, VERTEX, FRAGMENT)
-		|| load(E_PCUBE, VERTEX_FIELD, FRAGMENT_FIELD))
+		|| load(E_PCUBE, VERTEX_ASTEROID, FRAGMENT_ASTEROID))
 			return (1);
 	this->meshes[1]->translate(Vec3(0., 0., -3.5));
 	// std::cout << this->meshes[0]->getShaderProgram() << " " << this->meshes[1]->getShaderProgram() << "\n";

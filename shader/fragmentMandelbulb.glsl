@@ -9,6 +9,13 @@ uniform mat4	view;
 uniform vec3	eye;
 uniform float	time;
 
+uniform mat4	inverseView;
+uniform mat4	projection;
+uniform float	farNear[2];
+uniform float	u_fov;
+uniform vec2	u_resolution;
+uniform vec3	u_lightPos;
+
 const int MAX_ITERATIONS = 7; // 7
 const int MAX_STEPS = 100; // 100
 const int MAX_STEPS_REF = 10;
@@ -241,13 +248,6 @@ vec3 calculateColor(s_light light, vec3 eye, vec3 pos, vec3 norm)
 
 }
 
-uniform mat4	inverseView;
-uniform mat4	projection;
-uniform float	farNear[2];
-uniform float	u_fov;
-uniform vec2	u_resolution;
-uniform vec3	u_lightPos;
-
 vec3	calculateMarchinDir(float fov, vec2 resolutionSize, vec2 fragCoord)
 {
 
@@ -263,7 +263,7 @@ vec3	calculateMarchinDir(float fov, vec2 resolutionSize, vec2 fragCoord)
 	return (normalize(vec3(xy, -1)));
 }
 
-void	main()
+void	main(void)
 {
 	vec3	dir = calculateMarchinDir(u_fov, u_resolution, gl_FragCoord.xy / 2.);
 	vec3	worldDir = (inverseView * vec4(dir, 0.0)).xyz;
