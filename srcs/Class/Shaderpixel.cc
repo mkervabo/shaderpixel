@@ -115,9 +115,16 @@ bool						Shaderpixel::loadMesh(t_objPath obj)
 
 bool						Shaderpixel::loadMesh(t_objPath obj, std::string pathVertex, std::string pathFragment)
 {
-	Mesh	*m = new Mesh;
-
-	this->meshes.push_back(m);
+	if (!pathFragment.compare(FRAGMENT_CLOUD))
+	{
+		ShaderCloud	*m = new ShaderCloud;
+		this->meshes.push_back(m);
+	}
+	else
+	{
+		Mesh	*m = new Mesh;
+		this->meshes.push_back(m);
+	}
 	if (!this->meshes.size())
 		return (1);
 	if (this->meshes[this->meshes.size() - 1]->loadMesh(obj, pathVertex, pathFragment))
@@ -141,7 +148,7 @@ bool				Shaderpixel::init(void)
 		return (1);
 	if (load(E_PBALL, VERTEX_LIGHT, FRAGMENT_LIGHT)
 		|| load(E_PBALL, VERTEX, FRAGMENT)
-		|| load(E_PCUBE, VERTEX_ASTEROID, FRAGMENT_ASTEROID))
+		|| load(E_PCUBE, VERTEX_CLOUD, FRAGMENT_CLOUD))
 			return (1);
 	this->meshes[1]->translate(Vec3(0., 0., -3.5));
 	// std::cout << this->meshes[0]->getShaderProgram() << " " << this->meshes[1]->getShaderProgram() << "\n";

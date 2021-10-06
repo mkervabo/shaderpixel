@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 16:57:27 by gperez            #+#    #+#             */
-/*   Updated: 2021/08/05 16:46:39 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/06 13:14:06 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ bool Mesh::initMaterials(const aiScene* pScene, const t_objPath& path) // Genere
 					std::string fullPath = Dir + pathFromAssimp.data; // On ajoute le chemin relatif afin de le transformer en chemin absolue
 					this->m_Materials[i].newTexture();
 					std::cout << fullPath << "\n";
-					if (this->m_Materials[i].getTexture()->load(GL_TEXTURE_2D, (char*)fullPath.c_str())) // On charge la texture et la genere pour openGL
+					if (this->m_Materials[i].load(GL_TEXTURE_2D, (char*)fullPath.c_str())) // On charge la texture et la genere pour openGL
 					{
 						printf("Error loading texture '%s'\n", fullPath.c_str());
 						this->m_Materials[i].deleteTexture();
@@ -100,10 +100,10 @@ bool Mesh::initMaterials(const aiScene* pScene, const t_objPath& path) // Genere
 					}
 				}
 			}
-			else if (!this->m_Materials[i].getTexture())
+			else if (!this->m_Materials[i].asTexture())
 			{
 				this->m_Materials[i].newTexture();
-				ret = this->m_Materials[i].getTexture()->load(GL_TEXTURE_2D, (char*)PATH_DEFAULT_TEXTURE);
+				ret = this->m_Materials[i].load(GL_TEXTURE_2D, (char*)PATH_DEFAULT_TEXTURE);
 			}
 		}
 	}
@@ -170,9 +170,9 @@ void	Mesh::render(Camera &cam, float timeS, Vec3 &lightPos, Mat &modelMat) // On
  		glUseProgram(this->shader.getProgram());
 		// On check si le materiaux est une texture ou non
 		const unsigned int materialIndex = this->m_Entries[i].getMatIdx();
-		if (materialIndex < this->m_Materials.size() && this->m_Materials[materialIndex].getTexture())
+		if (materialIndex < this->m_Materials.size() && this->m_Materials[materialIndex].asTexture())
 		{
-			this->m_Materials[materialIndex].getTexture()->bind(GL_TEXTURE0);
+			this->m_Materials[materialIndex].bind(GL_TEXTURE0);
 			boolValue = 1;
 		}
 		color = this->m_Materials[materialIndex].getColor();

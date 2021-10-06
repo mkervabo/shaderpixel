@@ -20,6 +20,7 @@
 # include "Vec2.hpp"
 # include "TimeMs.hpp"
 # include "Mesh.hpp"
+# include "ShaderCloud.hpp"
 # include "glfw3.h" // Load fenetre
 
 # define RATIO (float)WIDTH / (float)HEIGHT

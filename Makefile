@@ -6,7 +6,7 @@
 #    By: gperez <gperez@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/06 13:36:11 by gperez            #+#    #+#              #
-#    Updated: 2021/10/03 21:21:02 by gperez           ###   ########.fr        #
+#    Updated: 2021/10/06 13:04:48 by gperez           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,6 +36,7 @@ SRC =	srcs/main.cc \
 		srcs/Class/Material.cc \
 		srcs/Class/Hud.cc \
 		srcs/Class/HudElement.cc \
+		srcs/ShaderClasses/ShaderCloud.cc \
 
 NC = \033[0m
 BOLD =\033[1m
@@ -71,6 +72,7 @@ LIBS_H =	libs/includes/ \
 			libs/stb/ \
 			includes/ \
 			libs/assimp/include/ \
+			includes/ShaderClasses \
 
 LIBS = $(addprefix -I,$(LIBS_H))
 
@@ -86,6 +88,7 @@ INC =	includes/Shaderpixel.hpp \
 		includes/Material.hpp \
 		includes/Hud.hpp \
 		includes/HudElement.hpp \
+		includes/ShaderClasses/ShaderCloud.hpp \
 
 OBJ = $(SRC:.cc=.o)
 

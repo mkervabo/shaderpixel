@@ -1,4 +1,21 @@
-const int MAX_ITERATIONS = 100;
+#version 410 core
+
+out vec4		FragColor;
+in	vec2		textureCoord;
+in	vec3		norm;
+
+uniform mat4	modelMat;
+uniform mat4	view;
+uniform vec3	eye;
+uniform float	time;
+
+uniform mat4	inverseView;
+uniform mat4	projection;
+uniform float	farNear[2];
+uniform float	u_fov;
+uniform vec2	u_resolution;
+uniform vec3	u_lightPos;
+
 const int MAX_REFLECTIONS = 1;
 const int MAX_STEPS = 300;
 const int MAX_STEPS_REF = 200;
@@ -442,7 +459,7 @@ mat4 viewMatrix(vec3 eye, vec3 pToLook, vec3 up)
 	));
 }
 
-void mainImage( out vec4 fragColor, in vec2 fragCoord )
+void main(void)
 {
 	s_env env;
 	env.ray.dir = calculateMarchinDir(45., iResolution.xy, fragCoord);

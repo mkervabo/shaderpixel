@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/25 17:47:37 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/05 16:08:41 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/06 11:23:10 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,9 @@
 
 # define VERTEX_ASTEROID "shader/vertexAsteroid.glsl"
 # define FRAGMENT_ASTEROID "shader/fragmentAsteroid.glsl"
+
+# define VERTEX_CLOUD "shader/vertexCloud.glsl"
+# define FRAGMENT_CLOUD "shader/fragmentCloud.glsl"
 
 # define VERTEX_LIGHT "shader/vertexLight.glsl"
 # define FRAGMENT_LIGHT "shader/fragmentLight.glsl"

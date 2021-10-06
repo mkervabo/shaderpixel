@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/27 14:26:47 by gperez            #+#    #+#             */
-/*   Updated: 2021/07/27 15:13:00 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/06 13:17:25 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,27 @@ Material::Material()
 	this->isText = true;
 }
 
+bool	Material::asTexture(void)
+{
+	return (this->text ? true : false);
+}
+
 void	Material::setTexture(Texture *t)
 {
 	this->text = t;
 }
 
-Texture	*Material::getTexture(void)
+bool	Material::load(GLenum target, char *txt)
 {
-	return (this->text);
+	if (this->text)
+		return (this->text->load(target, txt));
+	return (true);
+}
+
+void	Material::bind(GLenum textureUnit)
+{
+	if (this->text)
+		this->text->bind(textureUnit);
 }
 
 void	Material::setIsText(bool isT)

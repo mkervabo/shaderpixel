@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 20:12:28 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/04 13:40:30 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/06 13:17:54 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int			Hud::init(void)
 	if (isInit)
 		return (0);
 	this->texture.newTexture();
-	if (this->texture.getTexture()->load(GL_TEXTURE_2D, (char*)HUD_TEXTURE_PATH))
+	if (this->texture.load(GL_TEXTURE_2D, (char*)HUD_TEXTURE_PATH))
 		return (1);
 	if (this->shader.loadShader((char*)VERTEX_HUD, (char*)FRAGMENT_HUD))
 		return (1);
@@ -92,7 +92,7 @@ void		Hud::newElement(void)
 
 void		Hud::display(int fps)
 {
-	this->texture.getTexture()->bind(GL_TEXTURE0);
+	this->texture.bind(GL_TEXTURE0);
 	syncFpsToElements(fps);
 	glDepthMask(false);
 	for (unsigned int i = 0; i < this->hudElements.size(); i++)

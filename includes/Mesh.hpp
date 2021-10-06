@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 17:01:05 by gperez            #+#    #+#             */
-/*   Updated: 2021/08/05 00:53:14 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/06 12:49:07 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 
 class Mesh
 {
-	private:
+	protected:
 		std::vector<MeshEntry>	m_Entries;
 		std::vector<Material>	m_Materials;
 		// unsigned int	id;
@@ -42,13 +42,13 @@ class Mesh
 	public:
 		Mesh();
 		bool			loadMesh(t_objPath pathMesh);
-		bool			loadMesh(t_objPath pathMesh, std::string pathVertex, std::string pathFragment);
-		void			render(Camera &cam, float timeS, Vec3 &lightPos, Mat &modelMat);
+		virtual bool	loadMesh(t_objPath pathMesh, std::string pathVertex, std::string pathFragment);
+		virtual void	render(Camera &cam, float timeS, Vec3 &lightPos, Mat &modelMat);
 		void			clear(void);
 		void			translate(Vec3 t);
 		void			setPosition(Vec3 p);
 		unsigned int	getShaderProgram(void);
-		~Mesh();
+		virtual ~Mesh();
 };
 
 #endif

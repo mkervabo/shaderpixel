@@ -1,3 +1,22 @@
+#version 410 core
+
+out vec4			FragColor;
+in	vec2			textureCoord;
+in	vec3			norm;
+
+uniform mat4		modelMat;
+uniform mat4		view;
+uniform vec3		eye;
+uniform float		time;
+uniform sampler2D	text;
+
+uniform mat4		inverseView;
+uniform mat4		projection;
+uniform float		farNear[2];
+uniform float		u_fov;
+uniform vec2		u_resolution;
+uniform vec3		u_lightPos;
+
 const int MAX_REFLECTIONS = 1;
 const int MAX_STEPS = 400;
 const int MAX_STEPS_REF = 100;
@@ -110,13 +129,13 @@ s_obj DistanceEstimation(vec3 p, int typeTouch)
 	s_obj sphere;
 	sphere.type = SPHERE;
 	sphere.color = vec4(0.1, 0.5, 0.7, 1.);
-	sphere.dist = sphereDE(vec3(-1., -0.25, 0.) + rotY(p, iTime * 0.5), 0.1);
+	sphere.dist = sphereDE(vec3(-1., -0.25, 0.) + rotY(p, time * 0.5), 0.1);
 	s_obj scene = unionSDF(cube, sphere);
 
 	s_obj sphere2;
 	sphere2.type = SPHERE_2;
 	sphere2.color = vec4(0.5, 0.1, 0.7, 1.);
-	sphere2.dist = sphereDE(p + vec3(0., 0., -0.3 + cos(iTime * 0.5)), 0.1);
+	sphere2.dist = sphereDE(p + vec3(0., 0., -0.3 + cos(time * 0.5)), 0.1);
 	scene = unionSDF(scene, sphere2);
 
 	if (typeTouch == CLOUD)
@@ -153,7 +172,7 @@ vec2 convert1dTo2d(float xsize, float index)
 
 vec4 pseudoVolumeTexture(vec3 pos)
 {
-	//float att = 30. + 10. * sin(iTime);
+	//float att = 30. + 10. * sin(time);
 	pos = pos + 0.5;// + 0.5; // / 2. permet le grossissement et 0.5 permet de le centré (le centre du cube est en 0.)
 	//pos = floor(pos * att) / att;
 	pos.z += 0.06;
@@ -173,8 +192,8 @@ vec4 pseudoVolumeTexture(vec3 pos)
 	vec2 curframe = convert1dTo2d(xsize, zframe) / xsize;
 	vec2 nextframe = convert1dTo2d(xsize, zframe + 1.) / xsize;
 
-	vec4 sampleA = textureLod(iChannel0, uv + curframe, 0.);
-	vec4 sampleB = textureLod(iChannel0, uv + nextframe, 0.);
+	vec4 sampleA = textureLod(text, uv + curframe, 0.);
+	vec4 sampleB = textureLod(text, uv + nextframe, 0.);
 
 	return mix(sampleA, sampleB, zphase);
 }
@@ -341,12 +360,10 @@ vec3 phongLight(s_light light, vec3 vEP, vec3 norm, vec3 pos, bool isDifSpecSha[
 	if (specular < EPSILON)
 		return (light.intensity * (colorObj * diffuse * K_D));
 
-	vec3 ret;
+	vec3 ret = vec3(0.);
 		
-	if (isDifSpecSha[0]) // diffuse
-		ret += light.intensity * (colorObj * diffuse * K_D);
-	if (isDifSpecSha[1]) // specular
-		ret += light.intensity * (light.colorLight * pow(specular, K_S));
+	ret = light.intensity * (colorObj * diffuse * K_D);
+	ret += light.intensity * (light.colorLight * pow(specular, K_S));
 	return (ret);
 }
 
@@ -366,7 +383,7 @@ vec3 calculateColor(s_env env, vec3 pos, vec3 norm, vec3 colorObj)
 	vec3 colorShadow = vec3(0.);
 	vec3 color;
 		
-	color += phongLight(env.light, vEP, norm, pos, env.isDifSpecSha, colorObj);
+	color = phongLight(env.light, vEP, norm, pos, env.isDifSpecSha, colorObj);
 		
 	pos += norm * 0.01;
 	if (env.isDifSpecSha[2])
@@ -380,16 +397,17 @@ vec3 calculateColor(s_env env, vec3 pos, vec3 norm, vec3 colorObj)
 
 s_hit ShortestDistanceToSurface(s_env env, float start, float end, inout vec4 dColorObj)
 {
-	vec3 color;
-	float depth = start;
-	vec3 newPos;
-	vec3 norm;
-	s_hit hit;
-	s_obj obj;
-	float coef = 1.;
-	float distT = 0.;
-	vec3 inPosCloud;
-		
+	vec3	color;
+	float	depth = start;
+	vec3	newPos;
+	vec3	norm;
+	s_hit	hit;
+	s_obj	obj;
+	float	coef = 1.;
+	float	distT = 0.;
+	vec3	inPosCloud;
+	bool	isCloudPrinted = false;
+
 	hit.typeHit = -1;
 	for (int i = 0; i < MAX_STEPS; i++)
 	{
@@ -403,6 +421,7 @@ s_hit ShortestDistanceToSurface(s_env env, float start, float end, inout vec4 dC
 			hit.typeHit = obj.type;
 			if (obj.type == CLOUD) // Si on touche le nuage
 			{
+				isCloudPrinted = true;
 				inPosCloud = hit.posHit;
 				norm = estimateNormal(hit.posHit, NONE);
 				float sh = calcShadow(env, hit.posHit + norm * 0.01, hit.typeHit);
@@ -420,7 +439,6 @@ s_hit ShortestDistanceToSurface(s_env env, float start, float end, inout vec4 dC
 				if (distT > 0.01) // Si un objet et devant ou derriere le nuage (permet d'augmenter l'opacité en fonction de la profondeur)
 				{ 
 					float d = 0.;
-					
 					if (coef < 0.9)
 						d = min(distance(hit.posHit, inPosCloud), distT) / distT;
 					dColorObj.rgb += calculateColor(env, hit.posHit, norm, color).rgb * coef * (1. - d);
@@ -433,55 +451,51 @@ s_hit ShortestDistanceToSurface(s_env env, float start, float end, inout vec4 dC
 		depth += obj.dist;
 		if (depth > end - EPSILON) // Si aucun obj n'est detecter
 		{
-			dColorObj += vec4(0.);
-			//dColorObj += texture(iChannel1, env.ray.dir);
-			hit.dist = end;
+			dColorObj.rgb += vec3(0.);
+			dColorObj.a = isCloudPrinted ? (coef < 0.9 ? 1. : 0.) : 0.;
+			hit.dist = isCloudPrinted ? distance(inPosCloud, eye) : end;
 			return (hit);
 		}
 	}
-	hit.dist = end;
-	dColorObj += vec4(0.);
-	//dColorObj += texture(iChannel1, env.ray.dir);
 	return (hit);
 }
 
 vec3 calculateMarchinDir(float fov, vec2 resolutionSize, vec2 fragCoord)
 {
-	vec2 xy = fragCoord - resolutionSize / 2.0;
-	float z = resolutionSize.y / tan(radians(fov / 2.));
-	return (normalize(vec3(xy, -z)));
+	float	ratio = resolutionSize.x / resolutionSize.y;
+	vec2	xy = (fragCoord - 0.5) / resolutionSize;
+	//from [0,1] to [-1, 1]
+	xy.x = (2 * xy.x - 1) * ratio * tan(radians(fov / 2.));
+	xy.y = (2 * xy.y - 1) * tan(radians(fov / 2.));
+	return (normalize(vec3(xy, -1)));
 }
 
-mat4 viewMatrix(vec3 eye, vec3 pToLook, vec3 up)
-{
-	vec3 front = normalize(pToLook - eye);
-	vec3 right = normalize(cross(front, up));
-	vec3 newUp = normalize(cross(right, front));
-	return (mat4(
-		vec4(right, 0.),
-		vec4(newUp, 0.),
-		vec4(-front, 0.),
-		vec4(vec3(0.0), 1.0)
-	));
-}
-
-void mainImage( out vec4 fragColor, in vec2 fragCoord )
+void main(void)
 {
 	s_env env;
-	env.ray.localCam = calculateMarchinDir(45., iResolution.xy, fragCoord);
-	env.ray.w = 1.;
-	env.ray.eyeP = vec3(7. * cos(iTime * .25) , 0., 7. * sin(iTime * .25));
+	env.ray.localCam = calculateMarchinDir(u_fov, u_resolution, gl_FragCoord.xy / 2.);
+	env.ray.eyeP = eye;
 	env.isDifSpecSha = bool[3](true, true, true);
 
-	env.ray.viewToWorld = viewMatrix(env.ray.eyeP, vec3(0.0, 0.0, 0.0), vec3(0.0, 1.0, 0.0));
+	env.ray.viewToWorld = view;
 
-	env.ray.dir = (env.ray.viewToWorld * vec4(env.ray.localCam, 0.0)).xyz; // worldDir
+	env.ray.dir = (inverseView * vec4(env.ray.localCam, 0.0)).xyz; // worldDir
 
 	vec4 dColorObj = vec4(vec3(0.), 1.);
 
-	env.light.pos = vec3(-4., 2., -1.);
+	env.light.pos = u_lightPos;
+	// env.light.pos = vec3(-4., 2., -1.);
 	env.light.colorLight = vec3(0.25, 0., 0.45);
 	env.light.intensity = 0.5;
 	s_hit hit = ShortestDistanceToSurface(env, MIN_DIST, MAX_DIST, dColorObj);
-	fragColor = dColorObj;
+
+	float	p10 = projection[2].z;
+	float	p11 = projection[3].z;
+	float eyeHitZ  = -hit.dist * dot(env.ray.dir, (vec3(0.,0.,-1.) * mat3(view)));
+	float ndcDepth = -p10 + -p11 / eyeHitZ;
+	// from [-1,1] to [0,1]
+	float dep = ((gl_DepthRange.diff * ndcDepth) + gl_DepthRange.near + gl_DepthRange.far) / 2.0;
+	gl_FragDepth = dep;
+
+	FragColor = dColorObj;
 }
