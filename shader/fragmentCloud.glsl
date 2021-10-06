@@ -452,7 +452,7 @@ s_hit ShortestDistanceToSurface(s_env env, float start, float end, inout vec4 dC
 		if (depth > end - EPSILON) // Si aucun obj n'est detecter
 		{
 			dColorObj.rgb += vec3(0.);
-			dColorObj.a = isCloudPrinted ? (coef < 0.9 ? 1. : 0.) : 0.;
+			dColorObj.a = isCloudPrinted ? (coef < 0.9 ? 1. : 1. - coef) : 0.;
 			hit.dist = isCloudPrinted ? distance(inPosCloud, eye) : end;
 			return (hit);
 		}

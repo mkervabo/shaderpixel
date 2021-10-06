@@ -1,22 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ShaderCloud.cc                                     :+:      :+:    :+:   */
+/*   cloudMesh.cc                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 11:45:19 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/06 13:18:11 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/06 15:38:39 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "ShaderCloud.hpp"
+# include "CloudMesh.hpp"
 
-ShaderCloud::ShaderCloud()
+CloudMesh::CloudMesh()
 {
 	Mesh();
 }
-bool	ShaderCloud::loadMesh(t_objPath pathMesh, std::string pathVertex, std::string pathFragment)
+bool	CloudMesh::loadMesh(t_objPath pathMesh, std::string pathVertex, std::string pathFragment)
 {
 	if (Mesh::loadMesh(pathMesh, pathVertex, pathFragment))
 		return (true);
@@ -26,7 +26,7 @@ bool	ShaderCloud::loadMesh(t_objPath pathMesh, std::string pathVertex, std::stri
 	return (false);
 }
 
-void	ShaderCloud::render(Camera &cam, float timeS, Vec3 &lightPos, Mat &modelMat) // On parcours tous les mesh de notre objet et on l'affiche avec la texture qui lui est lier
+void	CloudMesh::render(Camera &cam, float timeS, Vec3 &lightPos, Mat &modelMat) // On parcours tous les mesh de notre objet et on l'affiche avec la texture qui lui est lier
 {
 	Vec3	camPos;
 	float	farNear[2] = {FAR_Z, NEAR_Z};
@@ -66,6 +66,6 @@ void	ShaderCloud::render(Camera &cam, float timeS, Vec3 &lightPos, Mat &modelMat
 	}
 }
 
-ShaderCloud::~ShaderCloud()
+CloudMesh::~CloudMesh()
 {
 }

@@ -117,7 +117,7 @@ bool						Shaderpixel::loadMesh(t_objPath obj, std::string pathVertex, std::stri
 {
 	if (!pathFragment.compare(FRAGMENT_CLOUD))
 	{
-		ShaderCloud	*m = new ShaderCloud;
+		CloudMesh	*m = new CloudMesh;
 		this->meshes.push_back(m);
 	}
 	else

@@ -6,7 +6,7 @@
 #    By: gperez <gperez@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/06 13:36:11 by gperez            #+#    #+#              #
-#    Updated: 2021/10/06 13:04:48 by gperez           ###   ########.fr        #
+#    Updated: 2021/10/06 15:41:02 by gperez           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,7 +36,7 @@ SRC =	srcs/main.cc \
 		srcs/Class/Material.cc \
 		srcs/Class/Hud.cc \
 		srcs/Class/HudElement.cc \
-		srcs/ShaderClasses/ShaderCloud.cc \
+		srcs/MeshClasses/CloudMesh.cc \
 
 NC = \033[0m
 BOLD =\033[1m
@@ -88,7 +88,7 @@ INC =	includes/Shaderpixel.hpp \
 		includes/Material.hpp \
 		includes/Hud.hpp \
 		includes/HudElement.hpp \
-		includes/ShaderClasses/ShaderCloud.hpp \
+		includes/MeshClasses/CloudMesh.hpp \
 
 OBJ = $(SRC:.cc=.o)
 
@@ -116,6 +116,7 @@ $(LIB_ASSIMP) : libs/assimp/CMakeLists.txt
 clean :
 	@/bin/rm -rf srcs/*.o
 	@/bin/rm -rf srcs/Class/*.o
+	@/bin/rm -rf srcs/MeshClasses/*.o
 
 .PHONY : fclean
 fclean : clean
