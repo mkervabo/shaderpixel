@@ -9,6 +9,9 @@ uniform mat4	view;
 uniform vec3	eye;
 uniform float	time;
 
+uniform int		u_isSpecular;
+uniform int		u_isDiffuse;
+
 uniform mat4	inverseView;
 uniform mat4	projection;
 uniform float	farNear[2];
@@ -18,11 +21,11 @@ uniform vec3	u_lightPos;
 
 const int MAX_REFLECTIONS = 1;
 const int MAX_STEPS = 300;
-const int MAX_STEPS_REF = 200;
-const int MAX_AO_STEPS = 10;
+const int MAX_STEPS_REF = 300;
+const int MAX_AO_STEPS = 30;
 const float MIN_DIST = 0.1;
 const float MAX_DIST = 100.0;
-const float EPSILON = 0.0025;
+const float EPSILON = 0.001;
 const float EPSILON_REF = 0.001;
 
 #define K_A 0.2
@@ -117,10 +120,7 @@ s_obj DistanceEstimation(vec3 p, int typeTouch)
 	s_obj sphere;
 	sphere.type = SPHERE;
 	sphere.color = vec4(0.6, 0., 0.7, 0.6);
-	//sphere.color = vec4(1., 1., 1., 0.6);
-	//sphere.color = vec4(0.5, 0.5, 0.5, 0.6);
-	//sphere.dist = boxDE(p, vec3(1.));
-	sphere.dist = sphereDE(p, 1.5);
+	sphere.dist = sphereDE(p, 0.5);
 		
 	s_obj plan;
 	plan.type = CUBE;
@@ -132,7 +132,6 @@ s_obj DistanceEstimation(vec3 p, int typeTouch)
 	plan2.color = vec4(0.3, 0.7, 0.6, 1.);
 	plan2.dist = sdPlane(p + vec3(0., 0., -10.), vec3(0., 0., -1.), 0.);
 
-	//s_obj scene = plan;
 	s_obj scene = unionSDF(plan, plan2);
 	if (typeTouch != sphere.type)
 		scene = unionSDF(scene, sphere);
@@ -209,7 +208,7 @@ vec3 phongLight(s_light light, vec3 vPToEye, vec3 norm, vec3 pos, bool isDifSpec
 			return (light.intensity * (colorObj * diffuse * K_D));
 		return (vec3(0.));
 	}
-	vec3 ret;
+	vec3 ret = vec3(0.);
 		
 	if (isDifSpecSha[0]) // diffuse
 		ret += light.intensity * (colorObj * diffuse * K_D);
@@ -223,9 +222,7 @@ float softShadow(s_env env, float mint, float maxt, float k)
 	float h;
 	s_obj obj;
 	float res = 1.0;
-	vec3 vPToEye;
 	vec3 pos;
-	vec3 norm;
 
 	for( float t=mint; t<maxt; )
 	{
@@ -244,19 +241,19 @@ s_color calculateColor(s_env env, vec3 pos, vec3 norm, vec3 colorObj, bool isAmb
 {
 	vec3 ambiantLight;	
 	vec3 vPToEye = normalize(env.ray.eyeP - pos);
-	vec3 color;
+	vec3 color = vec3(0.);
 		
 	if (isAmbiant)
 		ambiantLight = colorObj * ambientOcclusion(pos, norm, 2., 1.3) * K_A;
-		
-	color += phongLight(env.light, vPToEye, norm, pos, env.isDifSpecSha, colorObj);
+
+	color = phongLight(env.light, vPToEye, norm, pos, env.isDifSpecSha, colorObj);
 	pos += norm * 0.01;
 	if (env.isDifSpecSha[2] && env.isDifSpecSha[0])
 	{
 		env.ray.start = pos;
 		env.ray.dir = normalize(env.light.pos - pos);
 		float sh = softShadow(env, 0.,
-		 distance(env.light.pos, pos), 30.);
+		 distance(env.light.pos, pos), 150.);
 		sh = max(sh, 0.3);
 		color *= sh;
 	}
@@ -265,7 +262,7 @@ s_color calculateColor(s_env env, vec3 pos, vec3 norm, vec3 colorObj, bool isAmb
 
 s_hit refShortestDistToSurf(s_env env, float start, inout vec3 norm, float end, inout vec3 dColorObj)
 {
-	vec3 color;
+	vec3 color = vec3(0.);
 	float depth = start;
 	vec3 newPos;
 	s_hit hit;
@@ -287,13 +284,13 @@ s_hit refShortestDistToSurf(s_env env, float start, inout vec3 norm, float end, 
 		depth += obj.dist;
 		if (depth > end - EPSILON_REF) // Si aucun obj n'est detecter
 		{
-			dColorObj += texture(iChannel0, env.ray.dir).rgb;
+			// dColorObj += texture(iChannel0, env.ray.dir).rgb;
 			hit.dist = end;
 			return (hit);
 		}
 	}
 	hit.dist = end;
-	dColorObj += texture(iChannel0, env.ray.dir).rgb;
+	// dColorObj += texture(iChannel0, env.ray.dir).rgb;
 	return (hit);
 }
 
@@ -344,7 +341,7 @@ s_color calculateTranslucentLight(s_env env, vec3 posHit, float end)
 vec3 reflexion(s_env env, vec3 norm, float end, inout vec3 ambiantColor)
 {
 	s_color sColor;
-	vec3 color;
+	vec3 color = vec3(0.);
 	vec3 finalColor = vec3(0.);
 	s_hit hit;
 	for (int i = 0; i < MAX_REFLECTIONS; i++) // Reflexion
@@ -354,7 +351,7 @@ vec3 reflexion(s_env env, vec3 norm, float end, inout vec3 ambiantColor)
 
 		if (hit.dist > end - EPSILON_REF)  // Si on ne touche pas d'obj
 		{
-			finalColor += texture(iChannel0, env.ray.dir).xyz * K_R * (1. / float(MAX_REFLECTIONS));
+			//finalColor += texture(iChannel0, env.ray.dir).xyz * K_R * (1. / float(MAX_REFLECTIONS));
 			return (finalColor);
 		}
 		sColor = calculateColor(env, hit.posHit, norm, color, true);
@@ -373,11 +370,12 @@ vec3 reflexion(s_env env, vec3 norm, float end, inout vec3 ambiantColor)
 
 s_hit ShortestDistanceToSurface(s_env env, float start, float end, inout vec3 dColorObj)
 {
-	vec3 color;
+	vec3 color = vec3(0.);
 	float depth = start;
 	vec3 newPos;
 	vec3 norm;
 	s_hit hit;
+	hit.ambiantColor = vec3(0.);
 	s_obj obj;
 	bool isOneTrans = false;
 	hit.typeHit = NONE;
@@ -425,53 +423,46 @@ s_hit ShortestDistanceToSurface(s_env env, float start, float end, inout vec3 dC
 		depth += obj.dist;
 		if (depth > end - EPSILON) // Si aucun obj n'est detecter
 		{
-			dColorObj += texture(iChannel0, env.ray.dir).rgb;
-			hit.dist = end;
+			// dColorObj += texture(iChannel0, env.ray.dir).rgb;
 			if (isOneTrans)
 				calculateColorBehind(env, newPos, end, dColorObj);
+			else
+				hit.dist = end;
 			return (hit);
 		}
 	}
-	dColorObj += texture(iChannel0, env.ray.dir).rgb;
-	hit.dist = end;
+	// dColorObj += texture(iChannel0, env.ray.dir).rgb;
 	if (isOneTrans)
 		calculateColorBehind(env, newPos, end, dColorObj);
+	else
+		hit.dist = end;
 	return (hit);
 }
 
 vec3 calculateMarchinDir(float fov, vec2 resolutionSize, vec2 fragCoord)
 {
-	vec2 xy = fragCoord - resolutionSize / 2.0;
-	float z = resolutionSize.y / tan(radians(fov));
-	return (normalize(vec3(xy, -z)));
-}
-
-mat4 viewMatrix(vec3 eye, vec3 pToLook, vec3 up)
-{
-	vec3 front = normalize(pToLook - eye);
-	vec3 right = normalize(cross(front, up));
-	vec3 newUp = normalize(cross(right, front));
-	return (mat4(
-		vec4(right, 0.),
-		vec4(newUp, 0.),
-		vec4(-front, 0.),
-		vec4(vec3(0.0), 1.0)
-	));
+	float	ratio = resolutionSize.x / resolutionSize.y;
+	vec2	xy = (fragCoord - 0.5) / resolutionSize;
+	//from [0,1] to [-1, 1]
+	xy.x = (2 * xy.x - 1) * ratio * tan(radians(fov / 2.));
+	xy.y = (2 * xy.y - 1) * tan(radians(fov / 2.));
+	return (normalize(vec3(xy, -1)));
 }
 
 void main(void)
 {
 	s_env env;
-	env.ray.dir = calculateMarchinDir(45., iResolution.xy, fragCoord);
-	env.ray.eyeP = vec3(3. * cos(iTime * 0.5) , 0., -6.);
-	env.isDifSpecSha = bool[3](true, true, true);
+	env.ray.dir = calculateMarchinDir(u_fov, u_resolution, gl_FragCoord.xy / 2.);
+	env.ray.eyeP = eye;
+	// env.ray.eyeP = vec3(3. * cos(time * 0.5) , 0., -6.);
+	env.isDifSpecSha = bool[3](bool(u_isDiffuse), bool(u_isSpecular), true);
 	env.ray.start = env.ray.eyeP;
 
-	mat4 viewToWorld = viewMatrix(env.ray.eyeP, vec3(0.0, 0.0, 0.0), vec3(0.0, 1.0, 0.0));
-	env.ray.dir = (viewToWorld * vec4(env.ray.dir, 0.0)).xyz; // worldDir
+	env.ray.dir = (inverseView * vec4(env.ray.dir, 0.0)).xyz; // worldDir
 	vec3 dColorObj= vec3(0.);
 
-	env.light.pos = vec3(3. * cos(iTime * .5), 2. + cos(iTime) * 1.5, 3. * sin(iTime * .5));
+	env.light.pos = u_lightPos;
+	// env.light.pos = vec3(3. * cos(time * .5), 2. + cos(time) * 1.5, 3. * sin(time * .5));
 	env.light.colorLight = vec3(1.0, 1.0, 1.0);
 	env.light.intensity = 0.5;
 
@@ -480,8 +471,18 @@ void main(void)
 
 	if (hit.dist > MAX_DIST - EPSILON)
 	{
-		fragColor = vec4(dColorObj.rgb, 1.);
+		gl_FragDepth = farNear[0];
+		FragColor = vec4(dColorObj.rgb, 1.);
 		return ;
 	}
-	fragColor = vec4(dColorObj, 1.0);
+
+	float	p10 = projection[2].z;
+	float	p11 = projection[3].z;
+	float eyeHitZ  = -hit.dist * dot(env.ray.dir, (vec3(0.,0.,-1.) * mat3(view)));
+	float ndcDepth = -p10 + -p11 / eyeHitZ;
+	// from [-1,1] to [0,1]
+	float dep = ((gl_DepthRange.diff * ndcDepth) + gl_DepthRange.near + gl_DepthRange.far) / 2.0;
+	gl_FragDepth = dep;
+
+	FragColor = vec4(dColorObj, 1.0);
 }

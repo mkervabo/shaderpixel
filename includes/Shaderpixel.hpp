@@ -21,6 +21,7 @@
 # include "TimeMs.hpp"
 # include "Mesh.hpp"
 # include "CloudMesh.hpp"
+# include "RefractMesh.hpp"
 # include "glfw3.h" // Load fenetre
 
 # define RATIO (float)WIDTH / (float)HEIGHT
