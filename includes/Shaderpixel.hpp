@@ -22,6 +22,7 @@
 # include "Mesh.hpp"
 # include "CloudMesh.hpp"
 # include "RefractMesh.hpp"
+# include "FractalMesh.hpp"
 # include "glfw3.h" // Load fenetre
 
 # define RATIO (float)WIDTH / (float)HEIGHT
@@ -56,7 +57,7 @@ class Shaderpixel
 		void						setKey(unsigned int key, char state);
 		void						inputKey(unsigned int key);
 	
-		bool						load(e_pathObj enu, std::string vertex, std::string fragment);
+		bool						load(e_pathObj enu, std::string pathVertex, std::string pathFragment, e_meshType type);
 		std::vector<Mesh*>			meshes;
 
 	public:
@@ -68,7 +69,7 @@ class Shaderpixel
 		void						checkKeys(void);
 		void 						loadVBO(void);
 		bool						loadMesh(t_objPath obj);
-		bool						loadMesh(t_objPath obj, std::string pathVertex, std::string pathFragment);
+		bool						loadMesh(t_objPath obj, std::string pathVertex, std::string pathFragment, e_meshType type);
 
 		void						getKeys(void);
 		unsigned int				getState(unsigned int k);

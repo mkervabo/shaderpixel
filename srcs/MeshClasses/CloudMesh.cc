@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 11:45:19 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/06 15:38:39 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/06 22:25:25 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 CloudMesh::CloudMesh()
 {
 	Mesh();
+	this->type = E_CLOUD;
 }
 bool	CloudMesh::loadMesh(t_objPath pathMesh, std::string pathVertex, std::string pathFragment)
 {
@@ -26,7 +27,7 @@ bool	CloudMesh::loadMesh(t_objPath pathMesh, std::string pathVertex, std::string
 	return (false);
 }
 
-void	CloudMesh::render(Camera &cam, float timeS, Vec3 &lightPos, Mat &modelMat) // On parcours tous les mesh de notre objet et on l'affiche avec la texture qui lui est lier
+void	CloudMesh::render(Camera &cam, float timeS, Vec3 &lightPos) // On parcours tous les mesh de notre objet et on l'affiche avec la texture qui lui est lier
 {
 	Vec3	camPos;
 	float	farNear[2] = {FAR_Z, NEAR_Z};
@@ -39,8 +40,6 @@ void	CloudMesh::render(Camera &cam, float timeS, Vec3 &lightPos, Mat &modelMat) 
  		glUseProgram(this->shader.getProgram());
 		this->textureCloud.bind(GL_TEXTURE0);
 
-		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
-			"modelMat"), 1, GL_FALSE, &(modelMat.getInverseMat()[0][0]));
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
 			"model"), 1, GL_FALSE, &(mat.getMatrix(false).inverse()[0][0]));
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),

@@ -1,37 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   RefractMesh.cc                                     :+:      :+:    :+:   */
+/*   FractalMesh.cc                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/06 15:42:37 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/06 22:26:03 by gperez           ###   ########.fr       */
+/*   Created: 2021/10/06 20:57:58 by gperez            #+#    #+#             */
+/*   Updated: 2021/10/06 22:24:31 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "RefractMesh.hpp"
+#include "FractalMesh.hpp"
 
-RefractMesh::RefractMesh()
+FractalMesh::FractalMesh()
 {
 	Mesh();
-	this->type = E_REFRACT;
-	this->isDiffuse = true;
-	this->isSpecular = true;
+	this->type = E_FRACTAL;
 }
 
-void	RefractMesh::render(Camera &cam, float timeS, Vec3 &lightPos)
+void	FractalMesh::render(Camera &cam, float timeS, Vec3 &lightPos)
 {
 	Vec3	camPos;
 	float	farNear[2] = {FAR_Z, NEAR_Z};
 	float	fov = FOV;
 	Vec2	resolution = Vec2(WIDTH, HEIGHT);
 
+	this->modelMat.setRotation(Vec3(timeS * 7., timeS * 10., timeS * 5.));
 	for (unsigned int i = 0 ; i < this->m_Entries.size() ; i++)
 	{
 		glBindVertexArray(this->m_Entries[i].getVao());
- 		glUseProgram(this->shader.getProgram());
+		glUseProgram(this->shader.getProgram());
 
+		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
+			"modelMat"), 1, GL_FALSE, &(modelMat.getInverseMat()[0][0]));
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
 			"model"), 1, GL_FALSE, &(mat.getMatrix(false).inverse()[0][0]));
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
@@ -40,6 +41,7 @@ void	RefractMesh::render(Camera &cam, float timeS, Vec3 &lightPos)
 			"projection"), 1, GL_FALSE, &(cam.getProjMatrix()[0][0]));
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
 			"inverseView"), 1, GL_FALSE, &(cam.getInverseMat()[0][0]));
+
 		camPos = cam.getPosition();
 		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
 			"eye"), 1, (const GLfloat*)&camPos);
@@ -53,14 +55,12 @@ void	RefractMesh::render(Camera &cam, float timeS, Vec3 &lightPos)
 			"u_resolution"), 1, (const GLfloat*)&resolution);
 		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
 			"u_lightPos"), 1, (const GLfloat*)&lightPos);
-		glUniform1i(glGetUniformLocation(this->shader.getProgram(),
-			"u_isSpecular"), (GLuint)this->isSpecular);
-		glUniform1i(glGetUniformLocation(this->shader.getProgram(),
-			"u_isDiffuse"), (GLuint)this->isDiffuse);
+
 		glDrawElements(GL_TRIANGLES, this->m_Entries[i].getNumIndices(), GL_UNSIGNED_INT, NULL);
 	}
+	
 }
 
-RefractMesh::~RefractMesh()
+FractalMesh::~FractalMesh()
 {
 }

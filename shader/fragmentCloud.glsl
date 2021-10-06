@@ -1,10 +1,7 @@
 #version 410 core
 
 out vec4			FragColor;
-in	vec2			textureCoord;
-in	vec3			norm;
 
-uniform mat4		modelMat;
 uniform mat4		view;
 uniform vec3		eye;
 uniform float		time;

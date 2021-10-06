@@ -6,7 +6,7 @@
 #    By: gperez <gperez@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/06 13:36:11 by gperez            #+#    #+#              #
-#    Updated: 2021/10/06 17:28:55 by gperez           ###   ########.fr        #
+#    Updated: 2021/10/06 21:31:49 by gperez           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,6 +38,7 @@ SRC =	srcs/main.cc \
 		srcs/Class/HudElement.cc \
 		srcs/MeshClasses/CloudMesh.cc \
 		srcs/MeshClasses/RefractMesh.cc \
+		srcs/MeshClasses/FractalMesh.cc \
 
 NC = \033[0m
 BOLD =\033[1m
@@ -91,6 +92,7 @@ INC =	includes/Shaderpixel.hpp \
 		includes/HudElement.hpp \
 		includes/MeshClasses/CloudMesh.hpp \
 		includes/MeshClasses/RefractMesh.hpp \
+		includes/MeshClasses/FractalMesh.hpp \
 
 OBJ = $(SRC:.cc=.o)
 

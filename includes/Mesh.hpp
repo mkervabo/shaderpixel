@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 17:01:05 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/06 12:49:07 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/06 22:24:55 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 # include "Camera.hpp"
 # include "Shader.hpp"
 
+enum e_meshType {E_DEFAULT_MESH, E_FRACTAL, E_REFRACT, E_CLOUD, E_FIELD};
+
 # define NEAR_Z 0.1f
 # define FAR_Z 100.f
 # define WIDTH 1024.
@@ -32,7 +34,7 @@ class Mesh
 	protected:
 		std::vector<MeshEntry>	m_Entries;
 		std::vector<Material>	m_Materials;
-		// unsigned int	id;
+		e_meshType				type;
 		Shader					shader;
 		Mat						mat;
 		bool					initFromScene(const aiScene* pScene, const t_objPath& path);
@@ -43,11 +45,12 @@ class Mesh
 		Mesh();
 		bool			loadMesh(t_objPath pathMesh);
 		virtual bool	loadMesh(t_objPath pathMesh, std::string pathVertex, std::string pathFragment);
-		virtual void	render(Camera &cam, float timeS, Vec3 &lightPos, Mat &modelMat);
+		virtual void	render(Camera &cam, float timeS, Vec3 &lightPos);
 		void			clear(void);
 		void			translate(Vec3 t);
 		void			setPosition(Vec3 p);
 		unsigned int	getShaderProgram(void);
+		e_meshType		getType(void);
 		virtual ~Mesh();
 };
 

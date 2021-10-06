@@ -72,27 +72,27 @@ float MandelbulbDE(vec3 pos, float power)
 
 float boxDE(vec3 p, vec3 b)
 {
-  vec3 q = abs(p) - b;
-  return (length(max(q, 0.0)) + min(max(q.x, max(q.y, q.z)), 0.0));
+	vec3 q = abs(p) - b;
+	return (length(max(q, 0.0)) + min(max(q.x, max(q.y, q.z)), 0.0));
 }
 
 float planSphereDE(vec3 z)
 {
-  z.xy = mod((z.xy),1.0)-vec3(0.5).xy; // instance on xy-plane
-  return length(z)-0.3;             // sphere DE
+	z.xy = mod((z.xy),1.0)-vec3(0.5).xy;	// instance on xy-plane
+	return length(z)-0.3;					// sphere DE
 }
 
 float sphereDE(vec3 p, float rayon)
 {
-    return (length(p) - rayon);
+	return (length(p) - rayon);
 }
 
 float DistanceEstimation(vec3 p)
 {
 	// return (planSphereDE(p));
 	// return (sphereDE(p, 0.5));
-	// return (MandelbulbDE((modelMat * vec4(p, 1.)).xyz, 8.));
-	return (MandelbulbDE(p, 8.));
+	return (MandelbulbDE((modelMat * vec4(p, 1.)).xyz, 8.));
+	// return (MandelbulbDE(p, 8.));
 }
 
 float refShortestDistanceToSurface(vec3 eyeP, vec3 marchinDir, float start, float end)
@@ -269,7 +269,6 @@ void	main(void)
 	vec3	worldDir = (inverseView * vec4(dir, 0.0)).xyz;
 
 	float	dist = ShortestDistanceToSurface(eye, worldDir, farNear[1], farNear[0]);
-	// float	dist = ShortestDistanceToSurface(eye, worldDir, MIN_DIST, MAX_DIST);
 
 	vec3	posHit = eye + worldDir * dist;
 	vec3	norm = estimateNormal(posHit);
@@ -304,10 +303,6 @@ void	main(void)
 	// 	else 
 	// 		color += K_R * calculateColor(light, eye, posHit, norm) * float((MAX_REFLECTIONS - i) / MAX_REFLECTIONS);
 	// }
-
-	// float zc = (projection * vec4( posHit, 1.0 ) ).z;
-	// float wc = (projection * vec4( posHit, 1.0 ) ).w;
-	// gl_FragDepth = zc/wc;
 
 	float	p10 = projection[2].z;
 	float	p11 = projection[3].z;

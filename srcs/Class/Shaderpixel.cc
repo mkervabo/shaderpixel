@@ -110,15 +110,17 @@ void				Shaderpixel::initWindow(void)
 
 bool						Shaderpixel::loadMesh(t_objPath obj)
 {
-	return (this->loadMesh(obj, VERTEX, FRAGMENT));
+	return (this->loadMesh(obj, VERTEX, FRAGMENT, E_DEFAULT_MESH));
 }
 
-bool						Shaderpixel::loadMesh(t_objPath obj, std::string pathVertex, std::string pathFragment)
+bool						Shaderpixel::loadMesh(t_objPath obj, std::string pathVertex, std::string pathFragment, e_meshType type)
 {
-	if (!pathFragment.compare(FRAGMENT_CLOUD))
+	if (type == E_CLOUD)
 		this->meshes.push_back(new CloudMesh);
-	else if (!pathFragment.compare(FRAGMENT_REFRACT))
+	else if (type == E_REFRACT)
 		this->meshes.push_back(new RefractMesh);
+	else if (type == E_FRACTAL)
+		this->meshes.push_back(new FractalMesh);
 	else
 		this->meshes.push_back(new Mesh);
 	if (!this->meshes.size())
@@ -131,20 +133,20 @@ bool						Shaderpixel::loadMesh(t_objPath obj, std::string pathVertex, std::stri
 	return (0);
 }
 
-bool				Shaderpixel::load(e_pathObj enu, std::string vertex, std::string fragment)
+bool				Shaderpixel::load(e_pathObj enu, std::string pathVertex, std::string pathFragment, e_meshType type)
 {
 	if (enu >= E_PEND)
 		return (1);
-	return (this->loadMesh(g_objPath[enu], vertex, fragment));
+	return (this->loadMesh(g_objPath[enu], pathVertex, pathFragment, type));
 }
 
 bool				Shaderpixel::init(void)
 {
 	if (this->hud.init())
 		return (1);
-	if (load(E_PBALL, VERTEX_LIGHT, FRAGMENT_LIGHT)
-		|| load(E_PBALL, VERTEX, FRAGMENT)
-		|| load(E_PCUBE, VERTEX_REFRACT, FRAGMENT_REFRACT))
+	if (load(E_PBALL, VERTEX_LIGHT, FRAGMENT_LIGHT, E_DEFAULT_MESH)
+		|| load(E_PBALL, VERTEX, FRAGMENT, E_DEFAULT_MESH)
+		|| load(E_PCUBE, VERTEX_REFRACT, FRAGMENT_REFRACT, E_REFRACT))
 			return (1);
 	this->meshes[1]->translate(Vec3(0., 0., -3.5));
 	// std::cout << this->meshes[0]->getShaderProgram() << " " << this->meshes[1]->getShaderProgram() << "\n";
@@ -155,12 +157,11 @@ bool				Shaderpixel::init(void)
 void				Shaderpixel::update(Camera &cam)
 {
 	float	time = this->time.getTimeSeconds();
-	Mat		modelMat;
-	//modelMat.rotate(Vec3(time * 7., time * 10., time * 5.));
 	Vec3	lightPos = Vec3(1. * cos(time * 0.5), 1., 1. * sin(time * 0.5));
+	
 	this->meshes[0]->setPosition(lightPos);
 	for (unsigned int i = 0; i < this->meshes.size(); i++)
-		this->meshes[i]->render(cam, time, lightPos, modelMat);
+		this->meshes[i]->render(cam, time, lightPos);
 	this->currentFrameNb++;
 }
 
