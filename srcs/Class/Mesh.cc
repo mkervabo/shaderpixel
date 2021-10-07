@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 16:57:27 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/06 22:26:57 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/07 09:25:45 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,6 +214,11 @@ void	Mesh::clear(void)
 void	Mesh::translate(Vec3 t)
 {
 	this->mat.translate(t);
+}
+
+void	Mesh::translate(e_axes axe, float speed)
+{
+	this->mat.translate(axe, speed);
 }
 
 void	Mesh::setPosition(Vec3 p)

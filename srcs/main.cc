@@ -6,25 +6,11 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 15:29:41 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/05 11:51:34 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/07 09:14:30 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "Shaderpixel.hpp"
-
-// void	display(Shaderpixel &env, Shader &shader)
-// {
-// 	glClearColor(0.8f, 0.8f, 0.8f, 1.0f);
-//     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-// 	glBindVertexArray(env.getVao());
-// 	glUseProgram(shader.getProgram());
-// 	glUniformMatrix4fv(glGetUniformLocation(shader.getProgram(),
-// 		"view"), 1, GL_FALSE, &(env.getCam().getMatrix(true)[0][0]));
-// 	glUniformMatrix4fv(glGetUniformLocation(shader.getProgram(),
-// 		"projection"), 1, GL_FALSE,&(env.getCam().getProjMatrix()[0][0]));
-// 	glDrawElements(GL_TRIANGLES, 6 * (2 * 3), GL_UNSIGNED_INT, NULL); // NbMeshs * NbFaces * NbPoints (EBO)
-// 	glBindVertexArray(0);
-// }
 
 void	exec(Shaderpixel &env)
 {

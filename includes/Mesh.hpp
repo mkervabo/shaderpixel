@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 17:01:05 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/07 09:08:38 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/07 09:27:07 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ class Mesh
 		virtual void	render(Camera &cam, float timeS, Vec3 &lightPos);
 		void			clear(void);
 		void			translate(Vec3 t);
+		virtual void	translate(e_axes axe, float speed);
 		void			setPosition(Vec3 p);
 		unsigned int	getShaderProgram(void);
 		e_meshType		getType(void);

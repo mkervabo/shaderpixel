@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 22:35:50 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/06 23:51:22 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/07 09:27:21 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ private:
 public:
 	FieldMesh();
 	virtual void	render(Camera &cam, float timeS, Vec3 &lightPos);
+	virtual void	translate(e_axes axe, float speed);
 	virtual ~FieldMesh();
 };
 

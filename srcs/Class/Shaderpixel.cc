@@ -150,7 +150,7 @@ bool				Shaderpixel::init(void)
 		return (1);
 	if (load(E_PBALL, VERTEX_LIGHT, FRAGMENT_LIGHT, E_DEFAULT_MESH)
 		|| load(E_PBALL, VERTEX, FRAGMENT, E_DEFAULT_MESH)
-		|| load(E_PCUBE, VERTEX_ASTEROID, FRAGMENT_ASTEROID, E_ASTEROID))
+		|| load(E_PCUBE, VERTEX_FIELD, FRAGMENT_FIELD, E_FIELD))
 			return (1);
 	this->meshes[1]->translate(Vec3(0., 0., -3.5));
 	// std::cout << this->meshes[0]->getShaderProgram() << " " << this->meshes[1]->getShaderProgram() << "\n";
@@ -193,6 +193,20 @@ void				Shaderpixel::inputKey(unsigned int key)
 		this->keys[key] = KEY_RELEASE;
 }
 
+void				Shaderpixel::fieldKeys(void)
+{
+	if (this->meshes.size() <= 2)
+		return;
+	if (glfwGetKey(this->window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+		this->meshes[2]->translate(E_RIGHT, -SPEED);
+	if (glfwGetKey(this->window, GLFW_KEY_LEFT) == GLFW_PRESS)
+		this->meshes[2]->translate(E_RIGHT, SPEED);
+	if (glfwGetKey(this->window, GLFW_KEY_UP) == GLFW_PRESS)
+		this->meshes[2]->translate(E_FRONT, -SPEED);
+	if (glfwGetKey(this->window, GLFW_KEY_DOWN) == GLFW_PRESS)
+		this->meshes[2]->translate(E_FRONT, SPEED);
+}
+
 void				Shaderpixel::getKeys(void)
 {
 	if (glfwGetKey(this->window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -209,6 +223,7 @@ void				Shaderpixel::getKeys(void)
 		this->cam.translate(E_UP, SPEED);
 	if (glfwGetKey(this->window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
 		this->cam.translate(E_UP, -SPEED);
+	fieldKeys();
 }
 
 void				Shaderpixel::checkKeys(void)
@@ -218,7 +233,6 @@ void				Shaderpixel::checkKeys(void)
 	while (this->queue.size())
 	{
 		i = this->queue.front();
-		//key here
 		this->keys[(int)i] = KEY_DONE;
 		this->queue.pop();
 	}
