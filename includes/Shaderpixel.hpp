@@ -23,6 +23,8 @@
 # include "CloudMesh.hpp"
 # include "RefractMesh.hpp"
 # include "FractalMesh.hpp"
+# include "FieldMesh.hpp"
+# include "AsteroidMesh.hpp"
 # include "glfw3.h" // Load fenetre
 
 # define RATIO (float)WIDTH / (float)HEIGHT

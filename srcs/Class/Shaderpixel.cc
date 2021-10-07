@@ -121,6 +121,10 @@ bool						Shaderpixel::loadMesh(t_objPath obj, std::string pathVertex, std::stri
 		this->meshes.push_back(new RefractMesh);
 	else if (type == E_FRACTAL)
 		this->meshes.push_back(new FractalMesh);
+	else if (type == E_FIELD)
+		this->meshes.push_back(new FieldMesh);
+	else if (type == E_ASTEROID)
+		this->meshes.push_back(new AsteroidMesh);
 	else
 		this->meshes.push_back(new Mesh);
 	if (!this->meshes.size())
@@ -146,7 +150,7 @@ bool				Shaderpixel::init(void)
 		return (1);
 	if (load(E_PBALL, VERTEX_LIGHT, FRAGMENT_LIGHT, E_DEFAULT_MESH)
 		|| load(E_PBALL, VERTEX, FRAGMENT, E_DEFAULT_MESH)
-		|| load(E_PCUBE, VERTEX_REFRACT, FRAGMENT_REFRACT, E_REFRACT))
+		|| load(E_PCUBE, VERTEX_ASTEROID, FRAGMENT_ASTEROID, E_ASTEROID))
 			return (1);
 	this->meshes[1]->translate(Vec3(0., 0., -3.5));
 	// std::cout << this->meshes[0]->getShaderProgram() << " " << this->meshes[1]->getShaderProgram() << "\n";

@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 17:01:05 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/06 22:24:55 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/07 09:08:38 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 # include "Camera.hpp"
 # include "Shader.hpp"
 
-enum e_meshType {E_DEFAULT_MESH, E_FRACTAL, E_REFRACT, E_CLOUD, E_FIELD};
+enum e_meshType {E_DEFAULT_MESH, E_FRACTAL, E_REFRACT, E_CLOUD, E_FIELD, E_ASTEROID};
 
 # define NEAR_Z 0.1f
 # define FAR_Z 100.f

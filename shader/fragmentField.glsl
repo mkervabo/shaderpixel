@@ -3,7 +3,7 @@
 in vec4			pos;
 out vec4		FragColor;
 
-uniform mat4	modelMat;
+uniform mat4	matInField;
 uniform mat4	view;
 uniform vec3	eye;
 uniform float	time;
