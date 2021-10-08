@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Mesh.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 17:01:05 by gperez            #+#    #+#             */
-/*   Updated: 2021/08/05 00:53:14 by gperez           ###   ########.fr       */
+/*   Updated: 2021/09/29 15:37:30 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 
 # include "Camera.hpp"
 # include "Shader.hpp"
+# include "Metaballs.hpp"
 
 # define NEAR_Z 0.1f
 # define FAR_Z 100.f
@@ -35,6 +36,7 @@ class Mesh
 		// unsigned int	id;
 		Shader					shader;
 		Mat						mat;
+		Metaballs				meta;
 		bool					initFromScene(const aiScene* pScene, const t_objPath& path);
 		void					initMesh(unsigned int Index, const aiMesh* paiMesh);
 		bool					initMaterials(const aiScene* pScene, const t_objPath& path);

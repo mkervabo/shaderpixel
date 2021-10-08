@@ -2,3 +2,4 @@ Shaderpixel
 *.o
 libs/assimp
 .DS_Store
+*.trace

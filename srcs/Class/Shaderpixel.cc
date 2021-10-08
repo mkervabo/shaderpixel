@@ -125,7 +125,7 @@ bool						Shaderpixel::loadMesh(t_objPath obj, std::string pathVertex, std::stri
 
 bool				Shaderpixel::init(void)
 {
-	if (this->loadMesh(g_objPath[E_PCUBE], VERTEX_MANDELBULB, FRAGMENT_MANDELBULB))
+	if (this->loadMesh(g_objPath[E_PCUBE], VERTEX_MANDELBULB, FRAGMENT_METABALLS))
 		return (1);
 	if (this->loadMesh(g_objPath[E_PBALL], VERTEX, FRAGMENT))
 		return (1);
@@ -177,6 +177,30 @@ void				Shaderpixel::getKeys(void)
 		this->cam.translate(E_UP, SPEED);
 	if (glfwGetKey(this->window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
 		this->cam.translate(E_UP, -SPEED);
+	
+	// if (glfwGetKey(this->window, GLFW_KEY_T) == GLFW_PRESS)
+	// 	this->meshes[0].meta.addSize(0.1);
+	// if (glfwGetKey(this->window, GLFW_KEY_Y) == GLFW_PRESS)
+	// 	this->meshes[0].meta.addSize(-0.1);
+	// if (glfwGetKey(this->window, GLFW_KEY_U) == GLFW_PRESS)
+	// 	this->meshes[0].meta.addaxSize(0.1);
+	// if (glfwGetKey(this->window, GLFW_KEY_I) == GLFW_PRESS)
+	// 	this->meshes[0].meta.addMaxSize(-0.1);
+	// if (glfwGetKey(this->window, GLFW_KEY_O) == GLFW_PRESS)
+	// 	this->meshes[0].meta.addMinSize(0.1);
+	// if (glfwGetKey(this->window, GLFW_KEY_P) == GLFW_PRESS)
+	// 	this->meshes[0].meta.addMinSize(-0.1);
+	// if (glfwGetKey(this->window, GLFW_KEY_H) == GLFW_PRESS)
+	// 	this->meshes[0].meta.addVelocity(0.1);
+	// if (glfwGetKey(this->window, GLFW_KEY_J) == GLFW_PRESS)
+	// 	this->meshes[0].meta.addVelocity(-0.1);
+	// if (glfwGetKey(this->window, GLFW_KEY_K) == GLFW_PRESS
+	// 	&& this->meshes[0].meta.getNbBalls() < 20)
+	// 	this->meshes[0].meta.addBalls(1);
+	// if (glfwGetKey(this->window, GLFW_KEY_L) == GLFW_PRESS
+	// 	&& this->meshes[0].meta.getNbBalls() > 0)
+	// 	this->meshes[0].meta.addBalls(-1);	
+
 }
 
 void				Shaderpixel::checkKeys(void)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Shader.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/25 17:47:37 by gperez            #+#    #+#             */
-/*   Updated: 2021/08/05 00:39:33 by gperez           ###   ########.fr       */
+/*   Updated: 2021/09/22 10:31:03 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,10 @@
 
 # define VERTEX_MANDELBULB "shader/vertexMandelbulb.glsl"
 # define FRAGMENT_MANDELBULB "shader/fragmentMandelbulb.glsl"
+
+# define FRAGMENT_MANDELBOX "shader/fragmentMandelbox.glsl"
+
+# define FRAGMENT_METABALLS "shader/fragmentMetaballs.glsl"
 
 # define FRAGMENT_TETRAHEDRON "shader/fragmentTetrahedron.glsl"
 
