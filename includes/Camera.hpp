@@ -6,7 +6,7 @@
 /*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/04 23:49:41 by gperez            #+#    #+#             */
-/*   Updated: 2021/06/17 17:33:18 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/09/23 14:39:30 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include "Mat.hpp"
 # include "Vec2.hpp"
 # define FOV 45.0f
-# define SPEED 0.002f
+# define SPEED 0.02f
 # define SENSITIVITY 0.075f
 
 class	Camera : public Mat

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Mat.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/04 23:29:17 by gperez            #+#    #+#             */
-/*   Updated: 2021/07/12 11:08:38 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/08/04 21:24:13 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ class	Mat
 {
 	protected:
 		Mat4		mat;
+		Mat4		inverseMat;
 
 		Vec3		pos;
 		Vec3		rot;
@@ -39,6 +40,7 @@ class	Mat
 			Vec3 s = Vec3());
 		void		reset(void);
 		Mat4		getMatrix(bool calculate = true);
+		Mat4		getInverseMat(void);
 		void		setMatrix(Mat4 m);
 		Vec3		getFront(void);
 		void		setFront(Vec3 front);

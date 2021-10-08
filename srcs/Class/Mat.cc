@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Mat.cc                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/04 23:19:34 by gperez            #+#    #+#             */
-/*   Updated: 2021/06/17 16:41:51 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/08/04 21:24:07 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,11 @@ Mat4	Mat::getMatrix(bool calculate)
 	if (calculate)
 		this->calc();
 	return (mat);
+}
+
+Mat4	Mat::getInverseMat(void)
+{
+	return (this->inverseMat);
 }
 
 void	Mat::setMatrix(Mat4 m)
@@ -52,6 +57,7 @@ Vec3	Mat::getPosition(void)
 void	Mat::setPosition(Vec3 p)
 {
 	this->pos = p;
+	this->calc();
 }
 
 Vec3	Mat::getScale(void)
@@ -68,6 +74,7 @@ void	Mat::reset(void)
 {
 	Mat		m;
 	*this = m;
+	this->calc();
 }
 
 void	Mat::calc()
@@ -87,6 +94,7 @@ Vec3	Mat::getRotation(void)
 void	Mat::setRotation(Vec3 r)
 {
 	this->rot = r;
+	this->calc();
 }
 
 float	Mat::getEuler(e_rot euler)
@@ -123,6 +131,7 @@ void	Mat::lookAt(Vec3 look)
 	m[3][2] = -this->pos.dot(camera_forward);
 
 	this->setMatrix(m);
+	this->inverseMat = this->mat.inverse();
 }
 
 void	Mat::lookAt(void)
@@ -138,6 +147,7 @@ void	Mat::translate(e_axes axe, float speed)
 		this->setPosition(this->getPosition() + this->vecUp * speed);
 	else
 		this->setPosition(this->getPosition() + this->vecFront * speed);
+	this->calc();
 }
 
 void	Mat::translate(Vec3 t)
@@ -157,6 +167,7 @@ void	Mat::rotate(Vec3 rotEuler)
 		this->setRotation(Vec3(89.9, this->rot.getY(), this->rot.getZ()));
 	else if (this->rot.getX() < -89.9)
 		this->setRotation(Vec3(-89.9, this->rot.getY(), this->rot.getZ()));
+		this->calc();
 }
 
 void	Mat::scale(Vec3 s)

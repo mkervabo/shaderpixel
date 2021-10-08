@@ -3,18 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   Mesh.cc                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 16:57:27 by gperez            #+#    #+#             */
-/*   Updated: 2021/07/27 15:27:32 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/08 13:33:04 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Mesh.hpp"
+#include "Receiver.hpp"
 
 Mesh::Mesh()
 {
-	this->mat.rotate(Vec3(-90., 0., 0.));
+	this->type = E_DEFAULT_MESH;
+	// this->mat.rotate(Vec3(-90., 0., 0.));
 }
 
 void	Mesh::initMesh(unsigned int Index, const aiMesh* paiMesh) // Remplit un MeshEntry avec des vertices et des faces et l'ajoute au vector m_Entries
@@ -49,6 +51,7 @@ void	Mesh::initMesh(unsigned int Index, const aiMesh* paiMesh) // Remplit un Mes
 		indices.push_back(face.mIndices[2]);
 	}
 	m_Entries[Index].init(vertices, indices);
+	this->meta = Metaballs();
 }
 
 bool Mesh::initMaterials(const aiScene* pScene, const t_objPath& path) // Genere les textures de l'objet et les ajoutes au vector m_Textures
@@ -61,9 +64,9 @@ bool Mesh::initMaterials(const aiScene* pScene, const t_objPath& path) // Genere
 	{
 		const aiMaterial* pMaterial = pScene->mMaterials[i];
 
-		for (int i = 0; i < 19; i++)
-			std::cout << i << " materials " << pMaterial->GetTextureCount((aiTextureType)i) << "\n";
-		std::cout << "\n";
+		// for (int i = 0; i < 19; i++)
+		// 	std::cout << i << " materials " << pMaterial->GetTextureCount((aiTextureType)i) << "\n";
+		// std::cout << "\n";
 
 		bool isTexture = false;
 
@@ -71,13 +74,12 @@ bool Mesh::initMaterials(const aiScene* pScene, const t_objPath& path) // Genere
 			if (pMaterial->GetTextureCount((aiTextureType)i))
 				isTexture = true;
 
-		std::cout << isTexture << "\n";
 		if (!isTexture) // Si le materiaux ne contient pas de texture mais une couleur de base
 		{
 			aiColor4D	color;
 
 			aiGetMaterialColor(pMaterial, AI_MATKEY_COLOR_DIFFUSE, &color);
-			std::cout << color.r << " " << color.g << " " << color.b << "\n";
+			// std::cout << color.r << " " << color.g << " " << color.b << "\n";
 			this->m_Materials[i].setIsText(false);
 			this->m_Materials[i].setColor(Vec3(color.r, color.g, color.b));
 		}
@@ -93,7 +95,7 @@ bool Mesh::initMaterials(const aiScene* pScene, const t_objPath& path) // Genere
 					std::string fullPath = Dir + pathFromAssimp.data; // On ajoute le chemin relatif afin de le transformer en chemin absolue
 					this->m_Materials[i].newTexture();
 					std::cout << fullPath << "\n";
-					if (this->m_Materials[i].getTexture()->load(GL_TEXTURE_2D, (char*)fullPath.c_str())) // On charge la texture et la genere pour openGL
+					if (this->m_Materials[i].load(GL_TEXTURE_2D, (char*)fullPath.c_str())) // On charge la texture et la genere pour openGL
 					{
 						printf("Error loading texture '%s'\n", fullPath.c_str());
 						this->m_Materials[i].deleteTexture();
@@ -101,10 +103,10 @@ bool Mesh::initMaterials(const aiScene* pScene, const t_objPath& path) // Genere
 					}
 				}
 			}
-			else if (!this->m_Materials[i].getTexture())
+			else if (!this->m_Materials[i].asTexture())
 			{
 				this->m_Materials[i].newTexture();
-				ret = this->m_Materials[i].getTexture()->load(GL_TEXTURE_2D, (char*)PATH_DEFAULT_TEXTURE);
+				ret = this->m_Materials[i].load(GL_TEXTURE_2D, (char*)PATH_DEFAULT_TEXTURE);
 			}
 		}
 	}
@@ -134,6 +136,7 @@ bool	Mesh::loadMesh(t_objPath pathMesh, std::string pathVertex, std::string path
 	this->clear();
 	if (this->shader.loadShader(pathVertex, pathFragment))
 		return (true);
+	std::cout << this->shader.getProgram() << "\n";
 	const aiScene* pScene = importer.ReadFile(pathMesh.path.c_str(), // On lit le fichier et on le stock dans une scene avec les faces triangulé.
 		aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs);
 	if (pScene)
@@ -151,35 +154,67 @@ bool	Mesh::loadMesh(t_objPath pathMesh)
 	return (this->loadMesh(pathMesh, VERTEX, FRAGMENT));
 }
 
-void	Mesh::render(Camera &cam) // On parcours tous les mesh de notre objet et on l'affiche avec la texture qui lui est lier
+void	Mesh::render(Camera &cam, float timeS, Vec3 &lightPos) // On parcours tous les mesh de notre objet et on l'affiche avec la texture qui lui est lier
 {
-	int		boolValue = 1;
+	int		boolValue = 0;
+	Vec3	color;
+
 	// glEnableVertexAttribArray(0);
 	// glEnableVertexAttribArray(1);
 	// glEnableVertexAttribArray(2);
 
+	#include <iostream>
+	#include <irrKlang.h>
+	#include <ik_ISoundMixedOutputReceiver.h>
+	using namespace irrklang;
+	
 	for (unsigned int i = 0 ; i < this->m_Entries.size() ; i++)
 	{
 		glBindVertexArray(this->m_Entries[i].getVao());
  		glUseProgram(this->shader.getProgram());
-
 		// On check si le materiaux est une texture ou non
 		const unsigned int materialIndex = this->m_Entries[i].getMatIdx();
-		if (materialIndex < this->m_Materials.size() && this->m_Materials[materialIndex].getTexture())
-			this->m_Materials[materialIndex].getTexture()->bind(GL_TEXTURE0);
-		else
-			boolValue = 0;
-		glUniform1i(glGetUniformLocation(this->shader.getProgram(),
-			"isText"), (GLuint)boolValue);
-		Vec3	c = this->m_Materials[materialIndex].getColor();
-		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
-			"colorMat"), 1, (const GLfloat*)&c);
+		if (materialIndex < this->m_Materials.size() && this->m_Materials[materialIndex].asTexture())
+		{
+			this->m_Materials[materialIndex].bind(GL_TEXTURE0);
+			boolValue = 1;
+		}
+		color = this->m_Materials[materialIndex].getColor();
+
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
-			"model"), 1, GL_FALSE, &(this->mat.getMatrix(true)[0][0]));
+			"model"), 1, GL_FALSE, &(mat.getMatrix(false).inverse()[0][0]));
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
-			"view"), 1, GL_FALSE, &(cam.getMatrix(true)[0][0]));
+			"view"), 1, GL_FALSE, &(cam.getMatrix(false)[0][0]));
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
 			"projection"), 1, GL_FALSE, &(cam.getProjMatrix()[0][0]));
+		glUniform1fv(glGetUniformLocation(this->shader.getProgram(),
+			"time"), 1, (const GLfloat*)&timeS);
+		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
+			"colorMat"), 1, (const GLfloat*)&color);
+		glUniform1i(glGetUniformLocation(this->shader.getProgram(), // BASIC_SHADER
+			"isText"), (GLuint)boolValue);
+		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
+			"u_lightPos"), 1, (const GLfloat*)&lightPos);
+
+		//METABALLS SHADER
+		//irrklang:
+		// Receiver* receiver = NULL;
+		// engine->setMixedDataOutputReceiver(receiver);
+		float offset = this->meta.getSize();
+		glUniform1fv(glGetUniformLocation(this->shader.getProgram(),
+			"metaSize"), 1, (const GLfloat*)&offset);
+		offset = this->meta.getVelocity();
+		glUniform1fv(glGetUniformLocation(this->shader.getProgram(),
+			"metaVelocity"), 1, (const GLfloat*)&offset);
+		offset = this->meta.getMaxSize();
+		glUniform1fv(glGetUniformLocation(this->shader.getProgram(),
+			"metaMaxSize"), 1, (const GLfloat*)&offset);
+		offset = this->meta.getMinSize();
+		glUniform1fv(glGetUniformLocation(this->shader.getProgram(),
+			"metaMinSize"), 1, (const GLfloat*)&offset);
+		unsigned int nbBalls = this->meta.getNbBalls();
+		glUniform1i(glGetUniformLocation(this->shader.getProgram(),
+			"metaNbBalls"), (GLuint)nbBalls);
 
 		glDrawElements(GL_TRIANGLES, this->m_Entries[i].getNumIndices(), GL_UNSIGNED_INT, NULL);
 	}
@@ -201,6 +236,31 @@ void	Mesh::clear(void)
 	this->clearTextures();
 	this->m_Materials.clear();
 	// Rajouter le reste
+}
+
+void	Mesh::translate(Vec3 t)
+{
+	this->mat.translate(t);
+}
+
+void	Mesh::translate(e_axes axe, float speed)
+{
+	this->mat.translate(axe, speed);
+}
+
+void	Mesh::setPosition(Vec3 p)
+{
+	this->mat.setPosition(p);
+}
+
+unsigned int	Mesh::getShaderProgram(void)
+{
+	return (this->shader.getProgram());
+}
+
+e_meshType	Mesh::getType(void)
+{
+	return (this->type);
 }
 
 Mesh::~Mesh()

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Shader.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/25 17:47:37 by gperez            #+#    #+#             */
-/*   Updated: 2021/07/27 14:31:15 by gperez           ###   ########.fr       */
+/*   Updated: 2021/09/22 10:31:03 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,32 @@
 # define VERTEX "shader/vertex.glsl"
 # define FRAGMENT "shader/fragment.glsl"
 
+# define VERTEX_MANDELBULB "shader/vertexMandelbulb.glsl"
+# define FRAGMENT_MANDELBULB "shader/fragmentMandelbulb.glsl"
+
+# define FRAGMENT_MANDELBOX "shader/fragmentMandelbox.glsl"
+
+# define FRAGMENT_METABALLS "shader/fragmentMetaballs.glsl"
+
+# define FRAGMENT_TETRAHEDRON "shader/fragmentTetrahedron.glsl"
+
+# define VERTEX_FIELD "shader/vertexField.glsl"
+# define FRAGMENT_FIELD "shader/fragmentField.glsl"
+
+# define VERTEX_ASTEROID "shader/vertexAsteroid.glsl"
+# define FRAGMENT_ASTEROID "shader/fragmentAsteroid.glsl"
+
+# define VERTEX_CLOUD "shader/vertexCloud.glsl"
+# define FRAGMENT_CLOUD "shader/fragmentCloud.glsl"
+
+# define VERTEX_REFRACT "shader/vertexRefract.glsl"
+# define FRAGMENT_REFRACT "shader/fragmentRefract.glsl"
+
+# define VERTEX_LIGHT "shader/vertexLight.glsl"
+# define FRAGMENT_LIGHT "shader/fragmentLight.glsl"
+
 # define FAILED_OPEN_FILE "Failed open file"
+# define FAILED_READ_SHADER "Failed to read shader"
 # define VERTEX_FAILED "Shader vertex compilation failed"
 # define FRAGMENT_FAILED "Shader fragment compilation failed"
 # define LINK_SHADER_FAILED "Shader link failed"
@@ -38,13 +63,11 @@ class Shader
 {
 	private:
 		unsigned int	shaderProgram;
-		int				createShader(std::string info, std::string vertex_path,
-			std::string frag_path);
+		int				createShader(std::string vertex_path, std::string frag_path);
 	public:
 		Shader(void);
 		unsigned int	getProgram(void);
 		void			setProgram(unsigned int p);
-		
 		int				loadShader(std::string vertexPath, std::string fragPath);
 		void			freeProgram(void);
 		~Shader();
