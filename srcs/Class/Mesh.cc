@@ -6,7 +6,7 @@
 /*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 16:57:27 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/08 10:31:08 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/10/08 13:33:04 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,13 +152,6 @@ bool	Mesh::loadMesh(t_objPath pathMesh)
 {
 	return (this->loadMesh(pathMesh, VERTEX, FRAGMENT));
 }
-
-
-// #include <iostream>
-// #include <irrKlang.h>
-// #include <ik_ISoundMixedOutputReceiver.h>
-// using namespace irrklang;
-
 
 void	Mesh::render(Camera &cam, float timeS, Vec3 &lightPos, Mat &modelMat) // On parcours tous les mesh de notre objet et on l'affiche avec la texture qui lui est lier
 {

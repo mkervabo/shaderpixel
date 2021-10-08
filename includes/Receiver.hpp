@@ -12,7 +12,7 @@ class	Receiver : public ISoundMixedOutputReceiver
 	private:
 		float frequency[];
 	public:
-		void    OnAudioDataReady(const void* data, int byteCount, int playbackrate);
+		void	OnAudioDataReady(const void* data, int byteCount, int playbackrate);
 };
 
 #endif

@@ -1,7 +1,6 @@
 #include "Receiver.hpp"
 #include <fftw3.h>
 
-
 //	data			representing the sound frames which just have been mixed.
 //					Sound data always consists of two interleaved sound channels
 //					at 16bit per frame. 2 * 16 = 32
@@ -9,7 +8,7 @@
 //	playbackrate	The playback rate at samples per second (usually something
 //					like 44000). This value will not change and always båe the 
 //					same for an instance of an ISoundEngine.
-void    Receiver::OnAudioDataReady(const void* data, int byteCount, int playbackrate)
+void	Receiver::OnAudioDataReady(const void* data, int byteCount, int playbackrate)
 {
 	int N = byteCount / 4;
 	fftw_complex in[N], out[N];//double[]
