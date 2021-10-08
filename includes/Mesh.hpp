@@ -23,6 +23,8 @@
 # include "Shader.hpp"
 # include "Metaballs.hpp"
 
+enum e_meshType {E_DEFAULT_MESH, E_FRACTAL, E_REFRACT, E_CLOUD, E_FIELD, E_ASTEROID};
+
 # define NEAR_Z 0.1f
 # define FAR_Z 100.f
 # define WIDTH 1024.
@@ -30,10 +32,10 @@
 
 class Mesh
 {
-	private:
+	protected:
 		std::vector<MeshEntry>	m_Entries;
 		std::vector<Material>	m_Materials;
-		// unsigned int	id;
+		e_meshType				type;
 		Shader					shader;
 		Mat						mat;
 		Metaballs				meta;
@@ -44,13 +46,15 @@ class Mesh
 	public:
 		Mesh();
 		bool			loadMesh(t_objPath pathMesh);
-		bool			loadMesh(t_objPath pathMesh, std::string pathVertex, std::string pathFragment);
-		void			render(Camera &cam, float timeS, Vec3 &lightPos, Mat &modelMat);
+		virtual bool	loadMesh(t_objPath pathMesh, std::string pathVertex, std::string pathFragment);
+		virtual void	render(Camera &cam, float timeS, Vec3 &lightPos);
 		void			clear(void);
 		void			translate(Vec3 t);
+		virtual void	translate(e_axes axe, float speed);
 		void			setPosition(Vec3 p);
 		unsigned int	getShaderProgram(void);
-		~Mesh();
+		e_meshType		getType(void);
+		virtual ~Mesh();
 };
 
 #endif

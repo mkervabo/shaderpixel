@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/27 14:28:48 by gperez            #+#    #+#             */
-/*   Updated: 2021/07/27 15:04:27 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/06 13:16:41 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,10 @@ class Material
 		bool	isText;
 	public:
 		Material();
+		bool	asTexture(void);
 		void	setTexture(Texture *t);
-		Texture	*getTexture(void);
+		bool	load(GLenum target, char *txt);
+		void	bind(GLenum textureUnit);
 		void	setIsText(bool isT);
 		bool	getIsText(void);
 		void	setColor(Vec3 color);

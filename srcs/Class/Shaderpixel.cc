@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Shaderpixel.cc                                         :+:      :+:    :+:   */
+/*   Shaderpixel.cc                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -14,6 +14,11 @@
 
 Shaderpixel::Shaderpixel()
 {
+	this->time.setTime();
+	this->frameNb = 0;
+	this->currentFrameNb = 0;
+	this->lastTime = 0.;
+	this->deltaTime = 0.;
 	this->firstMoove = true;
 	for (unsigned int i = 0; i < GLFW_KEY_END; i++)
 		this->keys[i] = KEY_RELEASE;
@@ -99,19 +104,28 @@ void				Shaderpixel::initWindow(void)
 	glfwSetCursorPosCallback(this->window, mouse_callback);
 	glfwSetWindowUserPointer(this->window, this);
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-	glfwSwapInterval(VSYNC_OFF);
+	glfwSwapInterval(VSYNC_ON);
 }
 
 bool						Shaderpixel::loadMesh(t_objPath obj)
 {
-	return (this->loadMesh(obj, VERTEX, FRAGMENT));
+	return (this->loadMesh(obj, VERTEX, FRAGMENT, E_DEFAULT_MESH));
 }
 
-bool						Shaderpixel::loadMesh(t_objPath obj, std::string pathVertex, std::string pathFragment)
+bool						Shaderpixel::loadMesh(t_objPath obj, std::string pathVertex, std::string pathFragment, e_meshType type)
 {
-	Mesh	*m = new Mesh;
-
-	this->meshes.push_back(m);
+	if (type == E_CLOUD)
+		this->meshes.push_back(new CloudMesh);
+	else if (type == E_REFRACT)
+		this->meshes.push_back(new RefractMesh);
+	else if (type == E_FRACTAL)
+		this->meshes.push_back(new FractalMesh);
+	else if (type == E_FIELD)
+		this->meshes.push_back(new FieldMesh);
+	else if (type == E_ASTEROID)
+		this->meshes.push_back(new AsteroidMesh);
+	else
+		this->meshes.push_back(new Mesh);
 	if (!this->meshes.size())
 		return (1);
 	if (this->meshes[this->meshes.size() - 1]->loadMesh(obj, pathVertex, pathFragment))
@@ -122,16 +136,23 @@ bool						Shaderpixel::loadMesh(t_objPath obj, std::string pathVertex, std::stri
 	return (0);
 }
 
+bool				Shaderpixel::load(e_pathObj enu, std::string pathVertex, std::string pathFragment, e_meshType type)
+{
+	if (enu >= E_PEND)
+		return (1);
+	return (this->loadMesh(g_objPath[enu], pathVertex, pathFragment, type));
+}
+
 bool				Shaderpixel::init(void)
 {
-	if (this->loadMesh(g_objPath[E_PCUBE], VERTEX_MANDELBULB, FRAGMENT_METABALLS))
+	if (this->hud.init())
 		return (1);
-	if (this->loadMesh(g_objPath[E_PBALL], VERTEX, FRAGMENT))
-		return (1);
-	if (this->loadMesh(g_objPath[E_PBALL], VERTEX_LIGHT, FRAGMENT_LIGHT))
-		return (1);
+	if (load(E_PBALL, VERTEX_LIGHT, FRAGMENT_LIGHT, E_DEFAULT_MESH)
+		|| load(E_PBALL, VERTEX, FRAGMENT, E_DEFAULT_MESH)
+		|| load(E_PCUBE, VERTEX_FIELD, FRAGMENT_FIELD, E_FIELD))
+			return (1);
 	this->meshes[1]->translate(Vec3(0., 0., -3.5));
-	std::cout << this->meshes[0]->getShaderProgram() << " " << this->meshes[1]->getShaderProgram() << "\n";
+	// std::cout << this->meshes[0]->getShaderProgram() << " " << this->meshes[1]->getShaderProgram() << "\n";
 	this->time.setTime();
 	return (0);
 }
@@ -139,12 +160,23 @@ bool				Shaderpixel::init(void)
 void				Shaderpixel::update(Camera &cam)
 {
 	float	time = this->time.getTimeSeconds();
-	Mat		modelMat;
-	modelMat.rotate(Vec3(time * 7., time * 10., time * 5.));
 	Vec3	lightPos = Vec3(1. * cos(time * 0.5), 1., 1. * sin(time * 0.5));
-	this->meshes[2]->setPosition(lightPos);
+	
+	this->meshes[0]->setPosition(lightPos);
 	for (unsigned int i = 0; i < this->meshes.size(); i++)
-		this->meshes[i]->render(cam, time, lightPos, modelMat);
+		this->meshes[i]->render(cam, time, lightPos);
+	this->currentFrameNb++;
+}
+
+void				Shaderpixel::displayHud(void)
+{
+	if (this->isTimeToDisplay())
+	{
+		std::cout << this->frameNb << "\n";
+		this->frameNb = currentFrameNb;
+		this->currentFrameNb = 0;
+	}
+	this->hud.display(this->getFrameNb());
 }
 
 void				Shaderpixel::inputKey(unsigned int key)
@@ -158,6 +190,20 @@ void				Shaderpixel::inputKey(unsigned int key)
 	else if (glfwGetKey(this->window, key) == GLFW_RELEASE
 		&& this->keys[key] == KEY_DONE)
 		this->keys[key] = KEY_RELEASE;
+}
+
+void				Shaderpixel::fieldKeys(void)
+{
+	if (this->meshes.size() <= 2)
+		return;
+	if (glfwGetKey(this->window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+		this->meshes[2]->translate(E_RIGHT, -SPEED);
+	if (glfwGetKey(this->window, GLFW_KEY_LEFT) == GLFW_PRESS)
+		this->meshes[2]->translate(E_RIGHT, SPEED);
+	if (glfwGetKey(this->window, GLFW_KEY_UP) == GLFW_PRESS)
+		this->meshes[2]->translate(E_FRONT, -SPEED);
+	if (glfwGetKey(this->window, GLFW_KEY_DOWN) == GLFW_PRESS)
+		this->meshes[2]->translate(E_FRONT, SPEED);
 }
 
 void				Shaderpixel::getKeys(void)
@@ -176,6 +222,7 @@ void				Shaderpixel::getKeys(void)
 		this->cam.translate(E_UP, SPEED);
 	if (glfwGetKey(this->window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
 		this->cam.translate(E_UP, -SPEED);
+	fieldKeys();
 }
 
 void				Shaderpixel::checkKeys(void)
@@ -185,7 +232,6 @@ void				Shaderpixel::checkKeys(void)
 	while (this->queue.size())
 	{
 		i = this->queue.front();
-		//key here
 		this->keys[(int)i] = KEY_DONE;
 		this->queue.pop();
 	}
@@ -194,6 +240,27 @@ void				Shaderpixel::checkKeys(void)
 bool				Shaderpixel::isFirst(void)
 {
 	return (this->firstMoove);
+}
+
+void				Shaderpixel::calcTime(void)
+{
+	float currentTime = this->time.getTimeSeconds();
+	this->deltaTime = currentTime - this->lastTime;
+	this->lastTime = currentTime;
+}
+
+bool				Shaderpixel::isTimeToDisplay(void)
+{
+	this->addedTime += this->deltaTime;
+	if (this->addedTime < 1. + PREC)
+		return (false);
+	this->addedTime = 0.;
+	return (true);
+}
+
+int					Shaderpixel::getFrameNb(void)
+{
+	return (this->frameNb);
 }
 
 Shaderpixel::~Shaderpixel()

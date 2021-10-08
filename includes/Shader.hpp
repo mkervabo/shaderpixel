@@ -30,10 +30,23 @@
 
 # define FRAGMENT_TETRAHEDRON "shader/fragmentTetrahedron.glsl"
 
+# define VERTEX_FIELD "shader/vertexField.glsl"
+# define FRAGMENT_FIELD "shader/fragmentField.glsl"
+
+# define VERTEX_ASTEROID "shader/vertexAsteroid.glsl"
+# define FRAGMENT_ASTEROID "shader/fragmentAsteroid.glsl"
+
+# define VERTEX_CLOUD "shader/vertexCloud.glsl"
+# define FRAGMENT_CLOUD "shader/fragmentCloud.glsl"
+
+# define VERTEX_REFRACT "shader/vertexRefract.glsl"
+# define FRAGMENT_REFRACT "shader/fragmentRefract.glsl"
+
 # define VERTEX_LIGHT "shader/vertexLight.glsl"
 # define FRAGMENT_LIGHT "shader/fragmentLight.glsl"
 
 # define FAILED_OPEN_FILE "Failed open file"
+# define FAILED_READ_SHADER "Failed to read shader"
 # define VERTEX_FAILED "Shader vertex compilation failed"
 # define FRAGMENT_FAILED "Shader fragment compilation failed"
 # define LINK_SHADER_FAILED "Shader link failed"

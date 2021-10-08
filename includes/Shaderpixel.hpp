@@ -15,10 +15,16 @@
 
 # include <iostream>
 # include "Error.hpp"
+# include "Hud.hpp"
 # include <queue>
 # include "Vec2.hpp"
 # include "TimeMs.hpp"
 # include "Mesh.hpp"
+# include "CloudMesh.hpp"
+# include "RefractMesh.hpp"
+# include "FractalMesh.hpp"
+# include "FieldMesh.hpp"
+# include "AsteroidMesh.hpp"
 # include "glfw3.h" // Load fenetre
 
 # define RATIO (float)WIDTH / (float)HEIGHT
@@ -35,24 +41,38 @@ class Shaderpixel
 {
 	private:
 		GLFWwindow					*window;
+		Hud							hud;
+		TimeMs						time;
+		int							frameNb;
+		int							currentFrameNb;
+		float						lastTime;
+		float						deltaTime;
+		float						addedTime;
+
 		Camera						cam;
 		Vec2						mouseLastPos;
 		bool						firstMoove;
-		char						keys[GLFW_KEY_END];
+
+		// Keys //
 		std::queue<char>			queue;
+		char						keys[GLFW_KEY_END];
 		void						setKey(unsigned int key, char state);
 		void						inputKey(unsigned int key);
+		void						fieldKeys(void);
+
+		bool						load(e_pathObj enu, std::string pathVertex, std::string pathFragment, e_meshType type);
 		std::vector<Mesh*>			meshes;
-		TimeMs						time;
+
 	public:
 		Shaderpixel();
 		void						initWindow(void);
 		bool						init(void);
-		void						update(Camera &cam);	
+		void						update(Camera &cam);
+		void						displayHud(void);
 		void						checkKeys(void);
 		void 						loadVBO(void);
 		bool						loadMesh(t_objPath obj);
-		bool						loadMesh(t_objPath obj, std::string pathVertex, std::string pathFragment);
+		bool						loadMesh(t_objPath obj, std::string pathVertex, std::string pathFragment, e_meshType type);
 
 		void						getKeys(void);
 		unsigned int				getState(unsigned int k);
@@ -66,6 +86,10 @@ class Shaderpixel
 		void						generateBuffers(void);
 		
 		bool						isFirst(void);
+
+		void						calcTime(void);
+		bool						isTimeToDisplay(void);
+		int							getFrameNb(void);
 		~Shaderpixel();
 };
 

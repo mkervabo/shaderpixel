@@ -12,20 +12,6 @@
 
 # include "Shaderpixel.hpp"
 
-// void	display(Shaderpixel &env, Shader &shader)
-// {
-// 	glClearColor(0.8f, 0.8f, 0.8f, 1.0f);
-//     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-// 	glBindVertexArray(env.getVao());
-// 	glUseProgram(shader.getProgram());
-// 	glUniformMatrix4fv(glGetUniformLocation(shader.getProgram(),
-// 		"view"), 1, GL_FALSE, &(env.getCam().getMatrix(true)[0][0]));
-// 	glUniformMatrix4fv(glGetUniformLocation(shader.getProgram(),
-// 		"projection"), 1, GL_FALSE,&(env.getCam().getProjMatrix()[0][0]));
-// 	glDrawElements(GL_TRIANGLES, 6 * (2 * 3), GL_UNSIGNED_INT, NULL); // NbMeshs * NbFaces * NbPoints (EBO)
-// 	glBindVertexArray(0);
-// }
-
 void	exec(Shaderpixel &env)
 {
 	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
@@ -33,6 +19,8 @@ void	exec(Shaderpixel &env)
 	env.getKeys();
 	env.checkKeys();
 	env.update(env.getCam());
+	env.calcTime();
+	env.displayHud();
 	glfwSwapBuffers(env.getWindow());
 	glfwPollEvents();
 }
@@ -51,7 +39,8 @@ int		main(void)
 		return (1);
 	}
 	cam.setProjMatrix(perspective(FOV, RATIO, (float)NEAR_Z, (float)FAR_Z));
-	cam.translate(0. , 0., 3);
+	cam.translate(0. , 2., 3.);
+
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -63,7 +52,7 @@ int		main(void)
 		return (1);
 	}
 
-	//irrklang:
+  //irrklang:
   	// start the sound engine with default parameters
 	ISoundEngine* engine = createIrrKlangDevice();
 	if (!engine)
@@ -72,7 +61,8 @@ int		main(void)
 	ISound* vol = engine->play2D("libs/irrklang/media/getout.ogg", true, false, true);
 	if (vol)
      vol->setVolume((ik_f32)0.001);
-
+ 
+  
 	// Boucle Exec //
 	while(!glfwWindowShouldClose(env.getWindow()))
 	{

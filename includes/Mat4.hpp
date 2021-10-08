@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Mat4.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/16 16:47:07 by gperez            #+#    #+#             */
-/*   Updated: 2021/06/17 17:52:29 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/10/03 21:09:01 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 # include <math.h>
 # include <iostream>
+
+#define PREC 0.00001
 
 class Mat4
 {

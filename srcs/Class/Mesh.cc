@@ -15,6 +15,7 @@
 
 Mesh::Mesh()
 {
+	this->type = E_DEFAULT_MESH;
 	// this->mat.rotate(Vec3(-90., 0., 0.));
 }
 
@@ -94,7 +95,7 @@ bool Mesh::initMaterials(const aiScene* pScene, const t_objPath& path) // Genere
 					std::string fullPath = Dir + pathFromAssimp.data; // On ajoute le chemin relatif afin de le transformer en chemin absolue
 					this->m_Materials[i].newTexture();
 					std::cout << fullPath << "\n";
-					if (this->m_Materials[i].getTexture()->load(GL_TEXTURE_2D, (char*)fullPath.c_str())) // On charge la texture et la genere pour openGL
+					if (this->m_Materials[i].load(GL_TEXTURE_2D, (char*)fullPath.c_str())) // On charge la texture et la genere pour openGL
 					{
 						printf("Error loading texture '%s'\n", fullPath.c_str());
 						this->m_Materials[i].deleteTexture();
@@ -102,10 +103,10 @@ bool Mesh::initMaterials(const aiScene* pScene, const t_objPath& path) // Genere
 					}
 				}
 			}
-			else if (!this->m_Materials[i].getTexture())
+			else if (!this->m_Materials[i].asTexture())
 			{
 				this->m_Materials[i].newTexture();
-				ret = this->m_Materials[i].getTexture()->load(GL_TEXTURE_2D, (char*)PATH_DEFAULT_TEXTURE);
+				ret = this->m_Materials[i].load(GL_TEXTURE_2D, (char*)PATH_DEFAULT_TEXTURE);
 			}
 		}
 	}
@@ -153,14 +154,10 @@ bool	Mesh::loadMesh(t_objPath pathMesh)
 	return (this->loadMesh(pathMesh, VERTEX, FRAGMENT));
 }
 
-void	Mesh::render(Camera &cam, float timeS, Vec3 &lightPos, Mat &modelMat) // On parcours tous les mesh de notre objet et on l'affiche avec la texture qui lui est lier
+void	Mesh::render(Camera &cam, float timeS, Vec3 &lightPos) // On parcours tous les mesh de notre objet et on l'affiche avec la texture qui lui est lier
 {
-	int		boolValue = 1;
-	Vec3	camPos;
+	int		boolValue = 0;
 	Vec3	color;
-	float	farNear[2] = {FAR_Z, NEAR_Z};
-	float	fov = FOV;
-	Vec2	resolution = Vec2(WIDTH, HEIGHT);
 
 	// glEnableVertexAttribArray(0);
 	// glEnableVertexAttribArray(1);
@@ -177,40 +174,27 @@ void	Mesh::render(Camera &cam, float timeS, Vec3 &lightPos, Mat &modelMat) // On
  		glUseProgram(this->shader.getProgram());
 		// On check si le materiaux est une texture ou non
 		const unsigned int materialIndex = this->m_Entries[i].getMatIdx();
-		if (materialIndex < this->m_Materials.size() && this->m_Materials[materialIndex].getTexture())
-			this->m_Materials[materialIndex].getTexture()->bind(GL_TEXTURE0);
-		else
-			boolValue = 0;
+		if (materialIndex < this->m_Materials.size() && this->m_Materials[materialIndex].asTexture())
+		{
+			this->m_Materials[materialIndex].bind(GL_TEXTURE0);
+			boolValue = 1;
+		}
 		color = this->m_Materials[materialIndex].getColor();
 
-		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
-			"modelMat"), 1, GL_FALSE, &(modelMat.getInverseMat()[0][0]));
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
 			"model"), 1, GL_FALSE, &(mat.getMatrix(false).inverse()[0][0]));
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
 			"view"), 1, GL_FALSE, &(cam.getMatrix(false)[0][0]));
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
 			"projection"), 1, GL_FALSE, &(cam.getProjMatrix()[0][0]));
-		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
-			"inverseView"), 1, GL_FALSE, &(cam.getInverseMat()[0][0]));
-		camPos = cam.getPosition();
-		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
-			"eye"), 1, (const GLfloat*)&camPos);
 		glUniform1fv(glGetUniformLocation(this->shader.getProgram(),
 			"time"), 1, (const GLfloat*)&timeS);
-		glUniform1fv(glGetUniformLocation(this->shader.getProgram(),
-			"farNear"), 2, (const GLfloat*)&farNear);
-		glUniform1fv(glGetUniformLocation(this->shader.getProgram(),
-			"u_fov"), 1, (const GLfloat*)&fov);
-		glUniform2fv(glGetUniformLocation(this->shader.getProgram(),
-			"u_resolution"), 1, (const GLfloat*)&resolution);
 		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
-			"u_lightPos"), 1, (const GLfloat*)&lightPos);
-
+			"colorMat"), 1, (const GLfloat*)&color);
 		glUniform1i(glGetUniformLocation(this->shader.getProgram(), // BASIC_SHADER
 			"isText"), (GLuint)boolValue);
 		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
-			"colorMat"), 1, (const GLfloat*)&color);
+			"u_lightPos"), 1, (const GLfloat*)&lightPos);
 
 		//METABALLS SHADER
 		//irrklang:
@@ -259,6 +243,11 @@ void	Mesh::translate(Vec3 t)
 	this->mat.translate(t);
 }
 
+void	Mesh::translate(e_axes axe, float speed)
+{
+	this->mat.translate(axe, speed);
+}
+
 void	Mesh::setPosition(Vec3 p)
 {
 	this->mat.setPosition(p);
@@ -267,6 +256,11 @@ void	Mesh::setPosition(Vec3 p)
 unsigned int	Mesh::getShaderProgram(void)
 {
 	return (this->shader.getProgram());
+}
+
+e_meshType	Mesh::getType(void)
+{
+	return (this->type);
 }
 
 Mesh::~Mesh()

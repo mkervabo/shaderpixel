@@ -6,7 +6,7 @@
 #    By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/06 13:36:11 by gperez            #+#    #+#              #
-#    Updated: 2021/10/08 11:25:07 by maiwenn          ###   ########.fr        #
+#    Updated: 2021/10/07 09:10:15 by gperez           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,6 +35,13 @@ SRC =	srcs/main.cc \
 		srcs/Class/Texture.cc \
 		srcs/Class/Material.cc \
 		srcs/Class/Metaballs.cc \
+		srcs/Class/Hud.cc \
+		srcs/Class/HudElement.cc \
+		srcs/MeshClasses/CloudMesh.cc \
+		srcs/MeshClasses/RefractMesh.cc \
+		srcs/MeshClasses/FractalMesh.cc \
+		srcs/MeshClasses/FieldMesh.cc \
+		srcs/MeshClasses/AsteroidMesh.cc \
 
 NC = \033[0m
 BOLD =\033[1m
@@ -76,6 +83,7 @@ LIBS_H =	libs/includes/ \
 			libs/assimp/include/ \
 			libs/irrklang/include \
 			libs/fftw-3.3.10/api \
+			includes/MeshClasses/ \
 
 LIBS = $(addprefix -I,$(LIBS_H))
 
@@ -90,6 +98,13 @@ INC =	includes/Shaderpixel.hpp \
 		includes/Texture.hpp \
 		includes/Material.hpp \
 		includes/Metaballs.hpp \
+		includes/Hud.hpp \
+		includes/HudElement.hpp \
+		includes/MeshClasses/CloudMesh.hpp \
+		includes/MeshClasses/RefractMesh.hpp \
+		includes/MeshClasses/FractalMesh.hpp \
+		includes/MeshClasses/FieldMesh.hpp \
+		includes/MeshClasses/AsteroidMesh.hpp \
 
 OBJ = $(SRC:.cc=.o)
 
@@ -122,6 +137,7 @@ $(LIB_ASSIMP) : libs/assimp/CMakeLists.txt
 clean :
 	@/bin/rm -rf srcs/*.o
 	@/bin/rm -rf srcs/Class/*.o
+	@/bin/rm -rf srcs/MeshClasses/*.o
 
 .PHONY : fclean
 fclean : clean

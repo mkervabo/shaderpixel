@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/25 17:47:10 by gperez            #+#    #+#             */
-/*   Updated: 2021/08/04 21:25:26 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/05 16:08:56 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ static int		shaderError(int i_s, std::string error_msg)
 {
 	char	info[1024];
 
+	glGetProgramInfoLog(i_s, 1024, NULL, info);
 	glGetShaderInfoLog(i_s, 1024, NULL, info);
 	std::cout << error_msg << "\n";
 	std::cout << info << "\n";
@@ -63,7 +64,10 @@ int				Shader::createShader(const std::string vertex_path, const std::string fra
 
 	if (readShader(shader, vertex_path, 'v')
 		|| readShader(shader, frag_path, 'f'))
+	{
+		std::cout << FAILED_READ_SHADER << "\n";
 		return (1);
+	}
 	shader.i_v = glCreateShader(GL_VERTEX_SHADER);
 
 	const char *fileV = shader.vertex.c_str();
