@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+         #
+#    By: gperez <gperez@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/06 13:36:11 by gperez            #+#    #+#              #
-#    Updated: 2021/10/07 09:10:15 by gperez           ###   ########.fr        #
+#    Updated: 2021/10/08 15:27:54 by gperez           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -68,7 +68,7 @@ COLOR2 = \033[38;5;178m
 
 LIB_G = libs/glfw_mac/lib-macos/libglfw3.a
 
-LIB_ASSIMP = libs/assimp/lib/libassimp.a
+LIB_ASSIMP = libs/assimp/bin/libassimp.dylib
 
 LIB_IRRKLANG = libs/irrklang/bin/macosx-gcc/libirrklang.dylib
 
@@ -115,17 +115,19 @@ $(NAME) : $(OBJ)
 	@gcc $(FLAG) -o srcs/glad.o -c libs/glad/src/glad.c
 	
 	@g++ $(FLAG) $(FLAGCPP) $(FLAG_OPENCL) $(FLAG_OPENGL) $(LIB_G) $(LIB_ASSIMP) $(LIB_IRRKLANG) srcs/glad.o $^ -o $(NAME)
-	install_name_tool -add_rpath @executable_path/libs/irrklang/bin/macosx-gcc/ $(NAME)
-	install_name_tool -change /usr/local/lib/libirrklang.dylib @rpath/libirrklang.dylib $(NAME)
-	install_name_tool -add_rpath @executable_path/libs/fftw-3.3.10/ $(NAME)
-	install_name_tool -change /usr/local/lib/libfftw3.3.6.9.dylib @rpath/libfftw3.3.6.9.dylib $(NAME)
+	@install_name_tool -add_rpath @executable_path/libs/irrklang/bin/macosx-gcc/ $(NAME)
+	@install_name_tool -change /usr/local/lib/libirrklang.dylib @rpath/libirrklang.dylib $(NAME)
+	@install_name_tool -add_rpath @executable_path/libs/assimp/bin/ $(NAME)
+	@install_name_tool -change /usr/local/lib/libassimp.dylib @rpath/libassimp.dylib $(NAME)
+	@install_name_tool -add_rpath @executable_path/libs/fftw-3.3.10/ $(NAME)
+	@install_name_tool -change /usr/local/lib/libfftw3.3.6.9.dylib @rpath/libfftw3.3.6.9.dylib $(NAME)
 	@printf "$(BOLD)$(COLOR1)%20s : $(RS_BL)$(RS_BO)$(GREEN)succesfuly made!$(NC)%20s\n" $(NAME)
 
 libs/assimp/CMakeLists.txt :
 	git clone https://github.com/assimp/assimp.git libs/assimp --depth 1
 
 $(LIB_ASSIMP) : libs/assimp/CMakeLists.txt
-	cmake libs/assimp/CMakeLists.txt -D BUILD_SHARED_LIBS=OFF
+	cmake libs/assimp/CMakeLists.txt -D BUILD_SHARED_LIBS=ON
 	cmake --build libs/assimp/.  #build faster
 
 %.o : %.cc $(INC)
