@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Shaderpixel.cc                                         :+:      :+:    :+:   */
+/*   Shaderpixel.cc                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -23,7 +23,6 @@ Shaderpixel::Shaderpixel()
 	for (unsigned int i = 0; i < GLFW_KEY_END; i++)
 		this->keys[i] = KEY_RELEASE;
 }
-
 
 void				Shaderpixel::setMouseLastPos(Vec2 pos)
 {

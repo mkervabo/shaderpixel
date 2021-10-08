@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   Mesh.cc                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 16:57:27 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/07 09:25:45 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/08 13:33:04 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Mesh.hpp"
+#include "Receiver.hpp"
 
 Mesh::Mesh()
 {
@@ -50,6 +51,7 @@ void	Mesh::initMesh(unsigned int Index, const aiMesh* paiMesh) // Remplit un Mes
 		indices.push_back(face.mIndices[2]);
 	}
 	m_Entries[Index].init(vertices, indices);
+	this->meta = Metaballs();
 }
 
 bool Mesh::initMaterials(const aiScene* pScene, const t_objPath& path) // Genere les textures de l'objet et les ajoutes au vector m_Textures
@@ -161,6 +163,11 @@ void	Mesh::render(Camera &cam, float timeS, Vec3 &lightPos) // On parcours tous 
 	// glEnableVertexAttribArray(1);
 	// glEnableVertexAttribArray(2);
 
+	#include <iostream>
+	#include <irrKlang.h>
+	#include <ik_ISoundMixedOutputReceiver.h>
+	using namespace irrklang;
+	
 	for (unsigned int i = 0 ; i < this->m_Entries.size() ; i++)
 	{
 		glBindVertexArray(this->m_Entries[i].getVao());
@@ -188,6 +195,26 @@ void	Mesh::render(Camera &cam, float timeS, Vec3 &lightPos) // On parcours tous 
 			"isText"), (GLuint)boolValue);
 		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
 			"u_lightPos"), 1, (const GLfloat*)&lightPos);
+
+		//METABALLS SHADER
+		//irrklang:
+		// Receiver* receiver = NULL;
+		// engine->setMixedDataOutputReceiver(receiver);
+		float offset = this->meta.getSize();
+		glUniform1fv(glGetUniformLocation(this->shader.getProgram(),
+			"metaSize"), 1, (const GLfloat*)&offset);
+		offset = this->meta.getVelocity();
+		glUniform1fv(glGetUniformLocation(this->shader.getProgram(),
+			"metaVelocity"), 1, (const GLfloat*)&offset);
+		offset = this->meta.getMaxSize();
+		glUniform1fv(glGetUniformLocation(this->shader.getProgram(),
+			"metaMaxSize"), 1, (const GLfloat*)&offset);
+		offset = this->meta.getMinSize();
+		glUniform1fv(glGetUniformLocation(this->shader.getProgram(),
+			"metaMinSize"), 1, (const GLfloat*)&offset);
+		unsigned int nbBalls = this->meta.getNbBalls();
+		glUniform1i(glGetUniformLocation(this->shader.getProgram(),
+			"metaNbBalls"), (GLuint)nbBalls);
 
 		glDrawElements(GL_TRIANGLES, this->m_Entries[i].getNumIndices(), GL_UNSIGNED_INT, NULL);
 	}

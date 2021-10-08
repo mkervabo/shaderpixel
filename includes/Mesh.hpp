@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Mesh.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 17:01:05 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/07 09:27:07 by gperez           ###   ########.fr       */
+/*   Updated: 2021/09/29 15:37:30 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 
 # include "Camera.hpp"
 # include "Shader.hpp"
+# include "Metaballs.hpp"
 
 enum e_meshType {E_DEFAULT_MESH, E_FRACTAL, E_REFRACT, E_CLOUD, E_FIELD, E_ASTEROID};
 
@@ -37,6 +38,7 @@ class Mesh
 		e_meshType				type;
 		Shader					shader;
 		Mat						mat;
+		Metaballs				meta;
 		bool					initFromScene(const aiScene* pScene, const t_objPath& path);
 		void					initMesh(unsigned int Index, const aiMesh* paiMesh);
 		bool					initMaterials(const aiScene* pScene, const t_objPath& path);

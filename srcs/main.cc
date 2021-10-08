@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cc                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 15:29:41 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/07 09:14:30 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/08 13:45:58 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,25 @@ int		main(void)
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
+	//glViewport(0, 0, WIDTH, HEIGHT);
+	
 	if (env.init())
 	{
 		std::cout << "Error in the initialization\n";
 		return (1);
 	}
+
+  //irrklang:
+  	// start the sound engine with default parameters
+	ISoundEngine* engine = createIrrKlangDevice();
+	if (!engine)
+		return 0; // error starting up the engine
+	// play some sound stream, looped
+	ISound* vol = engine->play2D("libs/irrklang/media/getout.ogg", true, false, true);
+	if (vol)
+     vol->setVolume((ik_f32)0.001);
+ 
+  
 	// Boucle Exec //
 	while(!glfwWindowShouldClose(env.getWindow()))
 	{
@@ -65,6 +78,11 @@ int		main(void)
 		while((err = glGetError()) != GL_NO_ERROR){
 			std::cout << "Error " << err << '\n';
 		} 
+	}
+	if (vol)
+	{
+		vol->drop(); // don't forget to release the pointer once it is no longer needed by you
+		vol = 0;
 	}
 	return (0);
 }

@@ -3,7 +3,7 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gperez <gperez@student.42.fr>              +#+  +:+       +#+         #
+#    By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/06 13:36:11 by gperez            #+#    #+#              #
 #    Updated: 2021/10/07 09:10:15 by gperez           ###   ########.fr        #
@@ -34,6 +34,7 @@ SRC =	srcs/main.cc \
 		srcs/Class/MeshEntry.cc \
 		srcs/Class/Texture.cc \
 		srcs/Class/Material.cc \
+		srcs/Class/Metaballs.cc \
 		srcs/Class/Hud.cc \
 		srcs/Class/HudElement.cc \
 		srcs/MeshClasses/CloudMesh.cc \
@@ -67,7 +68,11 @@ COLOR2 = \033[38;5;178m
 
 LIB_G = libs/glfw_mac/lib-macos/libglfw3.a
 
-LIB_ASSIMP =	libs/assimp/lib/libassimp.a
+LIB_ASSIMP = libs/assimp/lib/libassimp.a
+
+LIB_IRRKLANG = libs/irrklang/bin/macosx-gcc/libirrklang.dylib
+
+LIB_FFTW = libs/fftw-3.3.10/libfftw3.3.6.9.dylib
 
 LIBS_H =	libs/includes/ \
 			libs/glfw_mac/include/GLFW \
@@ -76,6 +81,8 @@ LIBS_H =	libs/includes/ \
 			libs/stb/ \
 			includes/ \
 			libs/assimp/include/ \
+			libs/irrklang/include \
+			libs/fftw-3.3.10/api \
 			includes/MeshClasses/ \
 
 LIBS = $(addprefix -I,$(LIBS_H))
@@ -90,6 +97,7 @@ INC =	includes/Shaderpixel.hpp \
 		includes/MeshEntry.hpp \
 		includes/Texture.hpp \
 		includes/Material.hpp \
+		includes/Metaballs.hpp \
 		includes/Hud.hpp \
 		includes/HudElement.hpp \
 		includes/MeshClasses/CloudMesh.hpp \
@@ -105,7 +113,12 @@ all : $(LIB_ASSIMP) $(NAME)
 
 $(NAME) : $(OBJ)
 	@gcc $(FLAG) -o srcs/glad.o -c libs/glad/src/glad.c
-	@g++ $(FLAG) $(FLAGCPP) $(FLAG_OPENCL) $(FLAG_OPENGL) $(LIB_G) $(LIB_ASSIMP) srcs/glad.o $^ -o $(NAME)
+	
+	@g++ $(FLAG) $(FLAGCPP) $(FLAG_OPENCL) $(FLAG_OPENGL) $(LIB_G) $(LIB_ASSIMP) $(LIB_IRRKLANG) srcs/glad.o $^ -o $(NAME)
+	install_name_tool -add_rpath @executable_path/libs/irrklang/bin/macosx-gcc/ $(NAME)
+	install_name_tool -change /usr/local/lib/libirrklang.dylib @rpath/libirrklang.dylib $(NAME)
+	install_name_tool -add_rpath @executable_path/libs/fftw-3.3.10/ $(NAME)
+	install_name_tool -change /usr/local/lib/libfftw3.3.6.9.dylib @rpath/libfftw3.3.6.9.dylib $(NAME)
 	@printf "$(BOLD)$(COLOR1)%20s : $(RS_BL)$(RS_BO)$(GREEN)succesfuly made!$(NC)%20s\n" $(NAME)
 
 libs/assimp/CMakeLists.txt :
