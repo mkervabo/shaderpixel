@@ -10,7 +10,6 @@ float s[20];
 const float EPSILON = 0.0025;
 
 uniform float	time;
-
 uniform vec2	u_resolution;
 uniform float	u_fov;
 uniform mat4	projection;

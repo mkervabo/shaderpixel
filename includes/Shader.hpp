@@ -6,7 +6,7 @@
 /*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/25 17:47:37 by gperez            #+#    #+#             */
-/*   Updated: 2021/09/22 10:31:03 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/10/08 16:38:34 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,10 @@
 
 # define VERTEX_LIGHT "shader/vertexLight.glsl"
 # define FRAGMENT_LIGHT "shader/fragmentLight.glsl"
+
+# define FRAGMENT_GLOW "shader/fragmentGlow.glsl"
+
+# define FRAGMENT_RENDER_BUFFER "shader/renderBuffer/fragmentRenderBuffer.glsl"
 
 # define FAILED_OPEN_FILE "Failed open file"
 # define FAILED_READ_SHADER "Failed to read shader"

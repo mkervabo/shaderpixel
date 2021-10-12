@@ -6,7 +6,7 @@
 /*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 15:39:27 by gperez            #+#    #+#             */
-/*   Updated: 2021/06/21 09:36:10 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/10/11 14:57:37 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,12 @@ bool						Shaderpixel::loadMesh(t_objPath obj, std::string pathVertex, std::stri
 		this->meshes.push_back(new FieldMesh);
 	else if (type == E_ASTEROID)
 		this->meshes.push_back(new AsteroidMesh);
+	else if (type == E_METABALLS)
+		this->meshes.push_back(new MetaballsMesh);
+	else if (type == E_GLOW)
+		this->meshes.push_back(new GlowMesh);
+	else if (type == E_RENDER_BUFFER)
+		this->meshes.push_back(new RenderBufferMesh);
 	else
 		this->meshes.push_back(new Mesh);
 	if (!this->meshes.size())
@@ -149,7 +155,7 @@ bool				Shaderpixel::init(void)
 		return (1);
 	if (load(E_PBALL, VERTEX_LIGHT, FRAGMENT_LIGHT, E_DEFAULT_MESH)
 		|| load(E_PBALL, VERTEX, FRAGMENT, E_DEFAULT_MESH)
-		|| load(E_PCUBE, VERTEX_FIELD, FRAGMENT_FIELD, E_FIELD))
+		|| load(E_PCUBE, VERTEX_MANDELBULB, FRAGMENT_RENDER_BUFFER, E_RENDER_BUFFER))
 			return (1);
 	this->meshes[1]->translate(Vec3(0., 0., -3.5));
 	// std::cout << this->meshes[0]->getShaderProgram() << " " << this->meshes[1]->getShaderProgram() << "\n";

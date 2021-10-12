@@ -25,6 +25,9 @@
 # include "FractalMesh.hpp"
 # include "FieldMesh.hpp"
 # include "AsteroidMesh.hpp"
+# include "MetaballsMesh.hpp"
+# include "GlowMesh.hpp"
+# include "RenderBufferMesh.hpp"
 # include "glfw3.h" // Load fenetre
 
 # define RATIO (float)WIDTH / (float)HEIGHT
