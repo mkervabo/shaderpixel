@@ -12,7 +12,8 @@ bool	RenderBufferMesh::loadMesh(t_objPath pathMesh, std::string pathVertex, std:
 {
 	if (Mesh::loadMesh(pathMesh, pathVertex, pathFragment))
 		return (true);
-	this->bufferA.loadMesh(g_objPath[E_PPLANE], PATH_RENDER_BUFFER_VERTEX_BUFFER_A, PATH_RENDER_BUFFER_BUFFER_A);
+	if (this->bufferA.loadMesh(g_objPath[E_PPLANE], PATH_RENDER_BUFFER_VERTEX_BUFFER_A, PATH_RENDER_BUFFER_BUFFER_A))
+		return (true);
 
 	this->texture.newTexture();
 	if (this->texture.load(GL_TEXTURE_2D, (char*)PATH_RENDER_BUFFER_TEXTURE))
@@ -44,9 +45,6 @@ bool	RenderBufferMesh::loadMesh(t_objPath pathMesh, std::string pathVertex, std:
 
 void	RenderBufferMesh::render(Camera &cam, float timeS, Vec3 &lightPos)
 {
-	Vec3	camPos;
-	float	farNear[2] = {FAR_Z, NEAR_Z};
-	float	fov = FOV;
 	Vec2	resolution = Vec2(WIDTH, HEIGHT);
 	for (unsigned int i = 0 ; i < this->m_Entries.size() ; i++)
 	{
@@ -61,12 +59,6 @@ void	RenderBufferMesh::render(Camera &cam, float timeS, Vec3 &lightPos)
 			"u_resolution"), 1, (const GLfloat*)&resolution);
 		glUniformMatrix4fv(glGetUniformLocation(this->bufferA.getShaderProgram(),
 			"model"), 1, GL_FALSE, &(mat.getMatrix(false).inverse()[0][0]));
-		glUniformMatrix4fv(glGetUniformLocation(this->bufferA.getShaderProgram(),
-			"inverseView"), 1, GL_FALSE, &(cam.getInverseMat()[0][0]));
-		glUniformMatrix4fv(glGetUniformLocation(this->bufferA.getShaderProgram(), 
-			"view"), 1, GL_FALSE, &(cam.getMatrix(false)[0][0]));
-		glUniformMatrix4fv(glGetUniformLocation(this->bufferA.getShaderProgram(),
-			"projection"), 1, GL_FALSE, &(cam.getProjMatrix()[0][0]));
 		glDrawElements(GL_TRIANGLES, this->m_Entries[i].getNumIndices(), GL_UNSIGNED_INT, NULL);
 		
 		
@@ -87,17 +79,8 @@ void	RenderBufferMesh::render(Camera &cam, float timeS, Vec3 &lightPos)
 			"view"), 1, GL_FALSE, &(cam.getMatrix(false)[0][0]));
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
 			"projection"), 1, GL_FALSE, &(cam.getProjMatrix()[0][0]));
-		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
-			"inverseView"), 1, GL_FALSE, &(cam.getInverseMat()[0][0]));
-		camPos = cam.getPosition();
-		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
-			"eye"), 1, (const GLfloat*)&camPos);
 		glUniform1fv(glGetUniformLocation(this->shader.getProgram(),
 			"time"), 1, (const GLfloat*)&timeS);
-		glUniform1fv(glGetUniformLocation(this->shader.getProgram(),
-			"farNear"), 2, (const GLfloat*)&farNear);
-		glUniform1fv(glGetUniformLocation(this->shader.getProgram(),
-			"u_fov"), 1, (const GLfloat*)&fov);
 		glUniform2fv(glGetUniformLocation(this->shader.getProgram(),
 			"u_resolution"), 1, (const GLfloat*)&resolution);
 		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Mesh.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 17:01:05 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/08 16:32:22 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/10/13 16:27:27 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ class Mesh
 		virtual void	render(Camera &cam, float timeS, Vec3 &lightPos);
 		void			clear(void);
 		void			translate(Vec3 t);
+		void			rotate(Vec3 r);
 		virtual void	translate(e_axes axe, float speed);
 		void			setPosition(Vec3 p);
 		unsigned int	getShaderProgram(void);

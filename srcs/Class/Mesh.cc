@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Mesh.cc                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 16:57:27 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/08 15:38:59 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/10/13 17:39:21 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,6 +209,11 @@ void	Mesh::clear(void)
 	this->clearTextures();
 	this->m_Materials.clear();
 	// Rajouter le reste
+}
+
+void	Mesh::rotate(Vec3 r)
+{
+	this->mat.rotate(r);
 }
 
 void	Mesh::translate(Vec3 t)
