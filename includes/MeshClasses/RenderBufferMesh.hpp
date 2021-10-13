@@ -6,6 +6,7 @@
 
 # define PATH_RENDER_BUFFER_TEXTURE "shader/renderBuffer/img1.png"
 # define PATH_RENDER_BUFFER_BUFFER_A "shader/renderBuffer/buffera.glsl"
+# define PATH_RENDER_BUFFER_VERTEX_BUFFER_A "shader/renderBuffer/vertexBufferA.glsl"
 
 class RenderBufferMesh: public Mesh
 {

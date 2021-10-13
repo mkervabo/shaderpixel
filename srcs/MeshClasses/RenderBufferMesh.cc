@@ -12,25 +12,7 @@ bool	RenderBufferMesh::loadMesh(t_objPath pathMesh, std::string pathVertex, std:
 {
 	if (Mesh::loadMesh(pathMesh, pathVertex, pathFragment))
 		return (true);
-	this->bufferA.loadMesh(g_objPath[E_PCUBE], VERTEX_MANDELBULB, PATH_RENDER_BUFFER_BUFFER_A);
-
-	// glGenVertexArrays(1, &quad_VertexArrayID);
-	// glBindVertexArray(quad_VertexArrayID);
-
-	// static const GLfloat g_quad_vertex_buffer_data[] = {
-	// 	-1.0f, -1.0f, 0.0f,
-	// 	1.0f, -1.0f, 0.0f,
-	// 	-1.0f,  1.0f, 0.0f,
-	// 	-1.0f,  1.0f, 0.0f,
-	// 	1.0f, -1.0f, 0.0f,
-	// 	1.0f,  1.0f, 0.0f,
-	// };
-
-	// GLuint quad_vertexbuffer;
-	// glGenBuffers(1, &quad_vertexbuffer);
-	// glBindBuffer(GL_ARRAY_BUFFER, quad_vertexbuffer);
-	// glBufferData(GL_ARRAY_BUFFER, sizeof(g_quad_vertex_buffer_data), g_quad_vertex_buffer_data, GL_STATIC_DRAW);
-
+	this->bufferA.loadMesh(g_objPath[E_PPLANE], PATH_RENDER_BUFFER_VERTEX_BUFFER_A, PATH_RENDER_BUFFER_BUFFER_A);
 
 	this->texture.newTexture();
 	if (this->texture.load(GL_TEXTURE_2D, (char*)PATH_RENDER_BUFFER_TEXTURE))
@@ -42,28 +24,20 @@ bool	RenderBufferMesh::loadMesh(t_objPath pathMesh, std::string pathVertex, std:
 	glGenTextures(1, &this->frameTexture);
 	glBindTexture(GL_TEXTURE_2D, this->frameTexture);
 
-
-
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 800, 600, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-	//glTexImage2D(GL_TEXTURE_2D, 0,GL_DEPTH_COMPONENT24, 800, 600, 0,GL_DEPTH_COMPONENT, GL_FLOAT, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, WIDTH, HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	glGenRenderbuffers(1, &this->renderBuffer);
 	glBindRenderbuffer(GL_RENDERBUFFER, this->renderBuffer);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_RGB, 800, 600);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_RGB, WIDTH, HEIGHT);
 
-	//glBindFramebuffer(GL_FRAMEBUFFER, this->frame);
 	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, this->frameTexture, 0);
-	// glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, this->renderBuffer);
-
-	GLenum DrawBuffers[1] = {GL_COLOR_ATTACHMENT0};
-	glDrawBuffers(1, DrawBuffers); // "1" is the size of DrawBuffers*/
-
 
 	if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
  		return true;
+
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	return (false);
 }
@@ -88,17 +62,25 @@ void	RenderBufferMesh::render(Camera &cam, float timeS, Vec3 &lightPos)
 		glUniformMatrix4fv(glGetUniformLocation(this->bufferA.getShaderProgram(),
 			"model"), 1, GL_FALSE, &(mat.getMatrix(false).inverse()[0][0]));
 		glUniformMatrix4fv(glGetUniformLocation(this->bufferA.getShaderProgram(),
+			"inverseView"), 1, GL_FALSE, &(cam.getInverseMat()[0][0]));
+		glUniformMatrix4fv(glGetUniformLocation(this->bufferA.getShaderProgram(), 
 			"view"), 1, GL_FALSE, &(cam.getMatrix(false)[0][0]));
 		glUniformMatrix4fv(glGetUniformLocation(this->bufferA.getShaderProgram(),
 			"projection"), 1, GL_FALSE, &(cam.getProjMatrix()[0][0]));
 		glDrawElements(GL_TRIANGLES, this->m_Entries[i].getNumIndices(), GL_UNSIGNED_INT, NULL);
+		
+		
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
 		glBindVertexArray(this->m_Entries[i].getVao());
  		glUseProgram(this->shader.getProgram());
-		glActiveTexture(GL_TEXTURE0);
+
+		glUniform1i(glGetUniformLocation(this->shader.getProgram(), "bufferA"), 0);
+		glActiveTexture(GL_TEXTURE0 + 0);
 		glBindTexture(GL_TEXTURE_2D, this->frameTexture);
-		this->texture.bind(GL_TEXTURE1);
+		
+		glUniform1i(glGetUniformLocation(this->shader.getProgram(), "img"), 1);
+		this->texture.bind(GL_TEXTURE0 + 1);
+
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
 			"model"), 1, GL_FALSE, &(mat.getMatrix(false).inverse()[0][0]));
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
