@@ -1,6 +1,6 @@
 #version 410 core
 
-layout(location = 0) out vec4 fragColor;
+out vec4 fragColor;
 uniform vec2	u_resolution;
 
 uniform float	time;
@@ -73,6 +73,8 @@ float fbms(vec2 p)
 
 void main()
 {
+	vec2 px = 2. / u_resolution.xy,
+	uv = gl_FragCoord.xy * px * 0.5;
 	vec2 p = (gl_FragCoord.xy - u_resolution.xy) / u_resolution.y;
 	float e = 1.0 / u_resolution.y;
 	float f = fbms(p);

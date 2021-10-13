@@ -6,7 +6,7 @@
 /*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/25 17:47:37 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/08 16:38:34 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/10/12 14:35:36 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 
 # define FRAGMENT_METABALLS "shader/fragmentMetaballs.glsl"
 
+
 # define FRAGMENT_TETRAHEDRON "shader/fragmentTetrahedron.glsl"
 
 # define VERTEX_FIELD "shader/vertexField.glsl"
@@ -48,6 +49,7 @@
 # define FRAGMENT_GLOW "shader/fragmentGlow.glsl"
 
 # define FRAGMENT_RENDER_BUFFER "shader/renderBuffer/fragmentRenderBuffer.glsl"
+# define VERTEX_RENDERBUFFER "shader/renderBuffer/vertexRenderBuffer.glsl"
 
 # define FAILED_OPEN_FILE "Failed open file"
 # define FAILED_READ_SHADER "Failed to read shader"

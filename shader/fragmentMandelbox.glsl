@@ -1,6 +1,6 @@
 #version 410 core
 
-uniform float	time;
+// uniform float	time;
 uniform vec2	u_resolution;
 uniform mat4	inverseView;
 uniform float	u_fov;
@@ -9,6 +9,7 @@ uniform vec3	eye;
 uniform mat4	projection;
 out vec4		fragColor;
 uniform float	farNear[2];
+uniform vec3	u_lightPos;
 
 
 const int MAX_MARCHING_STEPS = 200;
@@ -131,21 +132,21 @@ vec3 phongIllumination(vec3 k_a, vec3 k_d, vec3 k_s, float alpha, vec3 p, vec3 e
     const vec3 ambientLight = 0.5 * vec3(1.0, 1.0, 1.0);
     vec3 color = ambientLight * k_a;
     
-    vec3 light1Pos =  vec3(0.0, 40.0, 45.0);
+    vec3 light1Pos =  u_lightPos;
     vec3 light1Intensity = vec3(0.1, 0.1, 0.1);
     
     color += phongContribForLight(k_d, k_s, alpha, p, eye,
                                   light1Pos,
                                   light1Intensity);
     
-    vec3 light2Pos = vec3(20.0 * sin(time),
-                          40.0 * cos(time),
-                          50.0);
-    vec3 light2Intensity = vec3(0.4, 0.4, 0.4);
+    // vec3 light2Pos = vec3(20.0 * sin(time),
+    //                       40.0 * cos(time),
+    //                       50.0);
+    // vec3 light2Intensity = vec3(0.4, 0.4, 0.4);
     
-    color += phongContribForLight(k_d, k_s, alpha, p, eye,
-                                  light2Pos,
-                                  light2Intensity);    
+    // color += phongContribForLight(k_d, k_s, alpha, p, eye,
+    //                               light2Pos,
+    //                               light2Intensity);    
     return color;
 }
 

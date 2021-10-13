@@ -2,14 +2,8 @@
 
 out vec4 fragColor;
 
-uniform float	time;
 uniform vec2	u_resolution;
-uniform float	u_fov;
-uniform mat4	projection;
-uniform mat4	view;
 uniform vec3	eye;
-uniform mat4	inverseView;
-uniform float	farNear[2];
 
 #define MAX_DIST 500.0
 
