@@ -1,65 +1,91 @@
 	#include "MetaballsMesh.hpp"
+	#include "Receiver.hpp"
 
-	MetaballsMesh::MetaballsMesh()
+MetaballsMesh::MetaballsMesh()
+{
+	Mesh();
+	this->type = E_METABALLS;
+	this->size = 0.2;
+	this->velocity = 0.5;
+	this->max_size = 0.3;
+	this->min_size = 0.1;
+	this->nb_balls = 5;
+	// irrklang:
+	// start the sound engine with default parameters
+	this->engine = createIrrKlangDevice();
+	if (!this->engine)
+		return ; // error starting up the engine
+	// play some sound stream, looped
+	ISound* vol = this->engine->play2D("libs/irrklang/media/getout.ogg", true, false, true);
+	if (vol)
+	vol->setVolume((ik_f32)0.1);
+	if (vol)
 	{
-		Mesh();
-		this->type = E_METABALLS;
-		this->size = 1.0;
-		this->velocity = 1.2;
-		this->max_size = 0.5;
-		this->min_size = 0.1;
-		this->nb_balls = 9;
+		vol->drop(); // don't forget to release the pointer once it is no longer needed by you
+		vol = 0;
 	}
+	this->engine->setMixedDataOutputReceiver(&this->receiver);
+}
 
-	void	MetaballsMesh::setSize(float new_size)
-	{
-		this->size = new_size;
-	}
+bool	MetaballsMesh::loadMesh(t_objPath pathMesh, std::string pathVertex, std::string pathFragment)
+{
+	if (Mesh::loadMesh(pathMesh, pathVertex, pathFragment))
+		return (true);
+	
+	glGenTextures(1, &this->songText);
+	glBindTexture(GL_TEXTURE_1D, this->songText);
+	return (false);
+}
 
-	void	MetaballsMesh::setVelocity(float new_velocity)
-	{
-		this->velocity = new_velocity;
-	}
+void	MetaballsMesh::setSize(float new_size)
+{
+	this->size = new_size;
+}
 
-	void	MetaballsMesh::setMaxSize(float new_max_size)
-	{
-		this->max_size = new_max_size;
-	}
+void	MetaballsMesh::setVelocity(float new_velocity)
+{
+	this->velocity = new_velocity;
+}
 
-	void   MetaballsMesh::setMinize(float new_min_size)
-	{
-		this->min_size = new_min_size;
-	}
+void	MetaballsMesh::setMaxSize(float new_max_size)
+{
+	this->max_size = new_max_size;
+}
 
-	void	MetaballsMesh::setNbBalls(unsigned int new_nb_balls)
-	{
-		this->nb_balls = new_nb_balls;
-	}
+void   MetaballsMesh::setMinize(float new_min_size)
+{
+	this->min_size = new_min_size;
+}
 
-	void	MetaballsMesh::addSize(float new_size)
-	{
-		this->size += new_size;
-	}
+void	MetaballsMesh::setNbBalls(unsigned int new_nb_balls)
+{
+	this->nb_balls = new_nb_balls;
+}
 
-	void	MetaballsMesh::addVelocity(float new_velocity)
-	{
-		this->velocity += new_velocity;
-	}
+void	MetaballsMesh::addSize(float new_size)
+{
+	this->size += new_size;
+}
 
-	void	MetaballsMesh::addMaxSize(float new_max_size)
-	{
-		this->max_size += new_max_size;
-	}
+void	MetaballsMesh::addVelocity(float new_velocity)
+{
+	this->velocity += new_velocity;
+}
 
-	void   MetaballsMesh::addMinize(float new_min_size)
-	{
-		this->min_size += new_min_size;
-	}
+void	MetaballsMesh::addMaxSize(float new_max_size)
+{
+	this->max_size += new_max_size;
+}
 
-	void	MetaballsMesh::addNbBalls(int new_nb_balls)
-	{
-		this->nb_balls += new_nb_balls;
-	}
+void   MetaballsMesh::addMinize(float new_min_size)
+{
+	this->min_size += new_min_size;
+}
+
+void	MetaballsMesh::addNbBalls(int new_nb_balls)
+{
+	this->nb_balls += new_nb_balls;
+}
 
 	void	MetaballsMesh::render(Camera &cam, float timeS, Vec3 &lightPos)
 {
@@ -69,9 +95,16 @@
 	Vec2	resolution = Vec2(WIDTH, HEIGHT);
 
 	for (unsigned int i = 0 ; i < this->m_Entries.size() ; i++)
-	{
+	{	
+		glBindTexture(GL_TEXTURE_1D, this->songText);
+		glTexImage1D(GL_TEXTURE_1D, 0, GL_RED, this->receiver.getSize(), 0, GL_RED, GL_FLOAT, this->receiver.getOut());
+		glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		
 		glBindVertexArray(this->m_Entries[i].getVao());
  		glUseProgram(this->shader.getProgram());
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_1D, this->songText);
 
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
 			"model"), 1, GL_FALSE, &(mat.getMatrix(false).inverse()[0][0]));
@@ -95,10 +128,10 @@
 		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
 			"u_lightPos"), 1, (const GLfloat*)&lightPos);
 
-		//METABALLS SHADER
-		//irrklang:
-		// Receiver* receiver = NULL;
-		// engine->setMixedDataOutputReceiver(receiver);
+		// this->songData = this->receiver->getFrequency();
+		// glActiveTexture(GL_TEXTURE0);
+		// glBindTexture(GL_TEXTURE_2D, this->songText);
+
 		float offset = this->size;
 		glUniform1fv(glGetUniformLocation(this->shader.getProgram(),
 			"metaSize"), 1, (const GLfloat*)&offset);
@@ -118,6 +151,6 @@
 	}
 }
 
-	MetaballsMesh::~MetaballsMesh()
-	{
-	}
+MetaballsMesh::~MetaballsMesh()
+{
+}

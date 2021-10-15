@@ -17,7 +17,9 @@ uniform mat4	view;
 uniform vec3	eye;
 uniform mat4	inverseView;
 uniform float	farNear[2];
+uniform vec3	u_lightPos;
 
+uniform sampler1D	songText;//buffer
 
 float sphere(vec3 pos, float rad) {
 	float distanceFromCenter = length(pos);
@@ -38,13 +40,12 @@ vec3 hash(float h)
 
 float makeScene(vec3 pos, vec2 coord) {
 	vec3 pos2 = pos;
-	//float song = texture(iChannel0, vec2(coord.x / iResolution.x, 1)).x;
+	float song = texture(songText, coord.x / u_resolution.x).x;
 	for (int i = 0; i < metaNbBalls; i++)
 	{
 		float h = float(i) / 8.0;
-		//pos2 = pos + VELOCOTY * vec3(cos(hash(h * 0.7) * hash(h * 0.6) * (time + song * 2.)));
-		pos2 = pos + metaVelocity * vec3(cos(hash(h * 0.7) * hash(h * 0.6) * (time)));
-		s[i] = sphere(pos2, clamp(h * metaSize, metaMinSize, metaMaxSize));
+		pos2 = pos + metaVelocity * vec3(cos(hash(h * 0.7) * hash(h * 0.6) * time));
+		s[i] = sphere(pos2, clamp(h * metaSize + song / 10, metaMinSize, metaMaxSize));
 	}
 	// MakeBlobs
 	float k = -4.0;
@@ -118,7 +119,7 @@ vec3 light(vec3 objColor, vec3 p) {
 	const vec3 ambientLight = 0.1 * vec3(1.0, 1.0, 1.0);
 	
 	vec3 norm = calcNormal(p, vec2(1));
-	vec3 lightPos =  vec3(0.0, 40.0, 45.0);
+	vec3 lightPos =  u_lightPos;
 	vec3 lightDir = normalize(lightPos - p);
 	float diffuseLight = max(dot(norm, lightDir), 0.0);
 	
@@ -151,4 +152,6 @@ void main()
 	gl_FragDepth = dep;
 
 	fragColor = vec4(color, 1.0);
+	// fragColor = vec4(0.0, 0.0, 1.0, 1.0);
+	// fragColor = vec4(texture(songText, gl_FragCoord.x).rgb, 1.0);
 }

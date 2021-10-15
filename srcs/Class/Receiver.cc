@@ -1,5 +1,14 @@
 #include "Receiver.hpp"
-#include <fftw3.h>
+#include <stdint.h>
+
+Receiver::Receiver()
+{
+	this->i = 0;
+	this->size = 512;
+	this->in = (float*)fftwf_alloc_real(this->size);
+    this->out = (float*)fftwf_alloc_real(this->size);
+    this->p = fftwf_plan_r2r_1d(this->size, in, out, FFTW_R2HC, FFTW_ESTIMATE);
+}
 
 //	data			representing the sound frames which just have been mixed.
 //					Sound data always consists of two interleaved sound channels
@@ -10,28 +19,49 @@
 //					same for an instance of an ISoundEngine.
 void	Receiver::OnAudioDataReady(const void* data, int byteCount, int playbackrate)
 {
-	int N = byteCount / 4;
-	fftw_complex in[N], out[N];//double[]
-	int i = 0;
 	int j = 0;
-	while(i < byteCount / 2)
+	while(j < byteCount / 4)
 	{
-		in[j][0] = (float)((short*)data)[i];
-		i += 2;
+		this->in[i] = (float)((int16_t*)data)[j * 2];
+		this->i++;
 		j++;
-	} 
-	fftw_plan p;
-	p = fftw_create_plan(N, FFTW_FORWARD, FFTW_ESTIMATE); 
-	//http://www.fftw.org/fftw2_doc/fftw_3.html#SEC23
-	// FFTW_FORWARD/FFTW_BACKWAR | FFTW_ESTIMATE/FFTW_MEASURE
-	//...
-	fftw_one(p, in, out);
-	//...
-	fftw_destroy_plan(p);
-	//this->frequency = out;
-	for(int k = 0; k < N; k++)
-	{
-		printf("in : %f. out: %f\n", in[k][0], out[k][0]);
+		if (this->i == this->size)
+		{
+			fftwf_execute(this->p); /* repeat as needed */
+			float max = 0;
+			for(size_t k = 0; k < this->size; k++)
+			{
+				if (this->out[k] > max)
+					max = this->out[k];
+			}
+			for(size_t k = 0; k < this->size; k++)
+			{
+				if (this->out[k] < 0)
+					this->out[k] = 0;
+				else
+					this->out[k] /= max;
+			}
+			this->i = 0;
+		}	
 	}
-	//frequency = out;
+}
+
+size_t	Receiver::getSize()
+{
+	return(this->size);
+}
+
+float	*Receiver::getOut()
+{
+	return(this->out);
+}
+
+
+Receiver::~Receiver()
+{
+	fftwf_free(this->in); 
+	fftwf_free(this->out);
+
+	fftwf_destroy_plan(this->p);
+	
 }

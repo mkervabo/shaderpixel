@@ -7,12 +7,22 @@
 # include <ik_ISoundMixedOutputReceiver.h>
 using namespace irrklang;
 
+# include <fftw3.h>
+
 class	Receiver : public ISoundMixedOutputReceiver
 {
 	private:
-		float frequency[];
+		fftwf_plan p;
+		float *in;
+		float *out;
+		size_t size;
+		size_t i;
 	public:
-		void	OnAudioDataReady(const void* data, int byteCount, int playbackrate);
+		Receiver();
+		virtual void	OnAudioDataReady(const void* data, int byteCount, int playbackrate);
+		size_t			getSize();
+		float			*getOut();
+		virtual ~Receiver();
 };
 
 #endif

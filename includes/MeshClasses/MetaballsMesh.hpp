@@ -7,6 +7,7 @@
 using namespace irrklang;
 
 # include "Mesh.hpp"
+# include "Receiver.hpp"
 
 class MetaballsMesh : public Mesh
 {
@@ -16,10 +17,16 @@ class MetaballsMesh : public Mesh
 		float			max_size;
 		float			min_size;
 		unsigned int	nb_balls;
-		// ISoundEngine* engine;
+		Receiver 		receiver;
+		ISoundEngine*	engine;
+		GLuint			songText;
+		float			songData[512];
+		// unsigned int	dataSize;
+
 	public:
 		MetaballsMesh();
 		virtual void	render(Camera &cam, float timeS, Vec3 &lightPos);
+		virtual bool	loadMesh(t_objPath pathMesh, std::string pathVertex, std::string pathFragment);
 		void			setSize(float new_size);
 		void			setVelocity(float new_velocity);
 		void			setMaxSize(float new_max_size);
@@ -30,6 +37,7 @@ class MetaballsMesh : public Mesh
 		void			addMaxSize(float new_max_size);
 		void			addMinize(float new_min_size);
 		void			addNbBalls(int new_nb_balls);
+		void			doubleToFloat();
 		virtual			~MetaballsMesh();
 };
 
