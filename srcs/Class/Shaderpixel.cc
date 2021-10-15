@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 15:39:27 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/15 10:44:01 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/15 15:58:07 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ Shaderpixel::Shaderpixel()
 	this->firstMoove = true;
 	for (unsigned int i = 0; i < GLFW_KEY_END; i++)
 		this->keys[i] = KEY_RELEASE;
+	this->isCursor = false;
 }
 
 void				Shaderpixel::setMouseLastPos(Vec2 pos)
@@ -197,7 +198,7 @@ void				Shaderpixel::inputKey(unsigned int key)
 	}
 	else if (glfwGetKey(this->window, key) == GLFW_RELEASE
 		&& this->keys[key] == KEY_DONE)
-		this->keys[key] = KEY_RELEASE;
+			this->keys[key] = KEY_RELEASE;
 }
 
 void				Shaderpixel::fieldKeys(void)
@@ -231,6 +232,7 @@ void				Shaderpixel::getKeys(void)
 	if (glfwGetKey(this->window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
 		this->cam.translate(E_UP, -SPEED);
 	fieldKeys();
+	this->inputKey(GLFW_KEY_APOSTROPHE);
 }
 
 void				Shaderpixel::checkKeys(void)
@@ -240,6 +242,14 @@ void				Shaderpixel::checkKeys(void)
 	while (this->queue.size())
 	{
 		i = this->queue.front();
+		if (i == GLFW_KEY_APOSTROPHE)
+		{
+			this->isCursor = !this->isCursor;
+			glfwSetInputMode(window, GLFW_CURSOR, this->isCursor
+				? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
+			glfwSetCursorPosCallback(this->window, this->isCursor
+				? NULL : mouse_callback);
+		}
 		this->keys[(int)i] = KEY_DONE;
 		this->queue.pop();
 	}

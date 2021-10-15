@@ -53,6 +53,7 @@ class Shaderpixel
 		float						addedTime;
 
 		Camera						cam;
+		bool						isCursor;
 		Vec2						mouseLastPos;
 		bool						firstMoove;
 
