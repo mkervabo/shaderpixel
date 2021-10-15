@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cloudMesh.cc                                       :+:      :+:    :+:   */
+/*   CloudMesh.cc                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 11:45:19 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/06 22:25:25 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/15 09:16:26 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ void	CloudMesh::render(Camera &cam, float timeS, Vec3 &lightPos) // On parcours 
 	float	fov = FOV;
 	Vec2	resolution = Vec2(WIDTH, HEIGHT);
 
+	if (this->distance(cam.getPosition()) > RENDER_DIST_SHADER - PREC)
+		return;
 	for (unsigned int i = 0 ; i < this->m_Entries.size() ; i++)
 	{
 		glBindVertexArray(this->m_Entries[i].getVao());

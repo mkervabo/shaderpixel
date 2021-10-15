@@ -23,7 +23,7 @@ in vec2 tCoords;
 
 void main()
 {
-	vec2 px = vec2(0.003),
+	vec2 px = vec2(0.0003),
 	uv = tCoords,
 	time = vec2(0., 0.1),
 	uvtime = uv + time;

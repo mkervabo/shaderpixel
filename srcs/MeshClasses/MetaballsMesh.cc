@@ -68,6 +68,8 @@
 	float	fov = FOV;
 	Vec2	resolution = Vec2(WIDTH, HEIGHT);
 
+	if (this->distance(cam.getPosition()) > RENDER_DIST_SHADER - PREC)
+		return;
 	for (unsigned int i = 0 ; i < this->m_Entries.size() ; i++)
 	{
 		glBindVertexArray(this->m_Entries[i].getVao());

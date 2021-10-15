@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 22:35:15 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/07 13:24:55 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/15 09:16:31 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ void	FieldMesh::render(Camera &cam, float timeS, Vec3 &lightPos)
 	matInField.setRotation(Vec3(0., rotCam.getY(), rotCam.getZ()));
 	Vec3	eyeInField = matInField.getPosition();
 
+	if (this->distance(cam.getPosition()) > RENDER_DIST_SHADER - PREC)
+		return;
 	for (unsigned int i = 0 ; i < this->m_Entries.size() ; i++)
 	{
 		glBindVertexArray(this->m_Entries[i].getVao());

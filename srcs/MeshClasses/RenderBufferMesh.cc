@@ -35,9 +35,14 @@ bool	RenderBufferMesh::loadMesh(t_objPath pathMesh, std::string pathVertex, std:
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_RGB, WIDTH, HEIGHT);
 
 	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, this->frameTexture, 0);
+	// glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_RENDERBUFFER, this->renderBuffer);
 
-	if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+	GLenum i;
+	if((i = glCheckFramebufferStatus(GL_FRAMEBUFFER)) != GL_FRAMEBUFFER_COMPLETE)
+	{
+		std::cout << "Error load renderBuffer: " << i << "\n";
  		return true;
+	}
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	return (false);
@@ -45,10 +50,14 @@ bool	RenderBufferMesh::loadMesh(t_objPath pathMesh, std::string pathVertex, std:
 
 void	RenderBufferMesh::render(Camera &cam, float timeS, Vec3 &lightPos)
 {
+	(void)lightPos;
 	Vec2	resolution = Vec2(WIDTH, HEIGHT);
+
+	if (this->distance(cam.getPosition()) > RENDER_DIST_SHADER - PREC)
+		return;
 	for (unsigned int i = 0 ; i < this->m_Entries.size() ; i++)
 	{
-		glBindFramebuffer(GL_FRAMEBUFFER, this->frame);
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, this->frame);
 		glClearColor(1, 0, 0, 0.5);
 		glClear(GL_COLOR_BUFFER_BIT);
 		glUseProgram(this->bufferA.getShaderProgram());
@@ -59,10 +68,14 @@ void	RenderBufferMesh::render(Camera &cam, float timeS, Vec3 &lightPos)
 			"u_resolution"), 1, (const GLfloat*)&resolution);
 		glUniformMatrix4fv(glGetUniformLocation(this->bufferA.getShaderProgram(),
 			"model"), 1, GL_FALSE, &(mat.getMatrix(false).inverse()[0][0]));
+		glUniformMatrix4fv(glGetUniformLocation(this->bufferA.getShaderProgram(),
+			"view"), 1, GL_FALSE, &(cam.getMatrix(false)[0][0]));
+		glUniformMatrix4fv(glGetUniformLocation(this->bufferA.getShaderProgram(),
+			"projection"), 1, GL_FALSE, &(cam.getProjMatrix()[0][0]));
 		glDrawElements(GL_TRIANGLES, this->m_Entries[i].getNumIndices(), GL_UNSIGNED_INT, NULL);
 		
 		
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 		glBindVertexArray(this->m_Entries[i].getVao());
  		glUseProgram(this->shader.getProgram());
 
