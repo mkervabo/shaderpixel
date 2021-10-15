@@ -13,6 +13,8 @@ void	GlowMesh::render(Camera &cam, float timeS, Vec3 &lightPos)
 	lightPos = Vec3();
 	timeS = 0;
 
+	if (this->distance(cam.getPosition()) > RENDER_DIST_SHADER - PREC)
+		return;
 	for (unsigned int i = 0 ; i < this->m_Entries.size() ; i++)
 	{
 		glBindVertexArray(this->m_Entries[i].getVao());

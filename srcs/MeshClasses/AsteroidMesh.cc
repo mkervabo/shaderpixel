@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   AsteroidMEsh.cc                                    :+:      :+:    :+:   */
+/*   AsteroidMesh.cc                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 09:05:56 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/07 09:11:23 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/15 09:14:21 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ void	AsteroidMesh::render(Camera &cam, float timeS, Vec3 &lightPos)
 	float	fov = FOV;
 	Vec2	resolution = Vec2(WIDTH, HEIGHT);
 
+	if (this->distance(cam.getPosition()) > RENDER_DIST_SHADER - PREC)
+		return;
 	for (unsigned int i = 0 ; i < this->m_Entries.size() ; i++)
 	{
 		glBindVertexArray(this->m_Entries[i].getVao());

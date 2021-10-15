@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Mesh.cc                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 16:57:27 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/08 15:38:59 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/10/15 09:10:44 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,21 @@ bool	Mesh::initFromScene(const aiScene* pScene, const t_objPath& path) // Rempli
 	return (initMaterials(pScene, path));
 }
 
+float	Mesh::distance(Vec3 pToCompare)
+{
+	Vec3 pMesh = this->mat.getPosition();
+
+	return (sqrt(
+		((pToCompare.getX() - pMesh.getX()) * (pToCompare.getX() - pMesh.getX()))
+		+ ((pToCompare.getY() - pMesh.getY()) * (pToCompare.getY() - pMesh.getY()))
+		+ ((pToCompare.getZ() - pMesh.getZ()) * (pToCompare.getZ() - pMesh.getZ()))));
+}
+
+float	Mesh::distance(Mesh& toCompare)
+{
+	return (this->distance(toCompare.mat.getPosition()));
+}
+
 bool	Mesh::loadMesh(t_objPath pathMesh, std::string pathVertex, std::string pathFragment)
 {
 	bool				ret = false;
@@ -209,6 +224,11 @@ void	Mesh::clear(void)
 	this->clearTextures();
 	this->m_Materials.clear();
 	// Rajouter le reste
+}
+
+void	Mesh::rotate(Vec3 r)
+{
+	this->mat.rotate(r);
 }
 
 void	Mesh::translate(Vec3 t)

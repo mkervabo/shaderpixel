@@ -94,6 +94,8 @@ void	MetaballsMesh::addNbBalls(int new_nb_balls)
 	float	fov = FOV;
 	Vec2	resolution = Vec2(WIDTH, HEIGHT);
 
+	if (this->distance(cam.getPosition()) > RENDER_DIST_SHADER - PREC)
+		return;
 	for (unsigned int i = 0 ; i < this->m_Entries.size() ; i++)
 	{	
 		glBindTexture(GL_TEXTURE_1D, this->songText);

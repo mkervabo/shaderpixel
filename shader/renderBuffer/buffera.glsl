@@ -1,9 +1,10 @@
 #version 410 core
 
 out vec4 fragColor;
-uniform vec2	u_resolution;
+uniform vec2		u_resolution;
 
 uniform float	time;
+in vec2			tCoords;
 
 const mat2 coef = mat2(0.80,  0.60, -0.60,  0.60);
 
@@ -71,11 +72,14 @@ float fbms(vec2 p)
 	return f;
 	}
 
+
 void main()
 {
-	vec2 px = 2. / u_resolution.xy,
-	uv = gl_FragCoord.xy * px * 0.5;
-	vec2 p = (gl_FragCoord.xy - u_resolution.xy) / u_resolution.y;
+	// vec2 px = 2. / u_resolution.xy,
+	// uv = gl_FragCoord.xy * px * 0.5;
+
+	vec2 p = tCoords;
+
 	float e = 1.0 / u_resolution.y;
 	float f = fbms(p);
 	vec3 col = vec3(0.5);

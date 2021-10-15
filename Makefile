@@ -6,7 +6,7 @@
 #    By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/06 13:36:11 by gperez            #+#    #+#              #
-#    Updated: 2021/10/15 09:45:16 by maiwenn          ###   ########.fr        #
+#    Updated: 2021/10/15 09:52:26 by maiwenn          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -119,7 +119,8 @@ all : $(LIB_ASSIMP) $(NAME)
 
 $(NAME) : $(OBJ)
 	@gcc $(FLAG) -o srcs/glad.o -c libs/glad/src/glad.c
-	@g++ $(FLAG) $(FLAGCPP) $(FLAG_OPENCL) $(FLAG_OPENGL) $(LIB_G) $(LIB_ASSIMP) $(LIB_IRRKLANG) $(LIB_FFTW) srcs/glad.o $^ -o $(NAME)
+	
+	@g++ $(FLAG) $(FLAGCPP) $(FLAG_OPENGL) $(LIB_G) $(LIB_ASSIMP) $(LIB_IRRKLANG) $(LIB_FFTW) -headerpad_max_install_names srcs/glad.o $^ -o  $(NAME)
 	@install_name_tool -add_rpath @executable_path/libs/irrklang/bin/macosx-gcc/ $(NAME)
 	@install_name_tool -change /usr/local/lib/libirrklang.dylib @rpath/libirrklang.dylib $(NAME)
 	@install_name_tool -add_rpath @executable_path/libs/assimp/bin/ $(NAME)

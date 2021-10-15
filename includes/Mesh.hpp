@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Mesh.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 17:01:05 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/08 16:32:22 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/10/15 09:14:07 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ enum e_meshType {E_DEFAULT_MESH, E_FRACTAL, E_REFRACT, E_CLOUD, E_FIELD, E_ASTER
 # define FAR_Z 100.f
 # define WIDTH 1024.
 # define HEIGHT 768.
+# define RENDER_DIST_SHADER 10.
 
 class Mesh
 {
@@ -43,11 +44,14 @@ class Mesh
 		void					clearTextures(void);
 	public:
 		Mesh();
+		float			distance(Mesh& toCompare);
+		float			distance(Vec3 pToCompare);
 		bool			loadMesh(t_objPath pathMesh);
 		virtual bool	loadMesh(t_objPath pathMesh, std::string pathVertex, std::string pathFragment);
 		virtual void	render(Camera &cam, float timeS, Vec3 &lightPos);
 		void			clear(void);
 		void			translate(Vec3 t);
+		void			rotate(Vec3 r);
 		virtual void	translate(e_axes axe, float speed);
 		void			setPosition(Vec3 p);
 		unsigned int	getShaderProgram(void);
