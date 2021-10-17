@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Shaderpixel.cc                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 15:39:27 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/15 09:52:43 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/10/15 16:05:16 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ Shaderpixel::Shaderpixel()
 	this->firstMoove = true;
 	for (unsigned int i = 0; i < GLFW_KEY_END; i++)
 		this->keys[i] = KEY_RELEASE;
+	this->isCursor = false;
 }
 
 void				Shaderpixel::setMouseLastPos(Vec2 pos)
@@ -88,6 +89,7 @@ void				Shaderpixel::initWindow(void)
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 	this->window = glfwCreateWindow(WIDTH, HEIGHT, (char*)PROG_NAME, NULL, NULL);
 	if (this->window == NULL)
 	{
@@ -155,10 +157,10 @@ bool				Shaderpixel::init(void)
 		return (1);
 	if (load(E_PBALL, VERTEX_LIGHT, FRAGMENT_LIGHT, E_DEFAULT_MESH)
 		|| load(E_PBALL, VERTEX, FRAGMENT, E_DEFAULT_MESH)
-		|| load(E_PPLANE, VERTEX_RENDERBUFFER, FRAGMENT_RENDER_BUFFER, E_RENDER_BUFFER))
+		|| load(E_PCUBE, VERTEX_MANDELBULB, FRAGMENT_MANDELBULB, E_FRACTAL))
 			return (1);
 	this->meshes[1]->translate(Vec3(0., 0., -3.5));
-	this->meshes[2]->rotate(Vec3(90., 0., 0.));
+	// this->meshes[2]->rotate(Vec3(90., 0., 0.));
 
 	// std::cout << this->meshes[0]->getShaderProgram() << " " << this->meshes[1]->getShaderProgram() << "\n";
 	this->time.setTime();
@@ -197,7 +199,7 @@ void				Shaderpixel::inputKey(unsigned int key)
 	}
 	else if (glfwGetKey(this->window, key) == GLFW_RELEASE
 		&& this->keys[key] == KEY_DONE)
-		this->keys[key] = KEY_RELEASE;
+			this->keys[key] = KEY_RELEASE;
 }
 
 void				Shaderpixel::fieldKeys(void)
@@ -231,6 +233,7 @@ void				Shaderpixel::getKeys(void)
 	if (glfwGetKey(this->window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
 		this->cam.translate(E_UP, -SPEED);
 	fieldKeys();
+	this->inputKey(GLFW_KEY_APOSTROPHE);
 }
 
 void				Shaderpixel::checkKeys(void)
@@ -240,6 +243,14 @@ void				Shaderpixel::checkKeys(void)
 	while (this->queue.size())
 	{
 		i = this->queue.front();
+		if (i == GLFW_KEY_APOSTROPHE)
+		{
+			this->isCursor = !this->isCursor;
+			glfwSetInputMode(window, GLFW_CURSOR, this->isCursor
+				? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
+			glfwSetCursorPosCallback(this->window, this->isCursor
+				? NULL : mouse_callback);
+		}
 		this->keys[(int)i] = KEY_DONE;
 		this->queue.pop();
 	}

@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/04 23:29:17 by gperez            #+#    #+#             */
-/*   Updated: 2021/08/04 21:24:13 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/15 15:33:42 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include "Vec2.hpp"
 # include "Vec3.hpp"
 # include "Mat4.hpp"
+# include "str_color.hpp"
 
 enum	e_axes{E_RIGHT, E_UP, E_FRONT};
 enum	e_rot{PITCH, YAW, ROLL};

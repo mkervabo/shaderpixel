@@ -7,6 +7,7 @@ in	vec3		norm;
 uniform mat4	modelMat;
 uniform mat4	view;
 uniform vec3	eye;
+uniform vec3	modelPos;
 uniform float	time;
 
 uniform mat4	inverseView;
@@ -16,20 +17,22 @@ uniform float	u_fov;
 uniform vec2	u_resolution;
 uniform vec3	u_lightPos;
 
+
 const int MAX_ITERATIONS = 7; // 7
 const int MAX_STEPS = 100; // 100
 const int MAX_STEPS_REF = 10;
 const int MAX_AO_STEPS = 5;
 const int MAX_REFLECTIONS = 1;
-const float EPSILON = 0.0025;
+const float EPSILON = 0.0025; // "/ SCALE"
 const float EPSILON_REF = 0.01;
+const float SCALE = 1.;
 
 const vec3 COLOR_OBJ = vec3(0.8, 1., 1.);
 
-#define K_A 0.5
+#define K_A 0.4
 #define K_S 10.
 #define K_R 0.8
-#define K_D 0.2
+#define K_D 0.7
 
 struct s_light
 {
@@ -89,9 +92,9 @@ float sphereDE(vec3 p, float rayon)
 
 float DistanceEstimation(vec3 p)
 {
-	// return (planSphereDE(p));
-	// return (sphereDE(p, 0.5));
-	return (MandelbulbDE((modelMat * vec4(p, 1.)).xyz, 8.));
+	// return (MandelbulbDE((modelMat * vec4(p, 1.)).xyz, 8.));
+	return (MandelbulbDE((modelMat * vec4(p * SCALE, 1.)).xyz, 8.) / SCALE);
+
 	// return (MandelbulbDE(p, 8.));
 }
 
@@ -131,12 +134,18 @@ float ShortestDistanceToSurface(vec3 eyeP, vec3 marchinDir, float start, float e
 
 vec3 estimateNormal(vec3 p)
 {
-	return (normalize(vec3(DistanceEstimation(vec3(p.x + EPSILON, p.y, p.z))
-		- DistanceEstimation(vec3(p.x - EPSILON, p.y, p.z)),
-			DistanceEstimation(vec3(p.x, p.y + EPSILON, p.z))
-		- DistanceEstimation(vec3(p.x, p.y - EPSILON, p.z)),
-			DistanceEstimation(vec3(p.x, p.y, p.z + EPSILON))
-		- DistanceEstimation(vec3(p.x, p.y, p.z - EPSILON)))));
+	float n = DistanceEstimation(p);
+	float dx = DistanceEstimation(p + vec3(EPSILON, 0, 0));
+	float dy = DistanceEstimation(p + vec3(0, EPSILON, 0));
+	float dz = DistanceEstimation(p + vec3(0, 0, EPSILON));
+	return (normalize(vec3(dx - n, dy - n, dz - n)));
+
+	// return (normalize(vec3(DistanceEstimation(vec3(p.x + EPSILON, p.y, p.z))
+	// 	- DistanceEstimation(vec3(p.x - EPSILON, p.y, p.z)),
+	// 		DistanceEstimation(vec3(p.x, p.y + EPSILON, p.z))
+	// 	- DistanceEstimation(vec3(p.x, p.y - EPSILON, p.z)),
+	// 		DistanceEstimation(vec3(p.x, p.y, p.z + EPSILON))
+	// 	- DistanceEstimation(vec3(p.x, p.y, p.z - EPSILON)))));
 }
 
 vec3 phongLight(s_light light, vec3 vEP, vec3 norm, vec3 pos, vec3 colorObj)
@@ -265,10 +274,12 @@ vec3	calculateMarchinDir(float fov, vec2 resolutionSize, vec2 fragCoord)
 
 void	main(void)
 {
+	float	d = distance(eye, modelPos);
+
 	vec3	dir = calculateMarchinDir(u_fov, u_resolution, gl_FragCoord.xy / 2.);
 	vec3	worldDir = (inverseView * vec4(dir, 0.0)).xyz;
 
-	float	dist = ShortestDistanceToSurface(eye, worldDir, farNear[1], farNear[0]);
+	float	dist = ShortestDistanceToSurface(eye, worldDir, d - 1.5, farNear[0]);
 
 	vec3	posHit = eye + worldDir * dist;
 	vec3	norm = estimateNormal(posHit);

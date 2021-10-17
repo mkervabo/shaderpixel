@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 20:57:58 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/15 09:16:37 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/15 11:23:30 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ FractalMesh::FractalMesh()
 void	FractalMesh::render(Camera &cam, float timeS, Vec3 &lightPos)
 {
 	Vec3	camPos;
+	Vec3	modelPos;
 	float	farNear[2] = {FAR_Z, NEAR_Z};
 	float	fov = FOV;
 	Vec2	resolution = Vec2(WIDTH, HEIGHT);
@@ -45,8 +46,11 @@ void	FractalMesh::render(Camera &cam, float timeS, Vec3 &lightPos)
 			"inverseView"), 1, GL_FALSE, &(cam.getInverseMat()[0][0]));
 
 		camPos = cam.getPosition();
+		modelPos = mat.getPosition();
 		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
 			"eye"), 1, (const GLfloat*)&camPos);
+		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
+			"modelPos"), 1, (const GLfloat*)&modelPos);
 		glUniform1fv(glGetUniformLocation(this->shader.getProgram(),
 			"time"), 1, (const GLfloat*)&timeS);
 		glUniform1fv(glGetUniformLocation(this->shader.getProgram(),
