@@ -6,7 +6,7 @@
 /*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/25 17:47:37 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/12 14:35:36 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/10/17 22:58:53 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,10 @@
 # define FRAGMENT_MANDELBULB "shader/fragmentMandelbulb.glsl"
 
 # define FRAGMENT_MANDELBOX "shader/fragmentMandelbox.glsl"
+# define VERTEX_MANDELBOX "shader/vertexMandelbox.glsl"
 
 # define FRAGMENT_METABALLS "shader/fragmentMetaballs.glsl"
-
+# define VERTEX_METABALLS "shader/vertexMetaballs.glsl"
 
 # define FRAGMENT_TETRAHEDRON "shader/fragmentTetrahedron.glsl"
 
@@ -47,6 +48,7 @@
 # define FRAGMENT_LIGHT "shader/fragmentLight.glsl"
 
 # define FRAGMENT_GLOW "shader/fragmentGlow.glsl"
+# define VERTEX_GLOW "shader/vertexGlow.glsl"
 
 # define FRAGMENT_RENDER_BUFFER "shader/renderBuffer/fragmentRenderBuffer.glsl"
 # define VERTEX_RENDERBUFFER "shader/renderBuffer/vertexRenderBuffer.glsl"
