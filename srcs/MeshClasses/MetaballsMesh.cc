@@ -155,4 +155,5 @@ void	MetaballsMesh::addNbBalls(int new_nb_balls)
 
 MetaballsMesh::~MetaballsMesh()
 {
+	this->engine->drop();
 }
