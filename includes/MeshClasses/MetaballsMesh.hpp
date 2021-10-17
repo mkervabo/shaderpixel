@@ -19,6 +19,7 @@ class MetaballsMesh : public Mesh
 		unsigned int	nb_balls;
 		Receiver 		receiver;
 		ISoundEngine*	engine;
+		ISound*			vol;
 		GLuint			songText;
 		float			songData[512];
 		// unsigned int	dataSize;

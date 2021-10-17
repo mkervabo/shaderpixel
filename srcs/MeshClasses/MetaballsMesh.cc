@@ -16,14 +16,7 @@ MetaballsMesh::MetaballsMesh()
 	if (!this->engine)
 		return ; // error starting up the engine
 	// play some sound stream, looped
-	ISound* vol = this->engine->play2D("libs/irrklang/media/getout.ogg", true, false, true);
-	if (vol)
-	vol->setVolume((ik_f32)0.1);
-	if (vol)
-	{
-		vol->drop(); // don't forget to release the pointer once it is no longer needed by you
-		vol = 0;
-	}
+	this->vol = this->engine->play2D("libs/irrklang/media/getout.ogg", true, false, true);
 	this->engine->setMixedDataOutputReceiver(&this->receiver);
 }
 
@@ -95,7 +88,11 @@ void	MetaballsMesh::addNbBalls(int new_nb_balls)
 	Vec2	resolution = Vec2(WIDTH, HEIGHT);
 
 	if (this->distance(cam.getPosition()) > RENDER_DIST_SHADER - PREC)
+	{
+		vol->setVolume((ik_f32)0.);
 		return;
+	}
+	vol->setVolume((ik_f32)((RENDER_DIST_SHADER - this->distance(cam.getPosition()))) / 10);
 	for (unsigned int i = 0 ; i < this->m_Entries.size() ; i++)
 	{	
 		glBindTexture(GL_TEXTURE_1D, this->songText);
@@ -155,5 +152,10 @@ void	MetaballsMesh::addNbBalls(int new_nb_balls)
 
 MetaballsMesh::~MetaballsMesh()
 {
+	if (this->vol)
+	{
+		this->vol->drop(); // don't forget to release the pointer once it is no longer needed by you
+		this->vol = 0;
+	}
 	this->engine->drop();
 }
