@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 20:57:58 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/15 11:23:30 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/18 11:29:49 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	FractalMesh::render(Camera &cam, float timeS, Vec3 &lightPos)
 
 	if (this->distance(cam.getPosition()) > RENDER_DIST_SHADER - PREC)
 		return;
-	this->modelMat.setRotation(Vec3(timeS * 7., timeS * 10., timeS * 5.));
+	this->modelMat.setRotation(Vec3(0., timeS * 10., 0.));
 	for (unsigned int i = 0 ; i < this->m_Entries.size() ; i++)
 	{
 		glBindVertexArray(this->m_Entries[i].getVao());

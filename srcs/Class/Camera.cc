@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/04 23:48:55 by gperez            #+#    #+#             */
-/*   Updated: 2021/08/04 21:24:27 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/18 11:03:14 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,16 @@ Vec3	Camera::createRay(Vec2 pos, float width, float height)
 	Mat4 invVP = (this->getProjMatrix() * this->getMatrix()).inverse();
 	
 	return ((screenPos * invVP).norm());
+}
+
+void	Camera::rotate(Vec3 rotEuler)
+{
+	this->rot = this->rot + rotEuler;
+	if (this->rot.getX() > 89.9)
+		this->setRotation(Vec3(89.9, this->rot.getY(), this->rot.getZ()));
+	else if (this->rot.getX() < -89.9)
+		this->setRotation(Vec3(-89.9, this->rot.getY(), this->rot.getZ()));
+	this->calc();
 }
 
 Camera::~Camera()
