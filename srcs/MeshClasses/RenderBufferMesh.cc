@@ -4,6 +4,7 @@ RenderBufferMesh::RenderBufferMesh()
 {
 	Mesh();
 	this->type = E_RENDER_BUFFER;
+	this->mat.rotate(Vec3(90., 0., 0.));
 }
 
 GLuint quad_VertexArrayID;

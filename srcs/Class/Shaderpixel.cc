@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Shaderpixel.cc                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 15:39:27 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/18 11:33:45 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/10/18 14:55:40 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,6 @@ bool				Shaderpixel::init(void)
 		|| load(E_PPLANE, VERTEX_RENDER_BUFFER, FRAGMENT_RENDER_BUFFER, E_RENDER_BUFFER))
 			return (1);
 	this->meshes[1]->translate(Vec3(0., 0., -3.5));
-	// this->meshes[2]->rotate(Vec3(90., 0., 0.));
 
 	// std::cout << this->meshes[0]->getShaderProgram() << " " << this->meshes[1]->getShaderProgram() << "\n";
 	this->time.setTime();
