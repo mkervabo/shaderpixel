@@ -1,23 +1,21 @@
-#include "RenderBufferMesh.hpp"
+#include "FrameBufferMesh.hpp"
 
-RenderBufferMesh::RenderBufferMesh()
+FrameBufferMesh::FrameBufferMesh()
 {
 	Mesh();
-	this->type = E_RENDER_BUFFER;
+	this->type = E_FRAMEBUFFER;
 	this->mat.rotate(Vec3(90., 0., 0.));
 }
 
-GLuint quad_VertexArrayID;
-
-bool	RenderBufferMesh::loadMesh(t_objPath pathMesh, std::string pathVertex, std::string pathFragment)
+bool	FrameBufferMesh::loadMesh(t_objPath pathMesh, std::string pathVertex, std::string pathFragment)
 {
 	if (Mesh::loadMesh(pathMesh, pathVertex, pathFragment))
 		return (true);
-	if (this->bufferA.loadMesh(g_objPath[E_PPLANE], PATH_RENDER_BUFFER_VERTEX_BUFFER_A, PATH_RENDER_BUFFER_BUFFER_A))
+	if (this->bufferA.loadMesh(g_objPath[E_PPLANE], PATH_FRAMEBUFFER_VERTEX_BUFFER_A, PATH_FRAMEBUFFER_BUFFER_A))
 		return (true);
 
 	this->texture.newTexture();
-	if (this->texture.load(GL_TEXTURE_2D, (char*)PATH_RENDER_BUFFER_TEXTURE))
+	if (this->texture.load(GL_TEXTURE_2D, (char*)PATH_FRAMEBUFFER_TEXTURE))
 		return (true);
 
 	glGenFramebuffers(1, &this->frame);
@@ -49,7 +47,7 @@ bool	RenderBufferMesh::loadMesh(t_objPath pathMesh, std::string pathVertex, std:
 	return (false);
 }
 
-void	RenderBufferMesh::render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution)
+void	FrameBufferMesh::render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution)
 {
 	(void)lightPos;
 	
@@ -102,7 +100,7 @@ void	RenderBufferMesh::render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 res
 	}
 }
 
-RenderBufferMesh::~RenderBufferMesh()
+FrameBufferMesh::~FrameBufferMesh()
 {
 	glDeleteTextures(1, &this->frameTexture);
 	glDeleteRenderbuffers(1, &this->renderBuffer);

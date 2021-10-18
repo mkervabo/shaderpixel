@@ -4,11 +4,11 @@
 # include "Mesh.hpp"
 //# include "MeshEntry.hpp"
 
-# define PATH_RENDER_BUFFER_TEXTURE "shader/renderBuffer/img1.png"
-# define PATH_RENDER_BUFFER_BUFFER_A "shader/renderBuffer/buffera.glsl"
-# define PATH_RENDER_BUFFER_VERTEX_BUFFER_A "shader/renderBuffer/vertexBufferA.glsl"
+# define PATH_FRAMEBUFFER_TEXTURE "shader/frameBuffer/img1.png"
+# define PATH_FRAMEBUFFER_BUFFER_A "shader/frameBuffer/buffera.glsl"
+# define PATH_FRAMEBUFFER_VERTEX_BUFFER_A "shader/frameBuffer/vertexBufferA.glsl"
 
-class RenderBufferMesh: public Mesh
+class FrameBufferMesh: public Mesh
 {
 	private:
 		Mesh bufferA;
@@ -17,10 +17,10 @@ class RenderBufferMesh: public Mesh
 		GLuint renderBuffer;
 		Material texture; 
 	public:
-		RenderBufferMesh();
+		FrameBufferMesh();
 		virtual bool	loadMesh(t_objPath pathMesh, std::string pathVertex, std::string pathFragment);
 		virtual void	render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution);
-		virtual ~RenderBufferMesh();
+		virtual ~FrameBufferMesh();
 };
 
 #endif

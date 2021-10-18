@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Shader.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/25 17:47:37 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/18 11:33:38 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/10/18 15:00:30 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,8 @@
 # define FRAGMENT_GLOW "shader/fragmentGlow.glsl"
 # define VERTEX_GLOW "shader/vertexGlow.glsl"
 
-# define FRAGMENT_RENDER_BUFFER "shader/renderBuffer/fragmentRenderBuffer.glsl"
-# define VERTEX_RENDER_BUFFER "shader/renderBuffer/vertexRenderBuffer.glsl"
+# define FRAGMENT_FRAMEBUFFER "shader/frameBuffer/fragmentFrameBuffer.glsl"
+# define VERTEX_FRAMEBUFFER "shader/frameBuffer/vertexFrameBuffer.glsl"
 
 # define FAILED_OPEN_FILE "Failed open file"
 # define FAILED_READ_SHADER "Failed to read shader"
