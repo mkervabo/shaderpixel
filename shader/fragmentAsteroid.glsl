@@ -30,6 +30,7 @@ const vec3 COLOR_SPHERE = vec3(0.6, 0.35, 0.2);
 #define K_S 0.3
 #define K_D 0.8
 #define IT_SHADOWS 100
+#define I_TERRAIN 8
 
 struct s_light
 {
@@ -95,8 +96,6 @@ float sdBase(vec3 p)
 				  min(sph(i,f,vec3(1,1,0)),
 					  sph(i,f,vec3(1,1,1)))));
 }
-
-#define I_TERRAIN 8
 
 vec2 sdFbm( vec3 p, float d)
 {
@@ -253,7 +252,7 @@ vec3 calculateColor(s_light light, vec3 eye, vec3 dir, vec3 pos, vec3 norm, floa
 
 void main(void)
 {
-	vec3 dir = calculateMarchinDir(u_fov, u_resolution, gl_FragCoord.xy / 2.);
+	vec3 dir = calculateMarchinDir(u_fov, u_resolution, gl_FragCoord.xy);
 	// vec3 eye = vec3(cos(iTime * 0.025), 1., sin(iTime * 0.025));
 
 	vec3 worldDir = (inverseView * vec4(dir, 0.0)).xyz;

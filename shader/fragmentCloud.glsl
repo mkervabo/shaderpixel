@@ -470,7 +470,7 @@ vec3 calculateMarchinDir(float fov, vec2 resolutionSize, vec2 fragCoord)
 void main(void)
 {
 	s_env env;
-	env.ray.localCam = calculateMarchinDir(u_fov, u_resolution, gl_FragCoord.xy / 2.);
+	env.ray.localCam = calculateMarchinDir(u_fov, u_resolution, gl_FragCoord.xy);
 	env.ray.eyeP = eye;
 	env.isDifSpecSha = bool[3](true, true, true);
 

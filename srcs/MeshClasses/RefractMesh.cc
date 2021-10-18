@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RefractMesh.cc                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 15:42:37 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/15 09:16:54 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/18 11:05:33 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,11 @@ RefractMesh::RefractMesh()
 	this->isSpecular = true;
 }
 
-void	RefractMesh::render(Camera &cam, float timeS, Vec3 &lightPos)
+void	RefractMesh::render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution)
 {
 	Vec3	camPos;
 	float	farNear[2] = {FAR_Z, NEAR_Z};
 	float	fov = FOV;
-	Vec2	resolution = Vec2(WIDTH, HEIGHT);
 
 	if (this->distance(cam.getPosition()) > RENDER_DIST_SHADER - PREC)
 		return;

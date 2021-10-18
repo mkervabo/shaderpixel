@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   AsteroidMesh.cc                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 09:05:56 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/15 09:14:21 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/18 11:06:09 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,11 @@ AsteroidMesh::AsteroidMesh()
 	this->type = E_ASTEROID;
 }
 
-void	AsteroidMesh::render(Camera &cam, float timeS, Vec3 &lightPos)
+void	AsteroidMesh::render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution)
 {
 	Vec3	camPos;
 	float	farNear[2] = {FAR_Z, NEAR_Z};
 	float	fov = FOV;
-	Vec2	resolution = Vec2(WIDTH, HEIGHT);
 
 	if (this->distance(cam.getPosition()) > RENDER_DIST_SHADER - PREC)
 		return;

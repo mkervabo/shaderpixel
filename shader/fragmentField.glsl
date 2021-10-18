@@ -189,7 +189,7 @@ vec3 calculateColor(s_light light, vec3 eye, vec3 norm, vec3 pos, float dist, ve
 
 void main(void)
 {
-	vec3 dir = calculateMarchinDir(u_fov, u_resolution, gl_FragCoord.xy / 2.);
+	vec3 dir = calculateMarchinDir(u_fov, u_resolution, gl_FragCoord.xy);
 	
 	float moove = 0.;
 	vec3 eyeP = eye + eyeInField + vec3(0., 1.5, 0.);

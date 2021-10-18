@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   FieldMesh.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 22:35:50 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/07 09:27:21 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/18 10:53:56 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ private:
 	Mat		matInField;
 public:
 	FieldMesh();
-	virtual void	render(Camera &cam, float timeS, Vec3 &lightPos);
+	virtual void	render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution);
 	virtual void	translate(e_axes axe, float speed);
 	virtual ~FieldMesh();
 };

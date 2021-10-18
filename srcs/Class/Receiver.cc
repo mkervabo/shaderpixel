@@ -20,6 +20,8 @@ Receiver::Receiver()
 void	Receiver::OnAudioDataReady(const void* data, int byteCount, int playbackrate)
 {
 	int j = 0;
+	(void)playbackrate;
+
 	while(j < byteCount / 4)
 	{
 		this->in[i] = (float)((int16_t*)data)[j * 2];

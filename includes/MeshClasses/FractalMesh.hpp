@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   FractalMesh.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 20:58:54 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/06 22:24:38 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/18 10:54:48 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ class FractalMesh : public Mesh
 
 	public:
 		FractalMesh();
-		virtual void	render(Camera &cam, float timeS, Vec3 &lightPos);
+		virtual void	render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution);
 		virtual ~FractalMesh();
 };
 

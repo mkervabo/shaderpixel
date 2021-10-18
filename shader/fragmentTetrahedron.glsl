@@ -222,7 +222,7 @@ vec3	calculateMarchinDir(float fov, vec2 resolutionSize, vec2 fragCoord)
 
 void	main()
 {
-	vec3	dir = calculateMarchinDir(u_fov, u_resolution, gl_FragCoord.xy / 2.);
+	vec3	dir = calculateMarchinDir(u_fov, u_resolution, gl_FragCoord.xy);
 	float	cosA = dir.z;
 	vec3	worldDir = (inverseView * vec4(dir, 0.0)).xyz;
 

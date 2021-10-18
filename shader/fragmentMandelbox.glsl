@@ -172,14 +172,14 @@ vec3	calculateMarchinDir(float fov, vec2 resolutionSize, vec2 fragCoord)
 	float	ratio = resolutionSize.x / resolutionSize.y;
 	vec2	xy = (fragCoord - 0.5) / resolutionSize;
 	//from [0,1] to [-1, 1]
-	xy.x = (2 * xy.x - 1) * ratio * tan(radians(fov / 1.));
-	xy.y = (2 * xy.y - 1) * tan(radians(fov / 1.));
+	xy.x = (2 * xy.x - 1) * ratio * tan(radians(fov / 2.));
+	xy.y = (2 * xy.y - 1) * tan(radians(fov / 2.));
 	return (normalize(vec3(xy, -1)));
 }
 
 void main()
 {
-	vec3	dir = calculateMarchinDir(u_fov, u_resolution, gl_FragCoord.xy / 2);
+	vec3	dir = calculateMarchinDir(u_fov, u_resolution, gl_FragCoord.xy);
 	vec3	worldDir = (inverseView * vec4(dir, 0.0)).xyz;
 	float	dist = shortestDistanceToSurface(eye, worldDir, farNear[1], farNear[0]);
     

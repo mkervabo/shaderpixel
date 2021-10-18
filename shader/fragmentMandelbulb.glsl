@@ -276,7 +276,7 @@ void	main(void)
 {
 	float	d = distance(eye, modelPos);
 
-	vec3	dir = calculateMarchinDir(u_fov, u_resolution, gl_FragCoord.xy / 2.);
+	vec3	dir = calculateMarchinDir(u_fov, u_resolution, gl_FragCoord.xy);
 	vec3	worldDir = (inverseView * vec4(dir, 0.0)).xyz;
 
 	float	dist = ShortestDistanceToSurface(eye, worldDir, d - 1.5, farNear[0]);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Mesh.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 17:01:05 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/15 09:14:07 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/18 10:54:35 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ class Mesh
 		float			distance(Vec3 pToCompare);
 		bool			loadMesh(t_objPath pathMesh);
 		virtual bool	loadMesh(t_objPath pathMesh, std::string pathVertex, std::string pathFragment);
-		virtual void	render(Camera &cam, float timeS, Vec3 &lightPos);
+		virtual void	render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution);
 		void			clear(void);
 		void			translate(Vec3 t);
 		void			rotate(Vec3 r);

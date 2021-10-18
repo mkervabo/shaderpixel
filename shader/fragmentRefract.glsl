@@ -451,7 +451,7 @@ vec3 calculateMarchinDir(float fov, vec2 resolutionSize, vec2 fragCoord)
 void main(void)
 {
 	s_env env;
-	env.ray.dir = calculateMarchinDir(u_fov, u_resolution, gl_FragCoord.xy / 2.);
+	env.ray.dir = calculateMarchinDir(u_fov, u_resolution, gl_FragCoord.xy);
 	env.ray.eyeP = eye;
 	// env.ray.eyeP = vec3(3. * cos(time * 0.5) , 0., -6.);
 	env.isDifSpecSha = bool[3](bool(u_isDiffuse), bool(u_isSpecular), true);

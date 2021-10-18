@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Mesh.cc                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 16:57:27 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/15 09:10:44 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/18 11:06:25 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,10 +168,11 @@ bool	Mesh::loadMesh(t_objPath pathMesh)
 	return (this->loadMesh(pathMesh, VERTEX, FRAGMENT));
 }
 
-void	Mesh::render(Camera &cam, float timeS, Vec3 &lightPos) // On parcours tous les mesh de notre objet et on l'affiche avec la texture qui lui est lier
+void	Mesh::render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution) // On parcours tous les mesh de notre objet et on l'affiche avec la texture qui lui est lier
 {
 	int		boolValue = 0;
 	Vec3	color;
+	(void)resolution;
 
 	// glEnableVertexAttribArray(0);
 	// glEnableVertexAttribArray(1);

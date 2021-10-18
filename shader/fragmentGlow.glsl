@@ -144,7 +144,7 @@ void main()
 {
     // Normalized pixel coordinates (from 0 to 1)
     vec2 uv = (2.0 * gl_FragCoord.xy - u_resolution.xy) / u_resolution.y; 
-    vec3 orig = vec3(0., .0, -5.);
+    vec3 orig = eye;
     vec3 dir = normalize(vec3(uv, 1.0));
     mat3 tilt = mat3(1.0, 0.0, 0.0,
                 0.0, 0.28, -0.96,

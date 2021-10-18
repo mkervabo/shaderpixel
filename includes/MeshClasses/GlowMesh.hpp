@@ -7,7 +7,7 @@ class GlowMesh : public Mesh
 {
 	public:
 		GlowMesh();
-		virtual void	render(Camera &cam, float timeS, Vec3 &lightPos);
+		virtual void	render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution);
 		virtual ~GlowMesh();
 };
 

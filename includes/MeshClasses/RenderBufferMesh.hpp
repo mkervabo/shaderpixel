@@ -19,7 +19,7 @@ class RenderBufferMesh: public Mesh
 	public:
 		RenderBufferMesh();
 		virtual bool	loadMesh(t_objPath pathMesh, std::string pathVertex, std::string pathFragment);
-		virtual void	render(Camera &cam, float timeS, Vec3 &lightPos);
+		virtual void	render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution);
 		virtual ~RenderBufferMesh();
 };
 

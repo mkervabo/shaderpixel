@@ -6,10 +6,10 @@ GlowMesh::GlowMesh()
 	this->type = E_GLOW;
 }
 
-void	GlowMesh::render(Camera &cam, float timeS, Vec3 &lightPos)
+void	GlowMesh::render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution)
 {
 	Vec3	camPos;
-	Vec2	resolution = Vec2(WIDTH, HEIGHT);
+
 	lightPos = Vec3();
 	timeS = 0;
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   FieldMesh.cc                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 22:35:15 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/15 09:16:31 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/18 11:05:56 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,11 @@ FieldMesh::FieldMesh()
 	this->type = E_FIELD;
 }
 
-void	FieldMesh::render(Camera &cam, float timeS, Vec3 &lightPos)
+void	FieldMesh::render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution)
 {
 	Vec3	camPos = cam.getPosition(); 
 	float	farNear[2] = {FAR_Z, NEAR_Z};
 	float	fov = FOV;
-	Vec2	resolution = Vec2(WIDTH, HEIGHT);
 	Vec3	rotCam = cam.getRotation();
 	matInField.setRotation(Vec3(0., rotCam.getY(), rotCam.getZ()));
 	Vec3	eyeInField = matInField.getPosition();

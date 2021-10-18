@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   FractalMesh.cc                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 20:57:58 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/15 11:23:30 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/18 10:58:06 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,13 @@ FractalMesh::FractalMesh()
 	this->type = E_FRACTAL;
 }
 
-void	FractalMesh::render(Camera &cam, float timeS, Vec3 &lightPos)
+void	FractalMesh::render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution)
 {
 	Vec3	camPos;
 	Vec3	modelPos;
 	float	farNear[2] = {FAR_Z, NEAR_Z};
 	float	fov = FOV;
-	Vec2	resolution = Vec2(WIDTH, HEIGHT);
+	// Vec2	resolution = Vec2(WIDTH, HEIGHT);
 
 	if (this->distance(cam.getPosition()) > RENDER_DIST_SHADER - PREC)
 		return;

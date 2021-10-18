@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RefractMesh.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 15:43:33 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/06 22:25:47 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/18 10:54:21 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ class RefractMesh : public Mesh
 		bool isSpecular;
 	public:
 		RefractMesh();
-		virtual void	render(Camera &cam, float timeS, Vec3 &lightPos);
+		virtual void	render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution);
 		virtual ~RefractMesh();
 };
 

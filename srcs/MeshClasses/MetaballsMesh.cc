@@ -80,12 +80,11 @@ void	MetaballsMesh::addNbBalls(int new_nb_balls)
 	this->nb_balls += new_nb_balls;
 }
 
-	void	MetaballsMesh::render(Camera &cam, float timeS, Vec3 &lightPos)
+	void	MetaballsMesh::render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution)
 {
 	Vec3	camPos;
 	float	farNear[2] = {FAR_Z, NEAR_Z};
 	float	fov = FOV;
-	Vec2	resolution = Vec2(WIDTH, HEIGHT);
 
 	if (this->distance(cam.getPosition()) > RENDER_DIST_SHADER - PREC)
 	{

@@ -48,11 +48,10 @@ bool	RenderBufferMesh::loadMesh(t_objPath pathMesh, std::string pathVertex, std:
 	return (false);
 }
 
-void	RenderBufferMesh::render(Camera &cam, float timeS, Vec3 &lightPos)
+void	RenderBufferMesh::render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution)
 {
 	(void)lightPos;
-	Vec2	resolution = Vec2(WIDTH, HEIGHT);
-
+	
 	if (this->distance(cam.getPosition()) > RENDER_DIST_SHADER - PREC)
 		return;
 	for (unsigned int i = 0 ; i < this->m_Entries.size() ; i++)
