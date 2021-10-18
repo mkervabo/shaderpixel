@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/04 23:19:34 by gperez            #+#    #+#             */
-/*   Updated: 2021/08/04 21:24:07 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/18 11:30:36 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,10 +163,6 @@ void	Mat::translate(float x, float y, float z)
 void	Mat::rotate(Vec3 rotEuler)
 {
 	this->rot = this->rot + rotEuler;
-	if (this->rot.getX() > 89.9)
-		this->setRotation(Vec3(89.9, this->rot.getY(), this->rot.getZ()));
-	else if (this->rot.getX() < -89.9)
-		this->setRotation(Vec3(-89.9, this->rot.getY(), this->rot.getZ()));
 		this->calc();
 }
 

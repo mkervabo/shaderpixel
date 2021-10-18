@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/04 23:29:17 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/15 15:33:42 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/18 11:01:49 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,12 @@ class	Mat
 		void		translate(e_axes axe, float speed);
 		void		translate(Vec3 t);
 		void		translate(float x, float y, float z);
-		void		rotate(Vec3 rotEuler);
+		virtual void	rotate(Vec3 rotEuler);
 		void		scale(Vec3 s);
 
 		static void	printMatrix(Mat4 mat);
 		void		printMatrix(bool calculate = true);
-		~Mat();
+		virtual ~Mat();
 };
 
 #endif
