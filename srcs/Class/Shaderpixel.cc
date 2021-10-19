@@ -6,7 +6,7 @@
 /*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 15:39:27 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/18 11:33:45 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/10/19 10:50:41 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,8 +156,9 @@ bool				Shaderpixel::init(void)
 	if (this->hud.init())
 		return (1);
 	if (load(E_PBALL, VERTEX_LIGHT, FRAGMENT_LIGHT, E_DEFAULT_MESH)
-		|| load(E_PBALL, VERTEX, FRAGMENT, E_DEFAULT_MESH)
-		|| load(E_PPLANE, VERTEX_RENDER_BUFFER, FRAGMENT_RENDER_BUFFER, E_RENDER_BUFFER))
+		|| load(E_PCHURCHE, VERTEX, FRAGMENT, E_DEFAULT_MESH)
+		//|| load(E_PPLANE, VERTEX_METABALLS, FRAGMENT_METABALLS, E_METABALLS)
+		)
 			return (1);
 	this->meshes[1]->translate(Vec3(0., 0., -3.5));
 	// this->meshes[2]->rotate(Vec3(90., 0., 0.));
