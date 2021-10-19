@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 16:57:27 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/19 15:05:56 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/19 15:37:58 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,17 @@ bool	Mesh::initMesh(unsigned int Index, const aiMesh* paiMesh) // Remplit un Mes
 	for (unsigned int i = 0 ; i < paiMesh->mNumFaces ; i++)
 	{
 		const aiFace& face = paiMesh->mFaces[i];
-		if (face.mNumIndices != 3)
-			return (1);
-		indices.push_back(face.mIndices[0]);
-		indices.push_back(face.mIndices[1]);
-		indices.push_back(face.mIndices[2]);
+		// if (face.mNumIndices < 3)
+		// {
+		// 	std::cout << "Here\n";
+		// 	return (1);
+		// }
+		if (face.mNumIndices > 0)
+			indices.push_back(face.mIndices[0]);
+		if (face.mNumIndices > 1)
+			indices.push_back(face.mIndices[1]);
+		if (face.mNumIndices > 2)
+			indices.push_back(face.mIndices[2]);
 	}
 	m_Entries[Index].init(vertices, indices);
 	return (0);

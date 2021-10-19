@@ -36,7 +36,7 @@ void	main()
 	// 	return (light.intensity * (colorObj * diffuse * K_D));
 
 	vec3	diffuse = LIGHT_COL * diff * 1.;
-	vec3	specular = LIGHT_COL * pow(spec, K_S) * 1.;
+	vec3	specular = LIGHT_COL * pow(spec, K_S) * 0.;
 
 	if (isText == 1)
 	{
