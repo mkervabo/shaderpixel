@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   Shaderpixel.cc                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 15:39:27 by gperez            #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2021/10/19 10:50:41 by maiwenn          ###   ########.fr       */
+=======
+/*   Updated: 2021/10/18 15:01:51 by gperez           ###   ########.fr       */
+>>>>>>> 41a4b9c2cb422c6683ee0528ad54fffd080c6988
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,8 +134,8 @@ bool						Shaderpixel::loadMesh(t_objPath obj, std::string pathVertex, std::stri
 		this->meshes.push_back(new MetaballsMesh);
 	else if (type == E_GLOW)
 		this->meshes.push_back(new GlowMesh);
-	else if (type == E_RENDER_BUFFER)
-		this->meshes.push_back(new RenderBufferMesh);
+	else if (type == E_FRAMEBUFFER)
+		this->meshes.push_back(new FrameBufferMesh);
 	else
 		this->meshes.push_back(new Mesh);
 	if (!this->meshes.size())
@@ -161,7 +165,6 @@ bool				Shaderpixel::init(void)
 		)
 			return (1);
 	this->meshes[1]->translate(Vec3(0., 0., -3.5));
-	// this->meshes[2]->rotate(Vec3(90., 0., 0.));
 
 	// std::cout << this->meshes[0]->getShaderProgram() << " " << this->meshes[1]->getShaderProgram() << "\n";
 	this->time.setTime();
