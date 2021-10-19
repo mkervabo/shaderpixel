@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/27 14:26:47 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/06 13:17:25 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/19 11:55:49 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ Material::Material()
 	this->text = NULL;
 	this->colorD = Vec3(0., 1., 1.);
 	this->isText = true;
+	this->specular = 0.;
 }
 
 bool	Material::asTexture(void)
@@ -55,6 +56,16 @@ bool	Material::getIsText(void)
 void	Material::setColor(Vec3 color)
 {
 	this->colorD = color;
+}
+
+void	Material::setSpecularCoef(float spec)
+{
+	this->specular = spec;
+}
+
+float	Material::getSpecularCoef(void)
+{
+	return (this->specular);
 }
 
 Vec3	Material::getColor(void)

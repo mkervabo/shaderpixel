@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 15:39:27 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/19 11:07:46 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/19 14:56:32 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,7 +156,7 @@ bool				Shaderpixel::init(void)
 	if (this->hud.init())
 		return (1);
 	if (load(E_PBALL, VERTEX_LIGHT, FRAGMENT_LIGHT, E_DEFAULT_MESH)
-		|| load(E_PCHURCHE, VERTEX, FRAGMENT, E_DEFAULT_MESH)
+		|| load(E_PBALL, VERTEX, FRAGMENT, E_DEFAULT_MESH)
 		//|| load(E_PPLANE, VERTEX_METABALLS, FRAGMENT_METABALLS, E_METABALLS)
 		)
 			return (1);

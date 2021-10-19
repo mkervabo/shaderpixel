@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Texture.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/13 17:42:19 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/19 10:51:37 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/10/19 15:04:58 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,10 @@
 # define PATH_CHURCHE "objToLoad/Church/churchModel.obj"
 # define PATH_TEXTURE_CHURCHE "objToLoad/Church/"
 
-enum	e_pathObj {E_PTREE, E_PBALL, E_PDRAGON, E_PCUBE, E_PPLANE, E_PCHURCHE, E_PEND};
+# define PATH_FRAMEWORK "objToLoad/FrameWork/frameWork.obj"
+# define PATH_TEXTURE_FRAMEWORK "objToLoad/FrameWork/"
+
+enum	e_pathObj {E_PTREE, E_PBALL, E_PDRAGON, E_PCUBE, E_PPLANE, E_PCHURCHE, E_PFRAMEWORK, E_PEND};
 
 typedef struct	s_objPath
 {
@@ -49,6 +52,7 @@ static t_objPath	g_objPath[]{
 	{PATH_CUBE, PATH_TEXTURE_CUBE},
 	{PATH_PLANE, PATH_TEXTURE_PLANE},
 	{PATH_CHURCHE, PATH_TEXTURE_CHURCHE},
+	{PATH_FRAMEWORK, PATH_TEXTURE_FRAMEWORK},
 	{"", ""}
 };
 
