@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   AsteroidMesh.cc                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 09:05:56 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/18 11:06:09 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/10/20 14:52:40 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ AsteroidMesh::AsteroidMesh()
 void	AsteroidMesh::render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution)
 {
 	Vec3	camPos;
+	Vec3	modelPos;
 	float	farNear[2] = {FAR_Z, NEAR_Z};
 	float	fov = FOV;
 
@@ -40,6 +41,9 @@ void	AsteroidMesh::render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolut
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
 			"inverseView"), 1, GL_FALSE, &(cam.getInverseMat()[0][0]));
 		camPos = cam.getPosition();
+		modelPos = mat.getPosition();
+		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
+			"modelPos"), 1, (const GLfloat*)&modelPos);
 		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
 			"eye"), 1, (const GLfloat*)&camPos);
 		glUniform1fv(glGetUniformLocation(this->shader.getProgram(),

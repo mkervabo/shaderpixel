@@ -5,6 +5,7 @@ in	vec2		textureCoord;
 in	vec3		norm;
 
 uniform mat4	modelMat;
+uniform vec3	modelPos;
 uniform mat4	view;
 uniform vec3	eye;
 uniform float	time;
@@ -118,6 +119,7 @@ vec2 sdFbm( vec3 p, float d)
 
 vec2 DistanceEstimation(vec3 p)
 {
+	p -= modelPos;
 	float sphere = sphereDE(p, 0.5);
 		
 	vec2 dt = sdFbm(p, sphere);
@@ -129,6 +131,7 @@ vec2 DistanceEstimation(vec3 p)
 
 vec2 iBox( in vec3 ro, in vec3 rd, in vec3 rad )
 {
+	ro -= modelPos;
 	vec3 m = 1.0/rd;
 	vec3 n = m*ro;
 	vec3 k = abs(m)*rad;

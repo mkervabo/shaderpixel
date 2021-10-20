@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 15:39:27 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/19 11:07:46 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/19 18:01:18 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,11 +156,11 @@ bool				Shaderpixel::init(void)
 	if (this->hud.init())
 		return (1);
 	if (load(E_PBALL, VERTEX_LIGHT, FRAGMENT_LIGHT, E_DEFAULT_MESH)
-		|| load(E_PCHURCHE, VERTEX, FRAGMENT, E_DEFAULT_MESH)
-		//|| load(E_PPLANE, VERTEX_METABALLS, FRAGMENT_METABALLS, E_METABALLS)
+		|| load(E_PFRAMEWORK, VERTEX, FRAGMENT, E_DEFAULT_MESH)
+		|| load(E_PPLANE, VERTEX_FRAMEBUFFER, FRAGMENT_FRAMEBUFFER, E_FRAMEBUFFER)
 		)
 			return (1);
-	this->meshes[1]->translate(Vec3(0., 0., -3.5));
+	// this->meshes[1]->translate(Vec3(0., 0., -3.5));
 
 	// std::cout << this->meshes[0]->getShaderProgram() << " " << this->meshes[1]->getShaderProgram() << "\n";
 	this->time.setTime();

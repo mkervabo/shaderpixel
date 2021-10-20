@@ -6,7 +6,7 @@
 /*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 17:01:05 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/20 15:31:10 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/10/20 16:16:15 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ class Mesh
 		Shader					shader;
 		Mat						mat;
 		bool					initFromScene(const aiScene* pScene, const t_objPath& path);
-		void					initMesh(unsigned int Index, const aiMesh* paiMesh);
+		bool					initMesh(unsigned int Index, const aiMesh* paiMesh);
 		bool					initMaterials(const aiScene* pScene, const t_objPath& path);
 		void					clearTextures(void);
 	public:

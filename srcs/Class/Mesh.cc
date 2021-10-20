@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Mesh.cc                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 16:57:27 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/18 11:06:25 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/10/19 15:37:58 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ Mesh::Mesh()
 	// this->mat.rotate(Vec3(-90., 0., 0.));
 }
 
-void	Mesh::initMesh(unsigned int Index, const aiMesh* paiMesh) // Remplit un MeshEntry avec des vertices et des faces et l'ajoute au vector m_Entries
+bool	Mesh::initMesh(unsigned int Index, const aiMesh* paiMesh) // Remplit un MeshEntry avec des vertices et des faces et l'ajoute au vector m_Entries
 {
 	m_Entries[Index].setMatIdx(paiMesh->mMaterialIndex);
 
@@ -45,12 +45,20 @@ void	Mesh::initMesh(unsigned int Index, const aiMesh* paiMesh) // Remplit un Mes
 	for (unsigned int i = 0 ; i < paiMesh->mNumFaces ; i++)
 	{
 		const aiFace& face = paiMesh->mFaces[i];
-		assert(face.mNumIndices == 3);
-		indices.push_back(face.mIndices[0]);
-		indices.push_back(face.mIndices[1]);
-		indices.push_back(face.mIndices[2]);
+		// if (face.mNumIndices < 3)
+		// {
+		// 	std::cout << "Here\n";
+		// 	return (1);
+		// }
+		if (face.mNumIndices > 0)
+			indices.push_back(face.mIndices[0]);
+		if (face.mNumIndices > 1)
+			indices.push_back(face.mIndices[1]);
+		if (face.mNumIndices > 2)
+			indices.push_back(face.mIndices[2]);
 	}
 	m_Entries[Index].init(vertices, indices);
+	return (0);
 }
 
 bool Mesh::initMaterials(const aiScene* pScene, const t_objPath& path) // Genere les textures de l'objet et les ajoutes au vector m_Textures
@@ -76,11 +84,16 @@ bool Mesh::initMaterials(const aiScene* pScene, const t_objPath& path) // Genere
 		if (!isTexture) // Si le materiaux ne contient pas de texture mais une couleur de base
 		{
 			aiColor4D	color;
+			float		shininess;
 
 			aiGetMaterialColor(pMaterial, AI_MATKEY_COLOR_DIFFUSE, &color);
-			// std::cout << color.r << " " << color.g << " " << color.b << "\n";
+			if (AI_SUCCESS != aiGetMaterialFloat(pMaterial, AI_MATKEY_SHININESS, &shininess))
+				shininess = 0.f;
+
 			this->m_Materials[i].setIsText(false);
 			this->m_Materials[i].setColor(Vec3(color.r, color.g, color.b));
+			// this->m+Materials[i].setDiffuse();
+			this->m_Materials[i].setSpecularCoef(shininess);
 		}
 		else
 		{
@@ -121,7 +134,8 @@ bool	Mesh::initFromScene(const aiScene* pScene, const t_objPath& path) // Rempli
 	for (unsigned int i = 0 ; i < m_Entries.size() ; i++)
 	{
 		const aiMesh* paiMesh = pScene->mMeshes[i];
-		initMesh(i, paiMesh);
+		if (initMesh(i, paiMesh))
+			return (1);
 	}
 
 	return (initMaterials(pScene, path));
@@ -172,12 +186,16 @@ void	Mesh::render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution) // 
 {
 	int		boolValue = 0;
 	Vec3	color;
+	Vec3	camPos;
 	(void)resolution;
+	// float	diffCoef;
+	float	specularCoef;
 
 	// glEnableVertexAttribArray(0);
 	// glEnableVertexAttribArray(1);
 	// glEnableVertexAttribArray(2);
 	
+	camPos = cam.getPosition();
 	for (unsigned int i = 0 ; i < this->m_Entries.size() ; i++)
 	{
 		glBindVertexArray(this->m_Entries[i].getVao());
@@ -190,6 +208,15 @@ void	Mesh::render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution) // 
 			boolValue = 1;
 		}
 		color = this->m_Materials[materialIndex].getColor();
+		// diffCoef = this->m_Materials[materialIndex].getDiffuseCoef();
+		specularCoef = this->m_Materials[materialIndex].getSpecularCoef();
+
+		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
+			"eye"), 1, (const GLfloat*)&camPos);
+		// glUniform1fv(glGetUniformLocation(this->shader.getProgram(),
+		// 	"K_D"), 1, (const GLfloat*)&diffCoef);
+		glUniform1fv(glGetUniformLocation(this->shader.getProgram(),
+			"K_S"), 1, (const GLfloat*)&specularCoef);
 
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
 			"model"), 1, GL_FALSE, &(mat.getMatrix(false).inverse()[0][0]));
