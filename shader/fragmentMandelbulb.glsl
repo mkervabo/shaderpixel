@@ -92,6 +92,7 @@ float sphereDE(vec3 p, float rayon)
 
 float DistanceEstimation(vec3 p)
 {
+	p -= modelPos;
 	// return (MandelbulbDE((modelMat * vec4(p, 1.)).xyz, 8.));
 	return (MandelbulbDE((modelMat * vec4(p * SCALE, 1.)).xyz, 8.) / SCALE);
 

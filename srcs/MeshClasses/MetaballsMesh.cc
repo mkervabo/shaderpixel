@@ -86,12 +86,13 @@ void	MetaballsMesh::addNbBalls(int new_nb_balls)
 	float	farNear[2] = {FAR_Z, NEAR_Z};
 	float	fov = FOV;
 
-	if (this->distance(cam.getPosition()) > RENDER_DIST_SHADER - PREC)
-	{
-		vol->setVolume((ik_f32)0.);
-		return;
-	}
-	vol->setVolume((ik_f32)((RENDER_DIST_SHADER - this->distance(cam.getPosition()))) / 10);
+	// if (this->distance(cam.getPosition()) > RENDER_DIST_SHADER - PREC)
+	// {
+	// 	vol->setVolume((ik_f32)0.);
+	// 	return;
+	// }
+	// vol->setVolume((ik_f32)((RENDER_DIST_SHADER - this->distance(cam.getPosition()))) / 10);
+	vol->setVolume((ik_f32)(0));
 	for (unsigned int i = 0 ; i < this->m_Entries.size() ; i++)
 	{	
 		glBindTexture(GL_TEXTURE_1D, this->songText);
@@ -125,6 +126,9 @@ void	MetaballsMesh::addNbBalls(int new_nb_balls)
 			"u_resolution"), 1, (const GLfloat*)&resolution);
 		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
 			"u_lightPos"), 1, (const GLfloat*)&lightPos);
+		Vec3 modelPos = mat.getPosition();
+		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
+			"modelPos"), 1, (const GLfloat*)&modelPos);
 
 		// this->songData = this->receiver->getFrequency();
 		// glActiveTexture(GL_TEXTURE0);

@@ -8,6 +8,7 @@ uniform float metaMinSize;
 uniform int metaNbBalls;
 float s[20];
 const float EPSILON = 0.0025;
+const int MAX_STEPS = 100; // 100
 
 uniform float	time;
 uniform vec2	u_resolution;
@@ -18,6 +19,7 @@ uniform vec3	eye;
 uniform mat4	inverseView;
 uniform float	farNear[2];
 uniform vec3	u_lightPos;
+uniform vec3	modelPos;
 
 uniform sampler1D	songText;//buffer
 
@@ -39,6 +41,7 @@ vec3 hash(float h)
 }
 
 float makeScene(vec3 pos, vec2 coord) {
+	pos -= modelPos;
 	vec3 pos2 = pos;
 	float song = texture(songText, coord.x / u_resolution.x).x;
 	for (int i = 0; i < metaNbBalls; i++)
@@ -58,17 +61,19 @@ float makeScene(vec3 pos, vec2 coord) {
 }
 
 float intersection( in vec3 camPos, in vec3 camDir, vec2 coord) {
-	const float maxD = 20.0;
-	const float precis = EPSILON;
-	float h = precis;
-	float t = 0.0;
-	for( int i = 0; i < 90; i++ ) {
-		if(h < precis || t > maxD) break;
-		h = makeScene(camPos + camDir * t, vec2(1.));
-		t += h;
+	float depth = distance(eye, modelPos) - 1.5;
+	float dist;
+	for (int i = 0; i < MAX_STEPS; i++)
+	{
+		dist = makeScene(camPos + camDir * depth, vec2(1.));
+		if (dist < EPSILON)
+			return (depth);
+		depth += dist;
+		if (depth > farNear[0] ||
+			(depth > farNear[0] - EPSILON && depth < farNear[0] + EPSILON))
+			return farNear[0];
 	}
-	if( t > maxD ) t = 0.0;
-	return t;
+	return (farNear[0]);
 }
 
 vec3 calcNormal( in vec3 pos, vec2 coord) {
@@ -135,7 +140,7 @@ void main()
 	
 	if (dist > farNear[0] - EPSILON) {
 		gl_FragDepth = farNear[0];
-		fragColor = vec4(0.0, 0.0, 0.0, 0.0);
+		fragColor = vec4(1.0, 0.0, 0.0, 1.0);
 		return;
 	}
 	

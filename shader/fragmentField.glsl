@@ -14,6 +14,8 @@ uniform float	farNear[2];
 uniform float	u_fov;
 uniform vec2	u_resolution;
 uniform vec3	u_lightPos;
+uniform vec3	modelPos;
+
 
 const int MAX_STEPS = 200;
 const int MAX_AO_STEPS = 10;
@@ -92,6 +94,7 @@ float sphereDE(vec3 p, float rayon)
 
 float DistanceEstimation(vec3 p, float octaves)
 {
+	p -= modelPos;
 	float terrain = fbm(p.xz, octaves) * 0.3; // 5 * 0.3 => 1.5
 	terrain = 0.4 * (p.y + terrain * 2.5 - 1.5);// (p.y - 1.) * 0.8
 	return (terrain);
@@ -189,6 +192,7 @@ vec3 calculateColor(s_light light, vec3 eye, vec3 norm, vec3 pos, float dist, ve
 
 void main(void)
 {
+	float	d = distance(eye, modelPos);
 	vec3 dir = calculateMarchinDir(u_fov, u_resolution, gl_FragCoord.xy);
 	
 	float moove = 0.;
