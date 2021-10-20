@@ -10,6 +10,7 @@ uniform mat4	projection;
 out vec4		fragColor;
 uniform float	farNear[2];
 uniform vec3	u_lightPos;
+uniform vec3	modelPos;
 
 
 const int MAX_MARCHING_STEPS = 200;
@@ -58,6 +59,7 @@ float mandelboxSDF(vec3 z) {
 }
 
 float sceneSDF(vec3 samplePoint) {
+    samplePoint -= modelPos;
     float mandelboxDist = mandelboxSDF(samplePoint / 0.25) * 0.25;
     return (mandelboxDist);
 }
