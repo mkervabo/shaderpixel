@@ -6,7 +6,7 @@
 /*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 22:35:15 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/18 11:05:56 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/10/20 15:59:16 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,9 @@ void	FieldMesh::render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution
 			"u_resolution"), 1, (const GLfloat*)&resolution);
 		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
 			"u_lightPos"), 1, (const GLfloat*)&lightPos);
+		Vec3 modelPos = mat.getPosition();
+		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
+			"modelPos"), 1, (const GLfloat*)&modelPos);
 		glDrawElements(GL_TRIANGLES, this->m_Entries[i].getNumIndices(), GL_UNSIGNED_INT, NULL);
 	}
 }
