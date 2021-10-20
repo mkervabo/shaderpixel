@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CloudMesh.cc                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 11:45:19 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/18 11:06:02 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/10/20 15:19:08 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ bool	CloudMesh::loadMesh(t_objPath pathMesh, std::string pathVertex, std::string
 void	CloudMesh::render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution) // On parcours tous les mesh de notre objet et on l'affiche avec la texture qui lui est lier
 {
 	Vec3	camPos;
+	Vec3	modelPos;
 	float	farNear[2] = {FAR_Z, NEAR_Z};
 	float	fov = FOV;
 
@@ -50,6 +51,9 @@ void	CloudMesh::render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
 			"inverseView"), 1, GL_FALSE, &(cam.getInverseMat()[0][0]));
 		camPos = cam.getPosition();
+		modelPos = mat.getPosition();
+		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
+			"modelPos"), 1, (const GLfloat*)&modelPos);
 		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
 			"eye"), 1, (const GLfloat*)&camPos);
 		glUniform1fv(glGetUniformLocation(this->shader.getProgram(),

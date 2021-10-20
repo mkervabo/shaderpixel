@@ -13,6 +13,7 @@ uniform float		farNear[2];
 uniform float		u_fov;
 uniform vec2		u_resolution;
 uniform vec3		u_lightPos;
+uniform vec3		modelPos;
 
 const int MAX_REFLECTIONS = 1;
 const int MAX_STEPS = 400;
@@ -118,6 +119,7 @@ float planDE( vec3 p, vec3 n, float h )
 
 s_obj DistanceEstimation(vec3 p, int typeTouch)
 {
+	p -= modelPos;
 	s_obj cube;
 	cube.type = CUBE;
 	cube.color = vec4(0.1, 0.5, 0.7, 1.);
@@ -169,6 +171,7 @@ vec2 convert1dTo2d(float xsize, float index)
 
 vec4 pseudoVolumeTexture(vec3 pos)
 {
+	pos -= modelPos;
 	//float att = 30. + 10. * sin(time);
 	pos = pos + 0.5;// + 0.5; // / 2. permet le grossissement et 0.5 permet de le centré (le centre du cube est en 0.)
 	//pos = floor(pos * att) / att;
@@ -243,9 +246,9 @@ void shadowCloud(inout s_cloud cloud, vec3 lightDir, float sh)
 			curShadowVolTxt = pseudoVolumeTexture(cloud.lPos).r;
 			shadowDist += curShadowVolTxt;
 
-			if (cloud.lPos.x > BOUND || cloud.lPos.x < -BOUND
-				|| cloud.lPos.y > BOUND || cloud.lPos.y < -BOUND
-					|| cloud.lPos.z > BOUND || cloud.lPos.z < -BOUND) break;
+			if (cloud.lPos.x > BOUND + modelPos.x || cloud.lPos.x < -BOUND + modelPos.x
+				|| cloud.lPos.y > BOUND + modelPos.y || cloud.lPos.y < -BOUND + modelPos.y
+					|| cloud.lPos.z > BOUND + modelPos.z || cloud.lPos.z < -BOUND + modelPos.z) break;
 		}
 	}
 	cloud.curDensity = min(cloud.curVolTxt * DensityFactor, 1.);
