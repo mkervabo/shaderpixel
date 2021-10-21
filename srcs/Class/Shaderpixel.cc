@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Shaderpixel.cc                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 15:39:27 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/19 18:01:18 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/21 12:14:22 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ Shaderpixel::Shaderpixel()
 	this->lastTime = 0.;
 	this->deltaTime = 0.;
 	this->firstMoove = true;
+	this->addedTime = 0;
 	for (unsigned int i = 0; i < GLFW_KEY_END; i++)
 		this->keys[i] = KEY_RELEASE;
 	this->isCursor = false;
@@ -120,8 +121,10 @@ bool						Shaderpixel::loadMesh(t_objPath obj, std::string pathVertex, std::stri
 		this->meshes.push_back(new CloudMesh);
 	else if (type == E_REFRACT)
 		this->meshes.push_back(new RefractMesh);
-	else if (type == E_FRACTAL)
-		this->meshes.push_back(new FractalMesh);
+	else if (type == E_MANDELBULB)
+		this->meshes.push_back(new MandelbulbMesh);
+	else if (type == E_MANDELBOX)
+		this->meshes.push_back(new MandelboxMesh);
 	else if (type == E_FIELD)
 		this->meshes.push_back(new FieldMesh);
 	else if (type == E_ASTEROID)
@@ -155,12 +158,22 @@ bool				Shaderpixel::init(void)
 {
 	if (this->hud.init())
 		return (1);
-	if (load(E_PBALL, VERTEX_LIGHT, FRAGMENT_LIGHT, E_DEFAULT_MESH)
-		|| load(E_PFRAMEWORK, VERTEX, FRAGMENT, E_DEFAULT_MESH)
-		|| load(E_PPLANE, VERTEX_FRAMEBUFFER, FRAGMENT_FRAMEBUFFER, E_FRAMEBUFFER)
+	if (load(E_PBALL, VERTEX_LIGHT, FRAGMENT_LIGHT, E_DEFAULT_MESH)	
+		|| load(E_PCHURCHE, VERTEX, FRAGMENT, E_DEFAULT_MESH)
+		|| load(E_PCUBE, VERTEX_ASTEROID, FRAGMENT_ASTEROID, E_ASTEROID)
+		|| load(E_PCUBE, VERTEX_CLOUD, FRAGMENT_CLOUD, E_CLOUD)
+		|| load(E_PCUBE, VERTEX_REFRACT, FRAGMENT_REFRACT, E_REFRACT)
+		|| load(E_PCUBE, VERTEX_METABALLS, FRAGMENT_METABALLS, E_METABALLS)
+		|| load(E_PCUBE, VERTEX_MANDELBULB, FRAGMENT_MANDELBULB, E_MANDELBULB)
+		|| load(E_PCUBE, VERTEX_MANDELBOX, FRAGMENT_MANDELBOX, E_MANDELBOX)
+		|| load(E_PCUBE, VERTEX_FIELD, FRAGMENT_FIELD, E_FIELD)
+		|| load(E_PFRAMEWORK, VERTEX_FRAMEWORK, FRAGMENT, E_DEFAULT_MESH) //9
+		|| load(E_PPLANE, VERTEX_GLOW, FRAGMENT_GLOW, E_GLOW)
+		// || load(E_PFRAMEWORK, VERTEX, FRAGMENT, E_DEFAULT_MESH)
+		// || load(E_PPLANE, VERTEX_FRAMEBUFFER, FRAGMENT_FRAMEBUFFER, E_FRAMEBUFFER)
 		)
 			return (1);
-	// this->meshes[1]->translate(Vec3(0., 0., -3.5));
+	this->meshes[9]->translate(Vec3(-9.07, 2, 0.));//translate framework glow
 
 	// std::cout << this->meshes[0]->getShaderProgram() << " " << this->meshes[1]->getShaderProgram() << "\n";
 	this->time.setTime();
@@ -207,16 +220,16 @@ void				Shaderpixel::inputKey(unsigned int key)
 
 void				Shaderpixel::fieldKeys(void)
 {
-	if (this->meshes.size() <= 2)
+	if (this->meshes.size() <= 8)
 		return;
 	if (glfwGetKey(this->window, GLFW_KEY_RIGHT) == GLFW_PRESS)
-		this->meshes[2]->translate(E_RIGHT, -SPEED);
+		this->meshes[8]->translate(E_RIGHT, -SPEED);
 	if (glfwGetKey(this->window, GLFW_KEY_LEFT) == GLFW_PRESS)
-		this->meshes[2]->translate(E_RIGHT, SPEED);
+		this->meshes[8]->translate(E_RIGHT, SPEED);
 	if (glfwGetKey(this->window, GLFW_KEY_UP) == GLFW_PRESS)
-		this->meshes[2]->translate(E_FRONT, -SPEED);
+		this->meshes[8]->translate(E_FRONT, -SPEED);
 	if (glfwGetKey(this->window, GLFW_KEY_DOWN) == GLFW_PRESS)
-		this->meshes[2]->translate(E_FRONT, SPEED);
+		this->meshes[8]->translate(E_FRONT, SPEED);
 }
 
 void				Shaderpixel::getKeys(void)

@@ -21,7 +21,7 @@ const int MAX_ITERATIONS = 10;
 const int MAX_STEPS = 100;
 const int MAX_AO_STEPS = 10;
 const float MIN_DIST = 0.001;
-const float MAX_DIST = 10.;
+const float MAX_DIST = 100.;
 const float EPSILON = 0.001;
 
 const vec3 COLOR_SPHERE = vec3(0.6, 0.35, 0.2);
@@ -255,6 +255,7 @@ vec3 calculateColor(s_light light, vec3 eye, vec3 dir, vec3 pos, vec3 norm, floa
 
 void main(void)
 {
+	float d = distance(eye, modelPos) - 1.5;
 	vec3 dir = calculateMarchinDir(u_fov, u_resolution, gl_FragCoord.xy);
 	// vec3 eye = vec3(cos(iTime * 0.025), 1., sin(iTime * 0.025));
 

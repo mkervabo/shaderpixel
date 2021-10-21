@@ -17,6 +17,7 @@ uniform float	farNear[2];
 uniform float	u_fov;
 uniform vec2	u_resolution;
 uniform vec3	u_lightPos;
+uniform vec3	modelPos;
 
 const int MAX_REFLECTIONS = 1;
 const int MAX_STEPS = 300;
@@ -116,6 +117,7 @@ float sdPlane( vec3 p, vec3 n, float h )
 
 s_obj DistanceEstimation(vec3 p, int typeTouch)
 {
+	p -= modelPos;
 	s_obj sphere;
 	sphere.type = SPHERE;
 	sphere.color = vec4(0.6, 0., 0.7, 0.6);
@@ -370,7 +372,7 @@ vec3 reflexion(s_env env, vec3 norm, float end, inout vec3 ambiantColor)
 s_hit ShortestDistanceToSurface(s_env env, float start, float end, inout vec3 dColorObj)
 {
 	vec3 color = vec3(0.);
-	float depth = start;
+	float depth = distance(eye, modelPos) - 1.5;
 	vec3 newPos;
 	vec3 norm;
 	s_hit hit;

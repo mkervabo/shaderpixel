@@ -4,6 +4,7 @@ GlowMesh::GlowMesh()
 {
 	Mesh();
 	this->type = E_GLOW;
+	this->translate(Vec3(-9.07, 2, 0.));
 }
 
 void	GlowMesh::render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution)
@@ -31,6 +32,9 @@ void	GlowMesh::render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution)
 			"eye"), 1, (const GLfloat*)&camPos);
 		glUniform2fv(glGetUniformLocation(this->shader.getProgram(),
 			"u_resolution"), 1, (const GLfloat*)&resolution);
+		Vec3 modelPos = mat.getPosition();
+		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
+			"modelPos"), 1, (const GLfloat*)&modelPos);
 		glDrawElements(GL_TRIANGLES, this->m_Entries[i].getNumIndices(), GL_UNSIGNED_INT, NULL);
 	}
 }

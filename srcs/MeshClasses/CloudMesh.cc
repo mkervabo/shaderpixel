@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CloudMesh.cc                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 11:45:19 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/20 15:19:08 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/20 21:29:17 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ CloudMesh::CloudMesh()
 {
 	Mesh();
 	this->type = E_CLOUD;
+	this->translate(Vec3(7., 2., -45.));
 }
 bool	CloudMesh::loadMesh(t_objPath pathMesh, std::string pathVertex, std::string pathFragment)
 {

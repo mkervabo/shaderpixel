@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gperez <gperez@student.42.fr>              +#+  +:+       +#+         #
+#    By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/06 13:36:11 by gperez            #+#    #+#              #
-#    Updated: 2021/10/18 15:03:44 by gperez           ###   ########.fr        #
+#    Updated: 2021/10/20 21:47:16 by maiwenn          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,7 +39,8 @@ SRC =	srcs/main.cc \
 		srcs/Class/HudElement.cc \
 		srcs/MeshClasses/CloudMesh.cc \
 		srcs/MeshClasses/RefractMesh.cc \
-		srcs/MeshClasses/FractalMesh.cc \
+		srcs/MeshClasses/MandelbulbMesh.cc \
+		srcs/MeshClasses/MandelboxMesh.cc \
 		srcs/MeshClasses/FieldMesh.cc \
 		srcs/MeshClasses/AsteroidMesh.cc \
 		srcs/MeshClasses/MetaballsMesh.cc \
@@ -105,7 +106,8 @@ INC =	includes/Shaderpixel.hpp \
 		includes/HudElement.hpp \
 		includes/MeshClasses/CloudMesh.hpp \
 		includes/MeshClasses/RefractMesh.hpp \
-		includes/MeshClasses/FractalMesh.hpp \
+		includes/MeshClasses/MandelbulbMesh.hpp \
+		includes/MeshClasses/MandelboxMesh.hpp \
 		includes/MeshClasses/FieldMesh.hpp \
 		includes/MeshClasses/AsteroidMesh.hpp \
 		includes/MeshClasses/MetaballsMesh.hpp \

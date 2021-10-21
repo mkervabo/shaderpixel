@@ -17,7 +17,9 @@ MetaballsMesh::MetaballsMesh()
 		return ; // error starting up the engine
 	// play some sound stream, looped
 	this->vol = this->engine->play2D("libs/irrklang/media/getout.ogg", true, false, true);
+	this->vol->setVolume((ik_f32)(0));
 	this->engine->setMixedDataOutputReceiver(&this->receiver);
+	this->translate(Vec3(0., 2., -20.));
 }
 
 bool	MetaballsMesh::loadMesh(t_objPath pathMesh, std::string pathVertex, std::string pathFragment)
@@ -88,11 +90,11 @@ void	MetaballsMesh::addNbBalls(int new_nb_balls)
 
 	// if (this->distance(cam.getPosition()) > RENDER_DIST_SHADER - PREC)
 	// {
-	// 	vol->setVolume((ik_f32)0.);
+	// 	this->vol->setVolume((ik_f32)0.);
 	// 	return;
 	// }
-	// vol->setVolume((ik_f32)((RENDER_DIST_SHADER - this->distance(cam.getPosition()))) / 10);
-	vol->setVolume((ik_f32)(0));
+	// this->vol->setVolume((ik_f32)((RENDER_DIST_SHADER - this->distance(cam.getPosition()))) / 10);
+	this->vol->setVolume((ik_f32)(0));
 	for (unsigned int i = 0 ; i < this->m_Entries.size() ; i++)
 	{	
 		glBindTexture(GL_TEXTURE_1D, this->songText);

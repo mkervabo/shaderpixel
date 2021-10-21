@@ -4,6 +4,7 @@ out vec4 fragColor;
 
 uniform vec2	u_resolution;
 uniform vec3	eye;
+uniform vec3	modelPos;
 
 #define MAX_DIST 500.0
 
@@ -85,7 +86,9 @@ float DE(in vec3 z, in vec3 pt, in float neg)
   return mushroomSDF(pt, z, neg);           
 }
 
-vec3 sdfs(in vec3 pt, in vec3 pos) {
+vec3 sdfs(in vec3 pt, in vec3 pos)
+{
+    // pos -= modelPos;
     return vec3(DE(pos, pt, 1.), DE(pt, pos, -1.), DE(pos, pt, 1.));
 }
 
@@ -108,8 +111,10 @@ vec3 sdf_grad(in vec3 pt) {
                 sdf(pt + vec3(0.0, 0.0, h)) - f);
 }
 
-float raymarch(in vec3 orig, in vec3 dir, out vec3 integral) {
+float raymarch(in vec3 orig, in vec3 dir, out vec3 integral)
+{
     vec3 pos = ball1;
+    // pos -= modelPos;
 
     integral = vec3(0.0);
     float curr = 0.0;

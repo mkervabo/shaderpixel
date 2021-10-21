@@ -175,6 +175,7 @@ mat4 viewMatrix(vec3 eye, vec3 pToLook, vec3 up)
 
 vec3 calculateColor(s_light light, vec3 eye, vec3 norm, vec3 pos, float dist, vec3 skyColor)
 {
+	pos -= modelPos;
 	vec3 color = vec3(0.);
 	vec3 vPToEye = normalize(eye - pos);
 
