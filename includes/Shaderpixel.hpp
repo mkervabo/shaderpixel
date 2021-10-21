@@ -28,6 +28,7 @@
 # include "MetaballsMesh.hpp"
 # include "GlowMesh.hpp"
 # include "FrameBufferMesh.hpp"
+# include "RenderBufferMesh.hpp"
 # include "glfw3.h" // Load fenetre
 
 # define RATIO (float)WIDTH / (float)HEIGHT

@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/25 17:47:37 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/18 15:00:30 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/20 12:20:56 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,9 @@
 
 # define FRAGMENT_FRAMEBUFFER "shader/frameBuffer/fragmentFrameBuffer.glsl"
 # define VERTEX_FRAMEBUFFER "shader/frameBuffer/vertexFrameBuffer.glsl"
+
+# define FRAGMENT_RENDERBUFFER "shader/renderBuffer/fragmentRenderBuffer.glsl"
+# define VERTEX_RENDERBUFFER "shader/renderBuffer/vertexRenderBuffer.glsl"
 
 # define FAILED_OPEN_FILE "Failed open file"
 # define FAILED_READ_SHADER "Failed to read shader"

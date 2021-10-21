@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 15:39:27 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/19 18:01:18 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/20 18:48:41 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,8 @@ bool						Shaderpixel::loadMesh(t_objPath obj, std::string pathVertex, std::stri
 		this->meshes.push_back(new GlowMesh);
 	else if (type == E_FRAMEBUFFER)
 		this->meshes.push_back(new FrameBufferMesh);
+	else if (type == E_RENDERBUFFER)
+		this->meshes.push_back(new RenderBufferMesh);
 	else
 		this->meshes.push_back(new Mesh);
 	if (!this->meshes.size())
@@ -156,11 +158,11 @@ bool				Shaderpixel::init(void)
 	if (this->hud.init())
 		return (1);
 	if (load(E_PBALL, VERTEX_LIGHT, FRAGMENT_LIGHT, E_DEFAULT_MESH)
-		|| load(E_PFRAMEWORK, VERTEX, FRAGMENT, E_DEFAULT_MESH)
-		|| load(E_PPLANE, VERTEX_FRAMEBUFFER, FRAGMENT_FRAMEBUFFER, E_FRAMEBUFFER)
+		// || load(E_PFRAMEWORK, VERTEX, FRAGMENT, E_DEFAULT_MESH)
+		|| load(E_PCUBE, VERTEX_RENDERBUFFER, FRAGMENT_RENDERBUFFER, E_RENDERBUFFER)
 		)
 			return (1);
-	// this->meshes[1]->translate(Vec3(0., 0., -3.5));
+	this->meshes[1]->translate(Vec3(3., 0., -0.));
 
 	// std::cout << this->meshes[0]->getShaderProgram() << " " << this->meshes[1]->getShaderProgram() << "\n";
 	this->time.setTime();

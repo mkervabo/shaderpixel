@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Mesh.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 17:01:05 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/20 16:16:15 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/10/20 18:35:38 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@
 # include "Camera.hpp"
 # include "Shader.hpp"
 
-enum e_meshType {E_DEFAULT_MESH, E_FRACTAL, E_REFRACT, E_CLOUD, E_FIELD, E_ASTEROID, E_METABALLS, E_GLOW, E_FRAMEBUFFER};
+enum e_meshType {E_DEFAULT_MESH, E_FRACTAL, E_REFRACT, E_CLOUD, E_FIELD,
+	E_ASTEROID, E_METABALLS, E_GLOW, E_FRAMEBUFFER, E_RENDERBUFFER};
 
 # define NEAR_Z 0.1f
 # define FAR_Z 100.f
