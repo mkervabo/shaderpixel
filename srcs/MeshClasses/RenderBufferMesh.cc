@@ -1,28 +1,35 @@
-#include "FrameBufferMesh.hpp"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   RenderBufferMesh.cc                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/10/20 12:11:30 by gperez            #+#    #+#             */
+/*   Updated: 2021/10/20 12:24:24 by gperez           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-FrameBufferMesh::FrameBufferMesh()
+#include "RenderBufferMesh.hpp"
+
+RenderBufferMesh::RenderBufferMesh()
 {
 	Mesh();
-	this->type = E_FRAMEBUFFER;
-	this->mat.rotate(Vec3(90., 0., 0.));
+	this->type = E_RENDERBUFFER;
 }
 
-bool	FrameBufferMesh::loadMesh(t_objPath pathMesh, std::string pathVertex, std::string pathFragment)
+bool	RenderBufferMesh::loadMesh(t_objPath pathMesh, std::string pathVertex, std::string pathFragment)
 {
 	if (Mesh::loadMesh(pathMesh, pathVertex, pathFragment))
 		return (true);
-	if (this->bufferA.loadMesh(g_objPath[E_PPLANE], PATH_FRAMEBUFFER_VERTEX_BUFFER_A, PATH_FRAMEBUFFER_BUFFER_A))
+	if (this->bufferA.loadMesh(g_objPath[E_PDRAGON], PATH_RENDERBUFFER_VERTEX_BUFFER_A, PATH_RENDERBUFFER_BUFFER_A))
 		return (true);
 
-	this->texture.newTexture();
-	if (this->texture.load(GL_TEXTURE_2D, (char*)PATH_FRAMEBUFFER_TEXTURE))
-		return (true);
-
-	glGenFramebuffers(1, &this->frame);
-	glBindFramebuffer(GL_FRAMEBUFFER, this->frame);
+	glGenFramebuffers(1, &this->frameBuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, this->frameBuffer);
 	
-	glGenTextures(1, &this->frameTexture);
-	glBindTexture(GL_TEXTURE_2D, this->frameTexture);
+	glGenTextures(1, &this->frameBufferTexture);
+	glBindTexture(GL_TEXTURE_2D, this->frameBufferTexture);
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, WIDTH, HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 
@@ -31,10 +38,10 @@ bool	FrameBufferMesh::loadMesh(t_objPath pathMesh, std::string pathVertex, std::
 
 	glGenRenderbuffers(1, &this->renderBuffer);
 	glBindRenderbuffer(GL_RENDERBUFFER, this->renderBuffer);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_RGB, WIDTH, HEIGHT);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, WIDTH, HEIGHT);
 
-	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, this->frameTexture, 0);
-	// glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_RENDERBUFFER, this->renderBuffer);
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, this->frameBufferTexture, 0);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, this->renderBuffer);
 
 	GLenum i;
 	if((i = glCheckFramebufferStatus(GL_FRAMEBUFFER)) != GL_FRAMEBUFFER_COMPLETE)
@@ -47,7 +54,7 @@ bool	FrameBufferMesh::loadMesh(t_objPath pathMesh, std::string pathVertex, std::
 	return (false);
 }
 
-void	FrameBufferMesh::render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution)
+void	RenderBufferMesh::render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution)
 {
 	(void)lightPos;
 	
@@ -55,7 +62,7 @@ void	FrameBufferMesh::render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 reso
 		return;
 	for (unsigned int i = 0 ; i < this->m_Entries.size() ; i++)
 	{
-		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, this->frame);
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, this->frameBuffer);
 		glClearColor(1, 0, 0, 0.5);
 		glClear(GL_COLOR_BUFFER_BIT);
 		glUseProgram(this->bufferA.getShaderProgram());
@@ -79,10 +86,8 @@ void	FrameBufferMesh::render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 reso
 
 		glUniform1i(glGetUniformLocation(this->shader.getProgram(), "bufferA"), 0);
 		glActiveTexture(GL_TEXTURE0 + 0);
-		glBindTexture(GL_TEXTURE_2D, this->frameTexture);
+		glBindTexture(GL_TEXTURE_2D, this->frameBufferTexture);
 		
-		glUniform1i(glGetUniformLocation(this->shader.getProgram(), "img"), 1);
-		this->texture.bind(GL_TEXTURE0 + 1);
 
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
 			"model"), 1, GL_FALSE, &(mat.getMatrix(false).inverse()[0][0]));
@@ -100,9 +105,9 @@ void	FrameBufferMesh::render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 reso
 	}
 }
 
-FrameBufferMesh::~FrameBufferMesh()
+RenderBufferMesh::~RenderBufferMesh()
 {
-	glDeleteTextures(1, &this->frameTexture);
+	glDeleteTextures(1, &this->frameBufferTexture);
 	glDeleteRenderbuffers(1, &this->renderBuffer);
-	glDeleteFramebuffers(1, &this->frame);
+	glDeleteFramebuffers(1, &this->frameBuffer);
 }
