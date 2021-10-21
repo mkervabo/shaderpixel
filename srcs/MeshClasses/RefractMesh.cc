@@ -6,7 +6,7 @@
 /*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 15:42:37 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/18 11:05:33 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/10/20 21:35:57 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ RefractMesh::RefractMesh()
 	this->type = E_REFRACT;
 	this->isDiffuse = true;
 	this->isSpecular = true;
+	this->translate(Vec3(0., 2., -49.));
 }
 
 void	RefractMesh::render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution)
@@ -58,6 +59,9 @@ void	RefractMesh::render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resoluti
 			"u_isSpecular"), (GLuint)this->isSpecular);
 		glUniform1i(glGetUniformLocation(this->shader.getProgram(),
 			"u_isDiffuse"), (GLuint)this->isDiffuse);
+		Vec3 modelPos = mat.getPosition();
+		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
+			"modelPos"), 1, (const GLfloat*)&modelPos);
 		glDrawElements(GL_TRIANGLES, this->m_Entries[i].getNumIndices(), GL_UNSIGNED_INT, NULL);
 	}
 }

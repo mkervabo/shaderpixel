@@ -6,7 +6,7 @@
 /*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 22:35:15 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/20 15:59:16 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/10/21 12:20:06 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ FieldMesh::FieldMesh()
 {
 	Mesh();
 	this->type = E_FIELD;
+	this->Mesh::translate(Vec3(0., 2., -10.));
 }
 
 void	FieldMesh::render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution)

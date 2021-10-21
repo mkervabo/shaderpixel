@@ -1,30 +1,18 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   FractalMesh.cc                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/06 20:57:58 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/19 16:29:50 by maiwenn          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+#include "MandelbulbMesh.hpp"
 
-#include "FractalMesh.hpp"
-
-FractalMesh::FractalMesh()
+MandelbulbMesh::MandelbulbMesh()
 {
 	Mesh();
-	this->type = E_FRACTAL;
+	this->type = E_MANDELBULB;
+	this->translate(Vec3(-11., 2., -26.));
 }
 
-void	FractalMesh::render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution)
+void	MandelbulbMesh::render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution)
 {
 	Vec3	camPos;
 	Vec3	modelPos;
 	float	farNear[2] = {FAR_Z, NEAR_Z};
 	float	fov = FOV;
-	// Vec2	resolution = Vec2(WIDTH, HEIGHT);
 
 	if (this->distance(cam.getPosition()) > RENDER_DIST_SHADER - PREC)
 		return;
@@ -67,6 +55,6 @@ void	FractalMesh::render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resoluti
 	
 }
 
-FractalMesh::~FractalMesh()
+MandelbulbMesh::~MandelbulbMesh()
 {
 }
