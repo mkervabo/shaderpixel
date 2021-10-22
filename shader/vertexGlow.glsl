@@ -10,7 +10,7 @@ uniform mat4		model;
 uniform mat4		view;
 uniform mat4		projection;
 
- vec3    rotateZ(vec3 p, float theta)
+vec3    rotateZ(vec3 p, float theta)
 {
     mat3    mat = mat3(vec3(cos(theta), -sin(theta), 0.),
 			vec3(sin(theta), cos(theta), 0.),

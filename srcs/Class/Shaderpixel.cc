@@ -6,7 +6,7 @@
 /*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 15:39:27 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/21 14:04:44 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/10/22 15:04:05 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,11 +169,12 @@ bool				Shaderpixel::init(void)
 		|| load(E_PCUBE, VERTEX_FIELD, FRAGMENT_FIELD, E_FIELD)
 		|| load(E_PFRAMEWORK, VERTEX, FRAGMENT, E_DEFAULT_MESH) //9
 		|| load(E_PPLANE, VERTEX_GLOW, FRAGMENT_GLOW, E_GLOW)
-		// || load(E_PFRAMEWORK, VERTEX, FRAGMENT, E_DEFAULT_MESH)
-		// || load(E_PPLANE, VERTEX_FRAMEBUFFER, FRAGMENT_FRAMEBUFFER, E_FRAMEBUFFER)
+		|| load(E_PFRAMEWORK2, VERTEX, FRAGMENT, E_DEFAULT_MESH) //11
+		|| load(E_PPLANE, VERTEX_FRAMEBUFFER, FRAGMENT_FRAMEBUFFER, E_FRAMEBUFFER)
 		)
 			return (1);
 	this->meshes[9]->translate(Vec3(-9.07, 2, 0.));//translate framework glow
+	this->meshes[11]->translate(Vec3(0, 2, 6.69));//translate framework framebuffer
 
 	// std::cout << this->meshes[0]->getShaderProgram() << " " << this->meshes[1]->getShaderProgram() << "\n";
 	this->time.setTime();

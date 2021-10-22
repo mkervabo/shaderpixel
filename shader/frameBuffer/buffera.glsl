@@ -75,9 +75,6 @@ float fbms(vec2 p)
 
 void main()
 {
-	// vec2 px = 2. / u_resolution.xy,
-	// uv = gl_FragCoord.xy * px * 0.5;
-
 	vec2 p = tCoords;
 
 	float e = 1.0 / u_resolution.y;

@@ -9,8 +9,17 @@ uniform mat4		view;
 uniform mat4		projection;
 out vec4			pos;
 
+vec3    rotateY(vec3 p, float theta)
+{
+    mat3    mat = mat3(vec3(cos(theta),0.,  sin(theta)),
+	vec3(1., 0., 0.),
+	vec3(-sin(theta), 0., cos(theta)));
+			
+    return (mat * p);
+}
+
 void main()
 {
-	pos = model * vec4(aPos * 2., 1.0);
+	pos = model * vec4(rotateY(aPos, 3.14159), 1.0);
 	gl_Position = projection * view * pos;
 }

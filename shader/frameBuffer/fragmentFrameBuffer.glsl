@@ -1,7 +1,5 @@
 #version 410 core
 
-// #iChannel1 "./img1.png"//image
-
 out vec4 fragColor;
 
 uniform vec2	u_resolution;
@@ -66,14 +64,4 @@ void main()
 	vec3 color = vec3(waterDye - 0.1, waterDye + 0.2, waterDye + 0.4);
 	float ambiante = 0.3 - p1.z;
 	fragColor.rgb *= (color + ambiante);
-	// fragColor.rgb += (color * lightPow * lightPow * 0.1);
-	// fragColor.rgb += reflection * (lightPow * 2. - 1.75);
 }
-
-// void main()
-// {
-// 	vec2 px = 2. / u_resolution.xy,
-//  	uv = gl_FragCoord.xy * px * 0.5;
-// 	fragColor = texture(bufferA, uv);
-
-// }

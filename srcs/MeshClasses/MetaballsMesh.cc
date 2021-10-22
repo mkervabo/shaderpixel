@@ -88,13 +88,11 @@ void	MetaballsMesh::addNbBalls(int new_nb_balls)
 	float	farNear[2] = {FAR_Z, NEAR_Z};
 	float	fov = FOV;
 
-	// if (this->distance(cam.getPosition()) > RENDER_DIST_SHADER - PREC)
-	// {
-	// 	this->vol->setVolume((ik_f32)0.);
-	// 	return;
-	// }
-	// this->vol->setVolume((ik_f32)((RENDER_DIST_SHADER - this->distance(cam.getPosition()))) / 10);
-	this->vol->setVolume((ik_f32)(0));
+	if (this->distance(cam.getPosition()) > 10 - PREC)
+		this->vol->setVolume((ik_f32)0.);
+	else
+		this->vol->setVolume((ik_f32)((10 - this->distance(cam.getPosition()))) / 20);
+	// this->vol->setVolume((ik_f32)(0));
 	for (unsigned int i = 0 ; i < this->m_Entries.size() ; i++)
 	{	
 		glBindTexture(GL_TEXTURE_1D, this->songText);

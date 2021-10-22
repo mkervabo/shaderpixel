@@ -6,7 +6,7 @@
 /*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/13 17:42:19 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/20 16:15:45 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/10/21 16:33:28 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,10 @@
 # define PATH_TEXTURE_CHURCHE "objToLoad/Church/"
 
 # define PATH_FRAMEWORK "objToLoad/FrameWork/frameWork.obj"
+# define PATH_FRAMEWORK2 "objToLoad/FrameWork/frameWork2.obj"
 # define PATH_TEXTURE_FRAMEWORK "objToLoad/FrameWork/"
 
-enum	e_pathObj {E_PTREE, E_PBALL, E_PDRAGON, E_PCUBE, E_PPLANE, E_PCHURCHE, E_PFRAMEWORK, E_PEND};
+enum	e_pathObj {E_PTREE, E_PBALL, E_PDRAGON, E_PCUBE, E_PPLANE, E_PCHURCHE, E_PFRAMEWORK, E_PFRAMEWORK2, E_PEND};
 
 typedef struct	s_objPath
 {
@@ -53,6 +54,7 @@ static t_objPath	g_objPath[]{
 	{PATH_PLANE, PATH_TEXTURE_PLANE},
 	{PATH_CHURCHE, PATH_TEXTURE_CHURCHE},
 	{PATH_FRAMEWORK, PATH_TEXTURE_FRAMEWORK},
+	{PATH_FRAMEWORK2, PATH_TEXTURE_FRAMEWORK},
 	{"", ""}
 };
 
