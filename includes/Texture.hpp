@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/13 17:42:19 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/22 12:33:07 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/22 14:23:52 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@
 # define PATH_FRAMEWORK "objToLoad/FrameWork/frameWork.obj"
 # define PATH_TEXTURE_FRAMEWORK "objToLoad/FrameWork/"
 
-enum	e_pathObj {E_PTREE, E_PBALL, E_PDRAGON, E_PCUBE, E_PPLANE, E_PPLANS, E_PCHURCHE, E_PFRAMEWORK, E_PEND};
+enum	e_pathObj {E_PTREE, E_PBALL, E_PDRAGON, E_PCUBE, E_PPLAN, E_PPLANS, E_PCHURCHE, E_PFRAMEWORK, E_PEND};
 
 typedef struct	s_objPath
 {
