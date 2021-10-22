@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/13 17:42:19 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/22 14:28:18 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/22 14:43:52 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@
 # define PATH_PLANE "objToLoad/plane/plane.obj"
 # define PATH_TEXTURE_PLANE "objToLoad/plane/"
 
-# define PATH_PLANE_SIDE "objToLoad/planS/planS.obj"
-# define PATH_TEXTURE_PLANE_SIDE "objToLoad/planS/"
+# define PATH_PLANE_SIDE "objToLoad/planeS/planS.obj"
+# define PATH_TEXTURE_PLANE_SIDE "objToLoad/planeS/"
 
 # define PATH_CHURCHE "objToLoad/Church/churchModel.obj"
 # define PATH_TEXTURE_CHURCHE "objToLoad/Church/"

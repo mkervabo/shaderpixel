@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 17:01:05 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/21 14:19:22 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/22 14:39:55 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ enum e_meshType {E_DEFAULT_MESH, E_MANDELBULB, E_MANDELBOX, E_REFRACT, E_CLOUD, 
 
 # define NEAR_Z 0.1f
 # define FAR_Z 100.f
-# define WIDTH 1024.
-# define HEIGHT 768.
+# define WIDTH 500.
+# define HEIGHT 500.
 # define RENDER_DIST_SHADER 80.
 
 class Mesh
@@ -57,6 +57,9 @@ class Mesh
 		void			setPosition(Vec3 p);
 		unsigned int	getShaderProgram(void);
 		e_meshType		getType(void);
+		unsigned int	getEntriesSize(void);
+		unsigned int	getVao(unsigned int i);
+		unsigned int	getNumIndices(unsigned int i);
 		virtual ~Mesh();
 };
 

@@ -4,7 +4,6 @@ FrameBufferMesh::FrameBufferMesh()
 {
 	Mesh();
 	this->type = E_FRAMEBUFFER;
-	this->mat.rotate(Vec3(90., 0., 0.));
 }
 
 bool	FrameBufferMesh::loadMesh(t_objPath pathMesh, std::string pathVertex, std::string pathFragment)
