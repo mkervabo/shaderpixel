@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+         #
+#    By: gperez <gperez@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/06 13:36:11 by gperez            #+#    #+#              #
-#    Updated: 2021/10/20 21:47:16 by maiwenn          ###   ########.fr        #
+#    Updated: 2021/10/21 14:17:13 by gperez           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,6 +46,7 @@ SRC =	srcs/main.cc \
 		srcs/MeshClasses/MetaballsMesh.cc \
 		srcs/MeshClasses/GlowMesh.cc \
 		srcs/MeshClasses/FrameBufferMesh.cc \
+		srcs/MeshClasses/RenderBufferMesh.cc \
 
 NC = \033[0m
 BOLD =\033[1m
@@ -113,6 +114,8 @@ INC =	includes/Shaderpixel.hpp \
 		includes/MeshClasses/MetaballsMesh.hpp \
 		includes/MeshClasses/GlowMesh.hpp \
 		includes/MeshClasses/FrameBufferMesh.hpp \
+		includes/MeshClasses/RenderBufferMesh.hpp \
+
 
 OBJ = $(SRC:.cc=.o)
 

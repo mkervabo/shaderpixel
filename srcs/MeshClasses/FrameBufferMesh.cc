@@ -4,7 +4,6 @@ FrameBufferMesh::FrameBufferMesh()
 {
 	Mesh();
 	this->type = E_FRAMEBUFFER;
-
 	this->translate(Vec3(0, 2, 6.70));
 }
 
@@ -106,5 +105,4 @@ FrameBufferMesh::~FrameBufferMesh()
 	glDeleteTextures(1, &this->frameTexture);
 	glDeleteRenderbuffers(1, &this->renderBuffer);
 	glDeleteFramebuffers(1, &this->frame);
-	
 }

@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 16:57:27 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/19 15:37:58 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/21 15:34:22 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -282,6 +282,25 @@ unsigned int	Mesh::getShaderProgram(void)
 e_meshType	Mesh::getType(void)
 {
 	return (this->type);
+}
+
+unsigned int	Mesh::getEntriesSize(void)
+{
+	return (this->m_Entries.size());
+}
+
+unsigned int	Mesh::getVao(unsigned int i)
+{
+	if (i >= this->m_Entries.size())
+		return (0);
+	return (this->m_Entries[i].getVao());
+}
+
+unsigned int	Mesh::getNumIndices(unsigned int i)
+{
+	if (i >= this->m_Entries.size())
+		return (0);
+	return (this->m_Entries[i].getNumIndices());
 }
 
 Mesh::~Mesh()

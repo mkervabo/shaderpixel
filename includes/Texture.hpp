@@ -6,7 +6,7 @@
 /*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/13 17:42:19 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/21 16:33:28 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/10/22 15:18:26 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,9 @@
 # define PATH_PLANE "objToLoad/plane/plane.obj"
 # define PATH_TEXTURE_PLANE "objToLoad/plane/"
 
+# define PATH_PLANE_SIDE "objToLoad/planeS/planS.obj"
+# define PATH_TEXTURE_PLANE_SIDE "objToLoad/planeS/"
+
 # define PATH_CHURCHE "objToLoad/Church/churchModel.obj"
 # define PATH_TEXTURE_CHURCHE "objToLoad/Church/"
 
@@ -38,7 +41,7 @@
 # define PATH_FRAMEWORK2 "objToLoad/FrameWork/frameWork2.obj"
 # define PATH_TEXTURE_FRAMEWORK "objToLoad/FrameWork/"
 
-enum	e_pathObj {E_PTREE, E_PBALL, E_PDRAGON, E_PCUBE, E_PPLANE, E_PCHURCHE, E_PFRAMEWORK, E_PFRAMEWORK2, E_PEND};
+enum	e_pathObj {E_PTREE, E_PBALL, E_PDRAGON, E_PCUBE, E_PPLANE, E_PPLANES, E_PCHURCHE, E_PFRAMEWORK, E_PFRAMEWORK2, E_PEND};
 
 typedef struct	s_objPath
 {
@@ -52,6 +55,7 @@ static t_objPath	g_objPath[]{
 	{PATH_DRAGON, PATH_TEXTURE_DRAGON},
 	{PATH_CUBE, PATH_TEXTURE_CUBE},
 	{PATH_PLANE, PATH_TEXTURE_PLANE},
+	{PATH_PLANE_SIDE, PATH_TEXTURE_PLANE_SIDE},
 	{PATH_CHURCHE, PATH_TEXTURE_CHURCHE},
 	{PATH_FRAMEWORK, PATH_TEXTURE_FRAMEWORK},
 	{PATH_FRAMEWORK2, PATH_TEXTURE_FRAMEWORK},

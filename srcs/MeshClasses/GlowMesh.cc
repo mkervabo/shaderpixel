@@ -10,6 +10,7 @@ GlowMesh::GlowMesh()
 void	GlowMesh::render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution)
 {
 	Vec3	camPos;
+	float	fov = FOV;
 
 	lightPos = Vec3();
 	timeS = 0;
@@ -26,10 +27,14 @@ void	GlowMesh::render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution)
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
 			"view"), 1, GL_FALSE, &(cam.getMatrix(false)[0][0]));
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
+			"inverseView"), 1, GL_FALSE, &(cam.getInverseMat()[0][0]));
+		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
 			"projection"), 1, GL_FALSE, &(cam.getProjMatrix()[0][0]));
 		camPos = cam.getPosition();
 		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
 			"eye"), 1, (const GLfloat*)&camPos);
+		glUniform1fv(glGetUniformLocation(this->shader.getProgram(),
+			"u_fov"), 1, (const GLfloat*)&fov);
 		glUniform2fv(glGetUniformLocation(this->shader.getProgram(),
 			"u_resolution"), 1, (const GLfloat*)&resolution);
 		Vec3 modelPos = mat.getPosition();
