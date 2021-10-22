@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Texture.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/13 17:42:19 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/20 16:15:45 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/10/22 12:33:07 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,11 @@
 # define PATH_CUBE "objToLoad/cube/cube.obj"
 # define PATH_TEXTURE_CUBE "objToLoad/cube/"
 
-# define PATH_PLANE "objToLoad/plane/plane.obj"
-# define PATH_TEXTURE_PLANE "objToLoad/plane/"
+# define PATH_PLAN "objToLoad/plane/plan.obj"
+# define PATH_TEXTURE_PLAN "objToLoad/plan/"
+
+# define PATH_PLAN_SIDE "objToLoad/planS/planS.obj"
+# define PATH_TEXTURE_PLAN_SIDE "objToLoad/planS/"
 
 # define PATH_CHURCHE "objToLoad/Church/churchModel.obj"
 # define PATH_TEXTURE_CHURCHE "objToLoad/Church/"
@@ -37,7 +40,7 @@
 # define PATH_FRAMEWORK "objToLoad/FrameWork/frameWork.obj"
 # define PATH_TEXTURE_FRAMEWORK "objToLoad/FrameWork/"
 
-enum	e_pathObj {E_PTREE, E_PBALL, E_PDRAGON, E_PCUBE, E_PPLANE, E_PCHURCHE, E_PFRAMEWORK, E_PEND};
+enum	e_pathObj {E_PTREE, E_PBALL, E_PDRAGON, E_PCUBE, E_PPLANE, E_PPLANS, E_PCHURCHE, E_PFRAMEWORK, E_PEND};
 
 typedef struct	s_objPath
 {
@@ -50,7 +53,8 @@ static t_objPath	g_objPath[]{
 	{PATH_BALL, PATH_TEXTURE_BALL},
 	{PATH_DRAGON, PATH_TEXTURE_DRAGON},
 	{PATH_CUBE, PATH_TEXTURE_CUBE},
-	{PATH_PLANE, PATH_TEXTURE_PLANE},
+	{PATH_PLAN, PATH_TEXTURE_PLAN},
+	{PATH_PLAN_SIDE, PATH_TEXTURE_PLAN_SIDE},
 	{PATH_CHURCHE, PATH_TEXTURE_CHURCHE},
 	{PATH_FRAMEWORK, PATH_TEXTURE_FRAMEWORK},
 	{"", ""}
