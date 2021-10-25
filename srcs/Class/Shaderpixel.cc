@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Shaderpixel.cc                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 15:39:27 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/22 15:16:40 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/10/25 20:01:00 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ Shaderpixel::Shaderpixel()
 	for (unsigned int i = 0; i < GLFW_KEY_END; i++)
 		this->keys[i] = KEY_RELEASE;
 	this->isCursor = false;
+	this->refract = NULL;
 }
 
 void				Shaderpixel::setMouseLastPos(Vec2 pos)
@@ -120,7 +121,11 @@ bool						Shaderpixel::loadMesh(t_objPath obj, std::string pathVertex, std::stri
 	if (type == E_CLOUD)
 		this->meshes.push_back(new CloudMesh);
 	else if (type == E_REFRACT)
-		this->meshes.push_back(new RefractMesh);
+	{
+		RefractMesh *m = new RefractMesh;
+		this->refract = m;
+		this->meshes.push_back(m);
+	}
 	else if (type == E_MANDELBULB)
 		this->meshes.push_back(new MandelbulbMesh);
 	else if (type == E_MANDELBOX)
@@ -160,25 +165,20 @@ bool				Shaderpixel::init(void)
 {
 	if (this->hud.init())
 		return (1);
-	if (load(E_PBALL, VERTEX_LIGHT, FRAGMENT_LIGHT, E_DEFAULT_MESH)	
-		// || load(E_PCHURCHE, VERTEX, FRAGMENT, E_DEFAULT_MESH)
+	if (load(E_PBALL, VERTEX_LIGHT, FRAGMENT_LIGHT, E_DEFAULT_MESH)
+		|| load(E_PCHURCHE, VERTEX, FRAGMENT, E_DEFAULT_MESH)
 		// || load(E_PCUBE, VERTEX_ASTEROID, FRAGMENT_ASTEROID, E_ASTEROID)
 		// || load(E_PCUBE, VERTEX_CLOUD, FRAGMENT_CLOUD, E_CLOUD)
-		// || load(E_PCUBE, VERTEX_REFRACT, FRAGMENT_REFRACT, E_REFRACT)
+		|| load(E_PCUBE, VERTEX_REFRACT, FRAGMENT_REFRACT, E_REFRACT)
 		// || load(E_PCUBE, VERTEX_METABALLS, FRAGMENT_METABALLS, E_METABALLS)
 		// || load(E_PCUBE, VERTEX_MANDELBULB, FRAGMENT_MANDELBULB, E_MANDELBULB)
 		// || load(E_PCUBE, VERTEX_MANDELBOX, FRAGMENT_MANDELBOX, E_MANDELBOX)
 		// || load(E_PCUBE, VERTEX_FIELD, FRAGMENT_FIELD, E_FIELD)
 		// || load(E_PFRAMEWORK, VERTEX, FRAGMENT, E_DEFAULT_MESH) //9
-		// || load(E_PPLANE, VERTEX_GLOW, FRAGMENT_GLOW, E_GLOW)
-		// || load(E_PFRAMEWORK2, VERTEX, FRAGMENT, E_DEFAULT_MESH) //11
-		// || load(E_PPLANE, VERTEX_FRAMEBUFFER, FRAGMENT_FRAMEBUFFER, E_FRAMEBUFFER)
-		|| load(E_PPLANE, VERTEX_RENDERBUFFER, FRAGMENT_RENDERBUFFER, E_RENDERBUFFER)
+		// || load(E_PPLANES, VERTEX_GLOW, FRAGMENT_GLOW, E_GLOW)
 		)
 			return (1);
 	// this->meshes[9]->translate(Vec3(-9.07, 2, 0.));//translate framework glow
-	// this->meshes[11]->translate(Vec3(0, 2, 6.69));//translate framework framebuffer
-
 	// std::cout << this->meshes[0]->getShaderProgram() << " " << this->meshes[1]->getShaderProgram() << "\n";
 	this->time.setTime();
 	return (0);
@@ -254,6 +254,8 @@ void				Shaderpixel::getKeys(void)
 		this->cam.translate(E_UP, -SPEED);
 	fieldKeys();
 	this->inputKey(GLFW_KEY_APOSTROPHE);
+	this->inputKey(GLFW_KEY_1);
+	this->inputKey(GLFW_KEY_2);
 }
 
 void				Shaderpixel::checkKeys(void)
@@ -270,6 +272,16 @@ void				Shaderpixel::checkKeys(void)
 				? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
 			glfwSetCursorPosCallback(this->window, this->isCursor
 				? NULL : mouse_callback);
+		}
+		else if (i == GLFW_KEY_1)
+		{
+			if (this->refract)
+				this->refract->switchDiffuse();
+		}
+		else if (i == GLFW_KEY_2)
+		{
+			if (this->refract)
+				this->refract->switchSpecular();
 		}
 		this->keys[(int)i] = KEY_DONE;
 		this->queue.pop();

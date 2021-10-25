@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RefractMesh.cc                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 15:42:37 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/20 21:35:57 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/10/25 20:01:42 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ RefractMesh::RefractMesh()
 	this->type = E_REFRACT;
 	this->isDiffuse = true;
 	this->isSpecular = true;
-	this->translate(Vec3(0., 2., -49.));
+	this->translate(Vec3(0., 2., -51.));
 }
 
 void	RefractMesh::render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution)
@@ -64,6 +64,16 @@ void	RefractMesh::render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resoluti
 			"modelPos"), 1, (const GLfloat*)&modelPos);
 		glDrawElements(GL_TRIANGLES, this->m_Entries[i].getNumIndices(), GL_UNSIGNED_INT, NULL);
 	}
+}
+
+void	RefractMesh::switchDiffuse(void)
+{
+	this->isDiffuse = !this->isDiffuse;
+}
+
+void	RefractMesh::switchSpecular(void)
+{
+	this->isSpecular = !this->isSpecular;
 }
 
 RefractMesh::~RefractMesh()

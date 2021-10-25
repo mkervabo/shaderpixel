@@ -68,6 +68,7 @@ class Shaderpixel
 
 		bool						load(e_pathObj enu, std::string pathVertex, std::string pathFragment, e_meshType type);
 		std::vector<Mesh*>			meshes;
+		RefractMesh					*refract;
 
 	public:
 		Shaderpixel();
