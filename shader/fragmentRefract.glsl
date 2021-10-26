@@ -357,6 +357,7 @@ s_hit ShortestDistanceToSurface(s_env env, float start, float end, inout vec3 dC
 	s_obj obj;
 	bool isOneTrans = false;
 	hit.typeHit = NONE;
+	float saveDepthObjTrans = 0.;
 	for (int i = 0; i < MAX_STEPS; i++)
 	{
 		newPos = env.ray.start + env.ray.dir * depth;
@@ -380,6 +381,7 @@ s_hit ShortestDistanceToSurface(s_env env, float start, float end, inout vec3 dC
 				env.ray.start = hit.posHit;
 				dColorObj += reflexion(env, norm, end - depth, hit.ambiantColor);
 				env.ray.dir = refract(env.ray.dir, norm, INCIDENCE);
+				saveDepthObjTrans = depth;
 				depth = -obj.dist;
 			}
 			else // Si l'objet est opaque
@@ -390,8 +392,10 @@ s_hit ShortestDistanceToSurface(s_env env, float start, float end, inout vec3 dC
 				dColorObj += sColor.color;
 				hit.ambiantColor += sColor.ambiant;
 				if (isOneTrans)
+				{
 					calculateColorBehind(env, hit.posHit, end, dColorObj);
-				
+					hit.dist = saveDepthObjTrans;
+				}
 				env.ray.eyeP = env.light.pos; // Eclairage au sol a travers l'objet transparent
 				sColor = calculateTranslucentLight(env, hit.posHit, end - depth);
 				dColorObj += sColor.color * K_T;

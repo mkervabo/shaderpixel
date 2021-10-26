@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 15:39:27 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/25 20:01:00 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/26 12:16:29 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,18 +167,18 @@ bool				Shaderpixel::init(void)
 		return (1);
 	if (load(E_PBALL, VERTEX_LIGHT, FRAGMENT_LIGHT, E_DEFAULT_MESH)
 		|| load(E_PCHURCHE, VERTEX, FRAGMENT, E_DEFAULT_MESH)
-		// || load(E_PCUBE, VERTEX_ASTEROID, FRAGMENT_ASTEROID, E_ASTEROID)
-		// || load(E_PCUBE, VERTEX_CLOUD, FRAGMENT_CLOUD, E_CLOUD)
+		|| load(E_PCUBE, VERTEX_ASTEROID, FRAGMENT_ASTEROID, E_ASTEROID)
+		|| load(E_PCUBE, VERTEX_CLOUD, FRAGMENT_CLOUD, E_CLOUD)
 		|| load(E_PCUBE, VERTEX_REFRACT, FRAGMENT_REFRACT, E_REFRACT)
-		// || load(E_PCUBE, VERTEX_METABALLS, FRAGMENT_METABALLS, E_METABALLS)
-		// || load(E_PCUBE, VERTEX_MANDELBULB, FRAGMENT_MANDELBULB, E_MANDELBULB)
-		// || load(E_PCUBE, VERTEX_MANDELBOX, FRAGMENT_MANDELBOX, E_MANDELBOX)
-		// || load(E_PCUBE, VERTEX_FIELD, FRAGMENT_FIELD, E_FIELD)
-		// || load(E_PFRAMEWORK, VERTEX, FRAGMENT, E_DEFAULT_MESH) //9
-		// || load(E_PPLANES, VERTEX_GLOW, FRAGMENT_GLOW, E_GLOW)
+		|| load(E_PCUBE, VERTEX_METABALLS, FRAGMENT_METABALLS, E_METABALLS)
+		|| load(E_PCUBE, VERTEX_MANDELBULB, FRAGMENT_MANDELBULB, E_MANDELBULB)
+		|| load(E_PCUBE, VERTEX_MANDELBOX, FRAGMENT_MANDELBOX, E_MANDELBOX)
+		|| load(E_PCUBE, VERTEX_FIELD, FRAGMENT_FIELD, E_FIELD)
+		|| load(E_PFRAMEWORK, VERTEX, FRAGMENT, E_DEFAULT_MESH) //9
+		|| load(E_PPLANES, VERTEX_GLOW, FRAGMENT_GLOW, E_GLOW)
 		)
 			return (1);
-	// this->meshes[9]->translate(Vec3(-9.07, 2, 0.));//translate framework glow
+	this->meshes[9]->translate(Vec3(-9.07, 2, 0.));//translate framework glow
 	// std::cout << this->meshes[0]->getShaderProgram() << " " << this->meshes[1]->getShaderProgram() << "\n";
 	this->time.setTime();
 	return (0);
