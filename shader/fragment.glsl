@@ -9,7 +9,7 @@ in	vec4	pos;
 uniform sampler2D	text;
 uniform vec3		colorMat;
 uniform int			isText;
-uniform vec3		u_lightPos;
+uniform vec3		u_lightPos[11];
 uniform vec3		eye;
 
 uniform float		K_S;
@@ -23,7 +23,7 @@ uniform float		K_S;
 void	main()
 {
 	vec3	ambient = AMBIENT_COEF * LIGHT_COL;
-	vec3	lightDir = normalize(u_lightPos - pos.xyz);
+	vec3	lightDir = normalize(u_lightPos[0] - pos.xyz);
 	vec3	vPToEye = normalize(eye - pos.xyz);
 	float	diff = max(dot(lightDir, norm), 0.0);
 

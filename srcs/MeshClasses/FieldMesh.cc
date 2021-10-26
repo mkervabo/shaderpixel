@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   FieldMesh.cc                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 22:35:15 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/21 12:20:06 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/10/26 13:43:28 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,16 @@ FieldMesh::FieldMesh()
 	this->Mesh::translate(Vec3(0., 2., -10.));
 }
 
-void	FieldMesh::render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution)
+void	FieldMesh::render(Camera &cam, float timeS, std::vector<Mesh*> &lights, Vec2 resolution)
 {
-	Vec3	camPos = cam.getPosition(); 
+	Vec3	camPos = cam.getPosition();
+	Vec3	lightPos = lights[this->type]->getPosition();
 	float	farNear[2] = {FAR_Z, NEAR_Z};
 	float	fov = FOV;
 	Vec3	rotCam = cam.getRotation();
 	matInField.setRotation(Vec3(0., rotCam.getY(), rotCam.getZ()));
 	Vec3	eyeInField = matInField.getPosition();
 
-	if (this->distance(cam.getPosition()) > RENDER_DIST_SHADER - PREC)
-		return;
 	for (unsigned int i = 0 ; i < this->m_Entries.size() ; i++)
 	{
 		glBindVertexArray(this->m_Entries[i].getVao());

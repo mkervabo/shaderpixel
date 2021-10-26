@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 15:42:37 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/25 20:01:42 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/26 13:44:04 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,13 @@ RefractMesh::RefractMesh()
 	this->translate(Vec3(0., 2., -51.));
 }
 
-void	RefractMesh::render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution)
+void	RefractMesh::render(Camera &cam, float timeS, std::vector<Mesh*> &lights, Vec2 resolution)
 {
 	Vec3	camPos;
 	float	farNear[2] = {FAR_Z, NEAR_Z};
 	float	fov = FOV;
+	Vec3	lightPos = lights[this->type]->getPosition();
 
-	if (this->distance(cam.getPosition()) > RENDER_DIST_SHADER - PREC)
-		return;
 	for (unsigned int i = 0 ; i < this->m_Entries.size() ; i++)
 	{
 		glBindVertexArray(this->m_Entries[i].getVao());

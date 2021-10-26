@@ -47,12 +47,10 @@ bool	FrameBufferMesh::loadMesh(t_objPath pathMesh, std::string pathVertex, std::
 	return (false);
 }
 
-void	FrameBufferMesh::render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution)
+void	FrameBufferMesh::render(Camera &cam, float timeS, std::vector<Mesh*> &lights, Vec2 resolution)
 {
-	(void)lightPos;
+	Vec3	lightPos = lights[this->type]->getPosition();
 	
-	if (this->distance(cam.getPosition()) > RENDER_DIST_SHADER - PREC)
-		return;
 	for (unsigned int i = 0 ; i < this->m_Entries.size() ; i++)
 	{
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, this->frame);

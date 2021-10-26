@@ -67,6 +67,7 @@ class Shaderpixel
 		void						fieldKeys(void);
 
 		bool						load(e_pathObj enu, std::string pathVertex, std::string pathFragment, e_meshType type);
+		std::vector<Mesh*>			lights;
 		std::vector<Mesh*>			meshes;
 		RefractMesh					*refract;
 
@@ -80,6 +81,9 @@ class Shaderpixel
 		void 						loadVBO(void);
 		bool						loadMesh(t_objPath obj);
 		bool						loadMesh(t_objPath obj, std::string pathVertex, std::string pathFragment, e_meshType type);
+
+		bool						loadLight(Vec3 posL);
+
 
 		void						getKeys(void);
 		unsigned int				getState(unsigned int k);

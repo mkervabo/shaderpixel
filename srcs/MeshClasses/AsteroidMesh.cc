@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   AsteroidMesh.cc                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 09:05:56 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/20 21:26:10 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/10/26 13:43:21 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,14 @@ AsteroidMesh::AsteroidMesh()
 	this->translate(Vec3(-8., 2., -46.));
 }
 
-void	AsteroidMesh::render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution)
+void	AsteroidMesh::render(Camera &cam, float timeS, std::vector<Mesh*> &lights, Vec2 resolution)
 {
 	Vec3	camPos;
 	Vec3	modelPos;
+	Vec3	lightPos = lights[this->type]->getPosition();
 	float	farNear[2] = {FAR_Z, NEAR_Z};
 	float	fov = FOV;
 
-	if (this->distance(cam.getPosition()) > RENDER_DIST_SHADER - PREC)
-		return;
 	for (unsigned int i = 0 ; i < this->m_Entries.size() ; i++)
 	{
 		glBindVertexArray(this->m_Entries[i].getVao());

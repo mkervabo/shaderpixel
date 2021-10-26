@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 16:57:27 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/21 15:34:22 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/26 13:44:21 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,9 @@
 Mesh::Mesh()
 {
 	this->type = E_DEFAULT_MESH;
-	// this->mat.rotate(Vec3(-90., 0., 0.));
 }
 
-bool	Mesh::initMesh(unsigned int Index, const aiMesh* paiMesh) // Remplit un MeshEntry avec des vertices et des faces et l'ajoute au vector m_Entries
+bool			Mesh::initMesh(unsigned int Index, const aiMesh* paiMesh) // Remplit un MeshEntry avec des vertices et des faces et l'ajoute au vector m_Entries
 {
 	m_Entries[Index].setMatIdx(paiMesh->mMaterialIndex);
 
@@ -61,7 +60,7 @@ bool	Mesh::initMesh(unsigned int Index, const aiMesh* paiMesh) // Remplit un Mes
 	return (0);
 }
 
-bool Mesh::initMaterials(const aiScene* pScene, const t_objPath& path) // Genere les textures de l'objet et les ajoutes au vector m_Textures
+bool			Mesh::initMaterials(const aiScene* pScene, const t_objPath& path) // Genere les textures de l'objet et les ajoutes au vector m_Textures
 {
 	bool	ret = false;
 	(void)pScene;
@@ -70,11 +69,6 @@ bool Mesh::initMaterials(const aiScene* pScene, const t_objPath& path) // Genere
 	for (unsigned int i = 0 ; i < pScene->mNumMaterials ; i++)
 	{
 		const aiMaterial* pMaterial = pScene->mMaterials[i];
-
-		// for (int i = 0; i < 19; i++)
-		// 	std::cout << i << " materials " << pMaterial->GetTextureCount((aiTextureType)i) << "\n";
-		// std::cout << "\n";
-
 		bool isTexture = false;
 
 		for (int i = 0; i < 19 && !isTexture; i++)
@@ -92,7 +86,6 @@ bool Mesh::initMaterials(const aiScene* pScene, const t_objPath& path) // Genere
 
 			this->m_Materials[i].setIsText(false);
 			this->m_Materials[i].setColor(Vec3(color.r, color.g, color.b));
-			// this->m+Materials[i].setDiffuse();
 			this->m_Materials[i].setSpecularCoef(shininess);
 		}
 		else
@@ -125,7 +118,7 @@ bool Mesh::initMaterials(const aiScene* pScene, const t_objPath& path) // Genere
 	return (ret);
 }
 
-bool	Mesh::initFromScene(const aiScene* pScene, const t_objPath& path) // Remplit notre classe Mesh
+bool			Mesh::initFromScene(const aiScene* pScene, const t_objPath& path) // Remplit notre classe Mesh
 {
 	this->m_Entries.resize(pScene->mNumMeshes); // Les differents mesh qui composent l'objet
 	this->m_Materials.resize(pScene->mNumMaterials);
@@ -141,7 +134,7 @@ bool	Mesh::initFromScene(const aiScene* pScene, const t_objPath& path) // Rempli
 	return (initMaterials(pScene, path));
 }
 
-float	Mesh::distance(Vec3 pToCompare)
+float			Mesh::distance(Vec3 pToCompare)
 {
 	Vec3 pMesh = this->mat.getPosition();
 
@@ -151,12 +144,12 @@ float	Mesh::distance(Vec3 pToCompare)
 		+ ((pToCompare.getZ() - pMesh.getZ()) * (pToCompare.getZ() - pMesh.getZ()))));
 }
 
-float	Mesh::distance(Mesh& toCompare)
+float			Mesh::distance(Mesh& toCompare)
 {
 	return (this->distance(toCompare.mat.getPosition()));
 }
 
-bool	Mesh::loadMesh(t_objPath pathMesh, std::string pathVertex, std::string pathFragment)
+bool			Mesh::loadMesh(t_objPath pathMesh, std::string pathVertex, std::string pathFragment)
 {
 	bool				ret = false;
 	Assimp::Importer	importer;
@@ -177,24 +170,32 @@ bool	Mesh::loadMesh(t_objPath pathMesh, std::string pathVertex, std::string path
 	return (ret);
 }
 
-bool	Mesh::loadMesh(t_objPath pathMesh)
+bool			Mesh::loadMesh(t_objPath pathMesh)
 {
 	return (this->loadMesh(pathMesh, VERTEX, FRAGMENT));
 }
 
-void	Mesh::render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution) // On parcours tous les mesh de notre objet et on l'affiche avec la texture qui lui est lier
+void			Mesh::render(Camera &cam, float timeS, std::vector<Mesh*> &lights, Vec2 resolution) // On parcours tous les mesh de notre objet et on l'affiche avec la texture qui lui est lier
 {
 	int		boolValue = 0;
 	Vec3	color;
 	Vec3	camPos;
 	(void)resolution;
-	// float	diffCoef;
 	float	specularCoef;
+	Vec3	lightPos[11] = {
+		lights[0]->getPosition(),
+		lights[1]->getPosition(),
+		lights[2]->getPosition(),
+		lights[3]->getPosition(),
+		lights[4]->getPosition(),
+		lights[5]->getPosition(),
+		lights[6]->getPosition(),
+		lights[7]->getPosition(),
+		lights[8]->getPosition(),
+		lights[9]->getPosition(),
+		lights[10]->getPosition()
+	};
 
-	// glEnableVertexAttribArray(0);
-	// glEnableVertexAttribArray(1);
-	// glEnableVertexAttribArray(2);
-	
 	camPos = cam.getPosition();
 	for (unsigned int i = 0 ; i < this->m_Entries.size() ; i++)
 	{
@@ -208,13 +209,10 @@ void	Mesh::render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution) // 
 			boolValue = 1;
 		}
 		color = this->m_Materials[materialIndex].getColor();
-		// diffCoef = this->m_Materials[materialIndex].getDiffuseCoef();
 		specularCoef = this->m_Materials[materialIndex].getSpecularCoef();
 
 		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
 			"eye"), 1, (const GLfloat*)&camPos);
-		// glUniform1fv(glGetUniformLocation(this->shader.getProgram(),
-		// 	"K_D"), 1, (const GLfloat*)&diffCoef);
 		glUniform1fv(glGetUniformLocation(this->shader.getProgram(),
 			"K_S"), 1, (const GLfloat*)&specularCoef);
 
@@ -231,21 +229,18 @@ void	Mesh::render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution) // 
 		glUniform1i(glGetUniformLocation(this->shader.getProgram(), // BASIC_SHADER
 			"isText"), (GLuint)boolValue);
 		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
-			"u_lightPos"), 1, (const GLfloat*)&lightPos);
+			"u_lightPos"), 11, (const GLfloat*)&lightPos);
 		glDrawElements(GL_TRIANGLES, this->m_Entries[i].getNumIndices(), GL_UNSIGNED_INT, NULL);
 	}
-	// glDisableVertexAttribArray(0);
-	// glDisableVertexAttribArray(1);
-	// glDisableVertexAttribArray(2);
 }
 
-void	Mesh::clearTextures(void)
+void			Mesh::clearTextures(void)
 {
 	for (unsigned int i = 0; i < this->m_Materials.size(); i++)
 		this->m_Materials[i].clearMaterial();
 }
 
-void	Mesh::clear(void)
+void			Mesh::clear(void)
 {
 	this->shader.freeProgram();
 	this->m_Entries.clear();
@@ -254,24 +249,29 @@ void	Mesh::clear(void)
 	// Rajouter le reste
 }
 
-void	Mesh::rotate(Vec3 r)
+void			Mesh::rotate(Vec3 r)
 {
 	this->mat.rotate(r);
 }
 
-void	Mesh::translate(Vec3 t)
+void			Mesh::translate(Vec3 t)
 {
 	this->mat.translate(t);
 }
 
-void	Mesh::translate(e_axes axe, float speed)
+void			Mesh::translate(e_axes axe, float speed)
 {
 	this->mat.translate(axe, speed);
 }
 
-void	Mesh::setPosition(Vec3 p)
+void			Mesh::setPosition(Vec3 p)
 {
 	this->mat.setPosition(p);
+}
+
+Vec3			Mesh::getPosition(void)
+{
+	return (this->mat.getPosition());
 }
 
 unsigned int	Mesh::getShaderProgram(void)
@@ -279,7 +279,7 @@ unsigned int	Mesh::getShaderProgram(void)
 	return (this->shader.getProgram());
 }
 
-e_meshType	Mesh::getType(void)
+e_meshType		Mesh::getType(void)
 {
 	return (this->type);
 }

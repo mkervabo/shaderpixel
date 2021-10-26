@@ -7,15 +7,14 @@ MandelboxMesh::MandelboxMesh()
 	this->translate(Vec3(11., 1.8, -26.));
 }
 
-void	MandelboxMesh::render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution)
+void	MandelboxMesh::render(Camera &cam, float timeS, std::vector<Mesh*> &lights, Vec2 resolution)
 {
 	Vec3	camPos;
 	Vec3	modelPos;
 	float	farNear[2] = {FAR_Z, NEAR_Z};
 	float	fov = FOV;
+	Vec3	lightPos = lights[this->type]->getPosition();
 
-	if (this->distance(cam.getPosition()) > RENDER_DIST_SHADER - PREC)
-		return;
 	this->modelMat.setRotation(Vec3(0., timeS * 10., 0.));
 	for (unsigned int i = 0 ; i < this->m_Entries.size() ; i++)
 	{

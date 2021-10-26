@@ -26,7 +26,7 @@ class MetaballsMesh : public Mesh
 
 	public:
 		MetaballsMesh();
-		virtual void	render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution);
+		virtual void	render(Camera &cam, float timeS, std::vector<Mesh*> &lights, Vec2 resolution);
 		virtual bool	loadMesh(t_objPath pathMesh, std::string pathVertex, std::string pathFragment);
 		void			setSize(float new_size);
 		void			setVelocity(float new_velocity);

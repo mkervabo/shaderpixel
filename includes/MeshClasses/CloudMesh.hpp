@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CloudMesh.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 11:41:52 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/18 10:53:51 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/10/26 13:02:06 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ class CloudMesh : public Mesh
 	public:
 		CloudMesh();
 		virtual bool	loadMesh(t_objPath pathMesh, std::string pathVertex, std::string pathFragment);
-		virtual void	render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution);
+		virtual void	render(Camera &cam, float timeS, std::vector<Mesh*> &lights, Vec2 resolution);
 		virtual ~CloudMesh();
 };
 

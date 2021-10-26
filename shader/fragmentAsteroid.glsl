@@ -273,7 +273,7 @@ void main(void)
 		return ;
 	}
 	s_light light;
-	light.pos = vec3(cos(time * 0.1), 2., sin(time * 0.1));
+	light.pos = u_lightPos;
 	light.colorLight = vec3(1.0, 1.0, 1.0);
 	light.intensity = 1.;
 		

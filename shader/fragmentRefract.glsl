@@ -441,8 +441,7 @@ void main(void)
 	env.ray.dir = (inverseView * vec4(env.ray.dir, 0.0)).xyz; // worldDir
 	vec3 dColorObj= vec3(0.);
 
-	// env.light.pos = u_lightPos;
-	env.light.pos = vec3(cos(time), sin(time), 0.8 - cos(time / 4.)) + modelPos;
+	env.light.pos = u_lightPos;
 	env.light.colorLight = vec3(1.0, 1.0, 1.0);
 	env.light.intensity = 0.5;
 

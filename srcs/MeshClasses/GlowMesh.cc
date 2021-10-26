@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   GlowMesh.cc                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/10/26 13:05:14 by gperez            #+#    #+#             */
+/*   Updated: 2021/10/26 13:43:35 by gperez           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "GlowMesh.hpp"
 
 GlowMesh::GlowMesh()
@@ -7,16 +19,14 @@ GlowMesh::GlowMesh()
 	this->translate(Vec3(-9.07, 2, 0.));
 }
 
-void	GlowMesh::render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution)
+void	GlowMesh::render(Camera &cam, float timeS, std::vector<Mesh*> &lights, Vec2 resolution)
 {
 	Vec3	camPos;
 	float	fov = FOV;
 
-	lightPos = Vec3();
+	(void)lights;
 	timeS = 0;
 
-	if (this->distance(cam.getPosition()) > RENDER_DIST_SHADER - PREC)
-		return;
 	for (unsigned int i = 0 ; i < this->m_Entries.size() ; i++)
 	{
 		glBindVertexArray(this->m_Entries[i].getVao());
