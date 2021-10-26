@@ -12,6 +12,6 @@ void	main()
 
 	colorT = texture(basicTexture, tCoords);
 	if (colorT.w > 0.5)
-		colorT = vec4(1.0, 1.0, 1.0, 1.0);
+		colorT = vec4(0.98, 0.57, 0., 1.0);
 	FragColor = colorT;
 }
