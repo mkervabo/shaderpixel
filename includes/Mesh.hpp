@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Mesh.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 17:01:05 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/22 14:39:55 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/25 14:34:14 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ class Mesh
 		unsigned int	getEntriesSize(void);
 		unsigned int	getVao(unsigned int i);
 		unsigned int	getNumIndices(unsigned int i);
+		Mat				getMat();
 		virtual ~Mesh();
 };
 

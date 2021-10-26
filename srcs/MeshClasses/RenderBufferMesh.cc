@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RenderBufferMesh.cc                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 12:11:30 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/21 17:28:54 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/26 14:46:27 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ RenderBufferMesh::RenderBufferMesh()
 	Mesh();
 	this->type = E_RENDERBUFFER;
 	this->mat.rotate(Vec3(90., 0., 0.));
+	// this->bufferA.rotate(Vec3(90., 0., 0.));
+	this->bufferA.translate(Vec3(0.,-2.,18));
 }
 
 bool	RenderBufferMesh::loadMesh(t_objPath pathMesh, std::string pathVertex, std::string pathFragment)
@@ -33,20 +35,30 @@ bool	RenderBufferMesh::loadMesh(t_objPath pathMesh, std::string pathVertex, std:
 	
 	glGenTextures(1, &this->frameBufferTexture);
 	glBindTexture(GL_TEXTURE_2D, this->frameBufferTexture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, WIDTH, HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, WIDTH, HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	// glTexImage2D(GL_TEXTURE_2D, 0,GL_DEPTH_COMPONENT24, 1024, 768, 0,GL_DEPTH_COMPONENT, GL_FLOAT, 0);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+	// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
+	// glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_NONE);
 
 	glGenRenderbuffers(1, &this->renderBuffer);
 	glBindRenderbuffer(GL_RENDERBUFFER, this->renderBuffer);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, WIDTH, HEIGHT);
 
-	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, this->frameBufferTexture, 0);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, this->renderBuffer);
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, this->frameBufferTexture, 0);
 
-	GLenum DrawBuffers[1] = {GL_COLOR_ATTACHMENT0};
-	glDrawBuffers(1, DrawBuffers);
+	// GLenum DrawBuffers[1] = {GL_DEPTH_ATTACHMENT};
+	// glDrawBuffers(1, DrawBuffers);
+	glDrawBuffer(GL_NONE);
+	// glReadBuffer(GL_NONE);
 
+	
 	GLenum i;
 	if ((i = glCheckFramebufferStatus(GL_FRAMEBUFFER)) != GL_FRAMEBUFFER_COMPLETE)
 	{
@@ -78,7 +90,7 @@ void	RenderBufferMesh::render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 res
 			glUniform2fv(glGetUniformLocation(this->bufferA.getShaderProgram(),
 				"u_resolution"), 1, (const GLfloat*)&resolution);
 			glUniformMatrix4fv(glGetUniformLocation(this->bufferA.getShaderProgram(),
-				"model"), 1, GL_FALSE, &(mat.getMatrix(false)[0][0]));
+				"model"), 1, GL_FALSE, &(this->bufferA.getMat().getMatrix(false)[0][0]));
 			glUniformMatrix4fv(glGetUniformLocation(this->bufferA.getShaderProgram(),
 				"view"), 1, GL_FALSE, &(cam.getMatrix(false).inverse()[0][0]));
 			glUniformMatrix4fv(glGetUniformLocation(this->bufferA.getShaderProgram(),

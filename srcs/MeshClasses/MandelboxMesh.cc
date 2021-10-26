@@ -16,14 +16,12 @@ void	MandelboxMesh::render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolu
 
 	if (this->distance(cam.getPosition()) > RENDER_DIST_SHADER - PREC)
 		return;
-	this->modelMat.setRotation(Vec3(0., timeS * 10., 0.));
+
 	for (unsigned int i = 0 ; i < this->m_Entries.size() ; i++)
 	{
 		glBindVertexArray(this->m_Entries[i].getVao());
 		glUseProgram(this->shader.getProgram());
 
-		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
-			"modelMat"), 1, GL_FALSE, &(modelMat.getInverseMat()[0][0]));
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
 			"model"), 1, GL_FALSE, &(mat.getMatrix(false).inverse()[0][0]));
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),

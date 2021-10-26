@@ -10,8 +10,17 @@ uniform mat4		model;
 
 out vec2			tCoords;
 
+vec3    rotateX(vec3 p, float theta)
+{
+    mat3    mat = mat3(vec3(1., 0., 0.),
+	vec3(0., cos(theta), -sin(theta)),
+	vec3(0., sin(theta), cos(theta)));
+			
+    return (mat * p);
+}
+
 void main()
 {
 	tCoords = aTex;
-	gl_Position = projection * view * model * vec4(aPos, 1.0);
+	gl_Position = projection * view * model * vec4(rotateX(aPos, radians(-90.)), 1.0);
 }

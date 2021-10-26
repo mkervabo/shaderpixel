@@ -120,6 +120,7 @@ vec2 sdFbm( vec3 p, float d)
 vec2 DistanceEstimation(vec3 p)
 {
 	p -= modelPos;
+	p  = (modelMat * vec4(p, 1.)).xyz;
 	float sphere = sphereDE(p, 0.5);
 		
 	vec2 dt = sdFbm(p, sphere);

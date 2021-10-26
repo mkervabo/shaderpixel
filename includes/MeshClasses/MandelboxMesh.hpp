@@ -5,9 +5,6 @@
 
 class MandelboxMesh : public Mesh
 {
-	private:
-		Mat		modelMat;
-
 	public:
 		MandelboxMesh();
 		virtual void	render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution);
