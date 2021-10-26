@@ -3,8 +3,8 @@
 out vec4 fragColor;
 
 uniform sampler2D	bufferA;
-uniform float	time;
-uniform vec2	u_resolution;
+uniform float		time;
+uniform vec2		u_resolution;
 
 in vec2 tCoords;
 

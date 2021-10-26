@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 12:10:16 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/20 14:15:11 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/26 17:41:15 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,10 @@ class RenderBufferMesh : public Mesh
 {
 	private:
 		Mesh bufferA;
-		GLuint frameBuffer;
-		GLuint frameBufferTexture;
+		GLuint frameBufferInput;
 		GLuint renderBuffer;
+		GLuint frameBufferOutPut;
+		GLuint frameBufferTexture;
 	public:
 		RenderBufferMesh();
 		virtual bool	loadMesh(t_objPath pathMesh, std::string pathVertex, std::string pathFragment);
