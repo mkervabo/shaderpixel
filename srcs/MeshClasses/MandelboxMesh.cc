@@ -15,7 +15,6 @@ void	MandelboxMesh::render(Camera &cam, float timeS, std::vector<Mesh*> &lights,
 	float	fov = FOV;
 	Vec3	lightPos = lights[this->type]->getPosition();
 
-	this->modelMat.setRotation(Vec3(0., timeS * 10., 0.));
 	for (unsigned int i = 0 ; i < this->m_Entries.size() ; i++)
 	{
 		glBindVertexArray(this->m_Entries[i].getVao());
