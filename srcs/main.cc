@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cc                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 15:29:41 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/12 17:25:15 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/10/27 14:49:04 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ int		main(void)
 	cam.setProjMatrix(perspective(FOV, RATIO, (float)NEAR_Z, (float)FAR_Z));
 	cam.translate(0. , 2., 3.);
 
+	glEnable(GL_MULTISAMPLE);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
