@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 09:05:56 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/26 13:43:21 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/27 13:56:10 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,15 @@ void	AsteroidMesh::render(Camera &cam, float timeS, std::vector<Mesh*> &lights, 
 	float	farNear[2] = {FAR_Z, NEAR_Z};
 	float	fov = FOV;
 
+	this->modelMat.setRotation(Vec3(0., timeS, 0.));
+
 	for (unsigned int i = 0 ; i < this->m_Entries.size() ; i++)
 	{
 		glBindVertexArray(this->m_Entries[i].getVao());
  		glUseProgram(this->shader.getProgram());
 
+		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
+			"modelMat"), 1, GL_FALSE, &(modelMat.getInverseMat()[0][0]));
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
 			"model"), 1, GL_FALSE, &(mat.getMatrix(false).inverse()[0][0]));
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),

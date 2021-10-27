@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 16:57:27 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/26 13:44:21 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/27 10:45:01 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,7 +226,7 @@ void			Mesh::render(Camera &cam, float timeS, std::vector<Mesh*> &lights, Vec2 r
 			"time"), 1, (const GLfloat*)&timeS);
 		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
 			"colorMat"), 1, (const GLfloat*)&color);
-		glUniform1i(glGetUniformLocation(this->shader.getProgram(), // BASIC_SHADER
+		glUniform1i(glGetUniformLocation(this->shader.getProgram(),
 			"isText"), (GLuint)boolValue);
 		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
 			"u_lightPos"), 11, (const GLfloat*)&lightPos);

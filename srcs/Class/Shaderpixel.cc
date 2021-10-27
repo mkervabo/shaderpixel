@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 15:39:27 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/26 13:33:58 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/27 13:46:52 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,16 +210,16 @@ void				Shaderpixel::update(Camera &cam)
 	Vec3		lightTranslate[]
 	{
 		Vec3(0., 0., 0.),
-		Vec3(cos(time * 0.5), 1., sin(time * 0.5)), // MANDELBULB
-		Vec3(cos(time * 0.5), 1., sin(time * 0.5)), // MANDELBOX
+		Vec3(cos(time * 0.5) * 1.4, cos(time * 0.1), sin(time * 0.5) * 1.4), // MANDELBULB
+		Vec3(2. * cos(time * 0.5), sin(time), 2 * sin(time * 0.5)), // MANDELBOX
 		Vec3(cos(time), sin(time), 0.8 - cos(time / 4.)), // REFRACT
-		Vec3(cos(time * 0.5), 1., sin(time * 0.5)), // CLOUD
-		Vec3(cos(time * 0.5), 1., sin(time * 0.5)), // FIELD
-		Vec3(cos(time * 0.1), 2., sin(time * 0.1)), // ASTEROID
+		Vec3(-1., 1 + cos(time * 0.25) / 2., -.5), // CLOUD
+		Vec3(0., 0., 0.), // FIELD
+		Vec3(cos(time * 0.1), 1.5, sin(time * 0.1)), // ASTEROID
 		Vec3(cos(time * 0.5), 1., sin(time * 0.5)), // METABALLS
-		Vec3(cos(time * 0.5), 1., sin(time * 0.5)), // GLOW
-		Vec3(cos(time * 0.5), 1., sin(time * 0.5)), // FRAMEBUFFER
-		Vec3(cos(time * 0.5), 1., sin(time * 0.5)) // RENDERBUFFER
+		Vec3(0., 0., 0.), // GLOW
+		Vec3(0., 0., 0.), // FRAMEBUFFER
+		Vec3(0., 0., 0.) // RENDERBUFFER
 	};
 
 	glfwGetFramebufferSize(this->getWindow(), &winWidth, &winHeight);
