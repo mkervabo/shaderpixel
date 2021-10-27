@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Shader.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/25 17:47:37 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/21 14:18:05 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/27 18:35:41 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 # define VERTEX_METABALLS "shader/vertexMetaballs.glsl"
 
 # define FRAGMENT_TETRAHEDRON "shader/fragmentTetrahedron.glsl"
+# define VERTEX_TETRAHEDRON "shader/vertexTetrahedron.glsl"
 
 # define VERTEX_FIELD "shader/vertexField.glsl"
 # define FRAGMENT_FIELD "shader/fragmentField.glsl"

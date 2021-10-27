@@ -8,6 +8,7 @@ uniform mat4	modelMat;
 uniform mat4	view;
 uniform vec3	eye;
 uniform float	time;
+uniform vec3	modelPos;
 
 const int MAX_STEPS_REF = 10;
 const int MAX_ITERATIONS = 10;
@@ -46,6 +47,7 @@ float TetrahedronDE(vec3 p, float scale, vec3 offset)
 
 float DistanceEstimation(vec3 p)
 {
+	p -= modelPos;
 	// return (TetrahedronDE((modelMat * vec4(p, 1.)).xyz, 8.));
 	return (TetrahedronDE((modelMat * vec4(p / 0.2, 1.)).xyz, 2., vec3(2.)) * 0.2);
 }
@@ -103,12 +105,13 @@ vec3 phongLight(s_light light, vec3 vEP, vec3 norm, vec3 pos, vec3 colorObj)
 	float specular = dot(vReflectLN, vEP);
 		
 	if (diffuse < EPSILON)
-		return (vec3(0., 0., 0.));
+		return (vec3(0., 1., 0.));
 	if (specular < EPSILON)
-		return (light.intensity * (colorObj * diffuse * K_D));
-
-	return (light.intensity * (colorObj * diffuse * K_D
-		+ light.colorLight * pow(specular, K_S)));
+	return (vec3(0., 1., 1.));
+		// return (light.intensity * (colorObj * diffuse * K_D));
+	return (vec3(0., 0., 1.));
+	// return (light.intensity * (colorObj * diffuse * K_D
+		// + light.colorLight * pow(specular, K_S)));
 }
 
 
@@ -156,7 +159,7 @@ float ambientOcclusion(in vec3 p, in vec3 n, in float maxDist, in float falloff)
 
 ////////////////////////////////
 
-#define LIGHT_RADIUS 15.
+#define LIGHT_RADIUS 40.
 
 float shadows(in vec3 posHit, in vec3 vPL, float minDist, float maxDist, float k)
 {
@@ -234,11 +237,11 @@ void	main()
 	if (dist > farNear[0] - EPSILON)
 	{
 		gl_FragDepth = farNear[0];
-		FragColor = vec4(0.);
+		FragColor = vec4(1., 1., 0., 0.);
 		return ;
 	}
 	s_light light[2];
-	light[0].pos = u_lightPos;
+	light[0].pos = vec3(1.,1.,1.);
 	light[0].colorLight = vec3(1.0, 1.0, 1.0);
 	light[0].intensity = 0.5;
 

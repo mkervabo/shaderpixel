@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Shaderpixel.cc                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 15:39:27 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/27 13:46:52 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/27 20:07:24 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,6 +142,8 @@ bool						Shaderpixel::loadMesh(t_objPath obj, std::string pathVertex, std::stri
 		this->meshes.push_back(new FrameBufferMesh);
 	else if (type == E_RENDERBUFFER)
 		this->meshes.push_back(new RenderBufferMesh);
+	else if (type == E_TETRAHEDRON)
+		this->meshes.push_back(new TetrahedronMesh);
 	else
 		this->meshes.push_back(new Mesh);
 	if (!this->meshes.size())
@@ -179,25 +181,33 @@ bool				Shaderpixel::init(void)
 {
 	if (this->hud.init())
 		return (1);
-	if (load(E_PCHURCHE, VERTEX, FRAGMENT, E_DEFAULT_MESH)
-		|| load(E_PCUBE, VERTEX_ASTEROID, FRAGMENT_ASTEROID, E_ASTEROID)
-		|| load(E_PCUBE, VERTEX_CLOUD, FRAGMENT_CLOUD, E_CLOUD)
-		|| load(E_PCUBE, VERTEX_REFRACT, FRAGMENT_REFRACT, E_REFRACT)
-		|| load(E_PCUBE, VERTEX_METABALLS, FRAGMENT_METABALLS, E_METABALLS)
-		|| load(E_PCUBE, VERTEX_MANDELBULB, FRAGMENT_MANDELBULB, E_MANDELBULB)
-		|| load(E_PCUBE, VERTEX_MANDELBOX, FRAGMENT_MANDELBOX, E_MANDELBOX)
-		|| load(E_PCUBE, VERTEX_FIELD, FRAGMENT_FIELD, E_FIELD)
-		|| load(E_PFRAMEWORK, VERTEX, FRAGMENT, E_DEFAULT_MESH) //8
-		|| load(E_PPLANES, VERTEX_GLOW, FRAGMENT_GLOW, E_GLOW)
+	if (
+	// load(E_PCHURCHE, VERTEX, FRAGMENT, E_DEFAULT_MESH)
+	// 	|| load(E_PCUBE, VERTEX_ASTEROID, FRAGMENT_ASTEROID, E_ASTEROID)
+	// 	|| load(E_PCUBE, VERTEX_CLOUD, FRAGMENT_CLOUD, E_CLOUD)
+	// 	|| load(E_PCUBE, VERTEX_REFRACT, FRAGMENT_REFRACT, E_REFRACT)
+	// 	|| load(E_PCUBE, VERTEX_METABALLS, FRAGMENT_METABALLS, E_METABALLS)
+	// 	|| load(E_PCUBE, VERTEX_MANDELBULB, FRAGMENT_MANDELBULB, E_MANDELBULB)
+	// 	|| load(E_PCUBE, VERTEX_MANDELBOX, FRAGMENT_MANDELBOX, E_MANDELBOX)
+	// 	|| load(E_PCUBE, VERTEX_FIELD, FRAGMENT_FIELD, E_FIELD)
+		load(E_PCUBE, VERTEX_TETRAHEDRON, FRAGMENT_TETRAHEDRON, E_TETRAHEDRON)
+		// || load(E_PFRAMEWORK, VERTEX, FRAGMENT, E_DEFAULT_MESH) // 9
+		// || load(E_PPLANES, VERTEX_GLOW, FRAGMENT_GLOW, E_GLOW)
+		// || load(E_PFRAMEWORK, VERTEX, FRAGMENT, E_DEFAULT_MESH) // 11
+		// || load(E_PPLANES, VERTEX_FRAMEBUFFER, FRAGMENT_FRAMEBUFFER, E_FRAMEBUFFER)
+		// || load(E_PFRAMEWORK, VERTEX, FRAGMENT, E_DEFAULT_MESH) // 14
+		// || load(E_PPLANES, VERTEX_FRAMEBUFFER, FRAGMENT_FRAMEBUFFER, E_FRAMEBUFFER)
 		)
 			return (1);
 	
-	for (unsigned int i = 0; i < (int)E_RENDERBUFFER + 1; i++)
-	{
-		if (loadLight(g_lightPos[i]))
-			return (1);
-	}
-	this->meshes[8]->translate(Vec3(-9.07, 2, 0.));//translate framework glow
+	// for (unsigned int i = 0; i < (int)E_RENDERBUFFER + 1; i++)
+	// {
+	// 	if (loadLight(g_lightPos[i]))
+	// 		return (1);
+	// }
+	// this->meshes[9]->translate(Vec3(-9.07, 2, 0.));//translate framework glow
+	// this->meshes[11]->translate(Vec3(9.07, 2, 0.));//translate frameworkframebuffer
+	// this->meshes[13]->translate(Vec3(9.07, 2, 0.));//translate frameworkrenderbuffer
 	this->time.setTime();
 	return (0);
 }

@@ -30,6 +30,7 @@
 # include "GlowMesh.hpp"
 # include "FrameBufferMesh.hpp"
 # include "RenderBufferMesh.hpp"
+# include "TetrahedronMesh.hpp"
 # include "glfw3.h" // Load fenetre
 
 # define RATIO (float)WIDTH / (float)HEIGHT
