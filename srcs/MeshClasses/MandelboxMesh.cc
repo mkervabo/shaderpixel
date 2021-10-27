@@ -22,8 +22,6 @@ void	MandelboxMesh::render(Camera &cam, float timeS, std::vector<Mesh*> &lights,
 		glUseProgram(this->shader.getProgram());
 
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
-			"modelMat"), 1, GL_FALSE, &(modelMat.getInverseMat()[0][0]));
-		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
 			"model"), 1, GL_FALSE, &(mat.getMatrix(false).inverse()[0][0]));
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
 			"view"), 1, GL_FALSE, &(cam.getMatrix(false)[0][0]));

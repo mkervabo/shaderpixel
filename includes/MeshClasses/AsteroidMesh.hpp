@@ -18,7 +18,7 @@
 class AsteroidMesh : public Mesh
 {
 	private:
-		Mat				modelMat;
+		Mat		modelMat;
 	public:
 		AsteroidMesh();
 		virtual void	render(Camera &cam, float timeS, std::vector<Mesh*> &lights, Vec2 resolution);

@@ -1,7 +1,7 @@
 #version 410 core
 
 out vec4	FragColor;
-in	vec4	color;
+// in	vec4	color;
 in	vec2	textureCoord;
 in	vec3	norm;
 in	vec4	pos;

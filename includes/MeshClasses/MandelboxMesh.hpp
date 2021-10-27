@@ -17,9 +17,6 @@
 
 class MandelboxMesh : public Mesh
 {
-	private:
-		Mat		modelMat;
-
 	public:
 		MandelboxMesh();
 		virtual void	render(Camera &cam, float timeS, std::vector<Mesh*> &lights, Vec2 resolution);

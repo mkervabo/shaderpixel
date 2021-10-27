@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   Mesh.cc                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 16:57:27 by gperez            #+#    #+#             */
 /*   Updated: 2021/10/27 10:45:01 by gperez           ###   ########.fr       */
@@ -301,6 +301,11 @@ unsigned int	Mesh::getNumIndices(unsigned int i)
 	if (i >= this->m_Entries.size())
 		return (0);
 	return (this->m_Entries[i].getNumIndices());
+}
+
+Mat				Mesh::getMat()
+{
+	return(this->mat);
 }
 
 Mesh::~Mesh()

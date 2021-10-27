@@ -6,9 +6,16 @@ layout (location = 2) in vec3 aNorm;
 
 uniform mat4		model;
 uniform mat4		projection;
-uniform mat4		view;
+
+out	vec4	color;
+out	vec2	textureCoord;
+out	vec3	norm;
+out	vec4	pos;
 
 void main()
 {
-	gl_Position = projection * view * model * vec4(aPos, 1.0);
+	textureCoord = aTex;
+	pos = model * vec4(aPos, 1.);
+	norm = aNorm;
+	gl_Position = projection * model * vec4(aPos, 1.0);
 }

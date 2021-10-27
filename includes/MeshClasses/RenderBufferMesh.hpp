@@ -22,9 +22,10 @@ class RenderBufferMesh : public Mesh
 {
 	private:
 		Mesh bufferA;
-		GLuint frameBuffer;
-		GLuint frameBufferTexture;
-		GLuint renderBuffer;
+		GLuint frameBufferInput;
+		GLuint renderBufferInput;
+		GLuint frameBufferOutput;
+		GLuint bufferTexture;
 	public:
 		RenderBufferMesh();
 		virtual bool	loadMesh(t_objPath pathMesh, std::string pathVertex, std::string pathFragment);
