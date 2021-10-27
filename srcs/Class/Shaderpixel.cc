@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 15:39:27 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/26 16:10:37 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/27 13:46:52 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ Shaderpixel::Shaderpixel()
 	for (unsigned int i = 0; i < GLFW_KEY_END; i++)
 		this->keys[i] = KEY_RELEASE;
 	this->isCursor = false;
+	this->refract = NULL;
 }
 
 void				Shaderpixel::setMouseLastPos(Vec2 pos)
@@ -120,7 +121,11 @@ bool						Shaderpixel::loadMesh(t_objPath obj, std::string pathVertex, std::stri
 	if (type == E_CLOUD)
 		this->meshes.push_back(new CloudMesh);
 	else if (type == E_REFRACT)
-		this->meshes.push_back(new RefractMesh);
+	{
+		RefractMesh *m = new RefractMesh;
+		this->refract = m;
+		this->meshes.push_back(m);
+	}
 	else if (type == E_MANDELBULB)
 		this->meshes.push_back(new MandelbulbMesh);
 	else if (type == E_MANDELBOX)
@@ -156,45 +161,79 @@ bool				Shaderpixel::load(e_pathObj enu, std::string pathVertex, std::string pat
 	return (this->loadMesh(g_objPath[enu], pathVertex, pathFragment, type));
 }
 
+bool				Shaderpixel::loadLight(Vec3 posL)
+{
+	this->lights.push_back(new Mesh);
+	if (!this->lights.size())
+		return (1);
+	if (this->lights[this->lights.size() - 1]->loadMesh(g_objPath[E_PBALL], VERTEX_LIGHT, FRAGMENT_LIGHT))
+	{
+		this->lights.pop_back();
+		return (1);
+	}
+	this->lights[this->lights.size() - 1]->setPosition(posL);
+	return (0);
+}
+
 bool				Shaderpixel::init(void)
 {
 	if (this->hud.init())
 		return (1);
-	if (load(E_PBALL, VERTEX_LIGHT, FRAGMENT_LIGHT, E_DEFAULT_MESH)
-		// || load(E_PCHURCHE, VERTEX, FRAGMENT, E_DEFAULT_MESH)
-		// || load(E_PCUBE, VERTEX_ASTEROID, FRAGMENT_ASTEROID, E_ASTEROID)
-		// || load(E_PCUBE, VERTEX_CLOUD, FRAGMENT_CLOUD, E_CLOUD)
-		// || load(E_PCUBE, VERTEX_REFRACT, FRAGMENT_REFRACT, E_REFRACT)
-		// || load(E_PCUBE, VERTEX_METABALLS, FRAGMENT_METABALLS, E_METABALLS)
-		// || load(E_PCUBE, VERTEX_MANDELBULB, FRAGMENT_MANDELBULB, E_MANDELBULB)
-		// || load(E_PCUBE, VERTEX_MANDELBOX, FRAGMENT_MANDELBOX, E_MANDELBOX)
-		// || load(E_PCUBE, VERTEX_FIELD, FRAGMENT_FIELD, E_FIELD)
-		// || load(E_PFRAMEWORK, VERTEX, FRAGMENT, E_DEFAULT_MESH) //9
-		// || load(E_PPLANE, VERTEX_GLOW, FRAGMENT_GLOW, E_GLOW)
-		// || load(E_PFRAMEWORK2, VERTEX, FRAGMENT, E_DEFAULT_MESH) //11
-		// || load(E_PPLANE, VERTEX_FRAMEBUFFER, FRAGMENT_FRAMEBUFFER, E_FRAMEBUFFER)
-		|| load(E_PPLANE, VERTEX_RENDERBUFFER, FRAGMENT_RENDERBUFFER, E_RENDERBUFFER)
+	if (load(E_PCHURCHE, VERTEX, FRAGMENT, E_DEFAULT_MESH)
+		|| load(E_PCUBE, VERTEX_ASTEROID, FRAGMENT_ASTEROID, E_ASTEROID)
+		|| load(E_PCUBE, VERTEX_CLOUD, FRAGMENT_CLOUD, E_CLOUD)
+		|| load(E_PCUBE, VERTEX_REFRACT, FRAGMENT_REFRACT, E_REFRACT)
+		|| load(E_PCUBE, VERTEX_METABALLS, FRAGMENT_METABALLS, E_METABALLS)
+		|| load(E_PCUBE, VERTEX_MANDELBULB, FRAGMENT_MANDELBULB, E_MANDELBULB)
+		|| load(E_PCUBE, VERTEX_MANDELBOX, FRAGMENT_MANDELBOX, E_MANDELBOX)
+		|| load(E_PCUBE, VERTEX_FIELD, FRAGMENT_FIELD, E_FIELD)
+		|| load(E_PFRAMEWORK, VERTEX, FRAGMENT, E_DEFAULT_MESH) //8
+		|| load(E_PPLANES, VERTEX_GLOW, FRAGMENT_GLOW, E_GLOW)
 		)
 			return (1);
-	// this->meshes[9]->translate(Vec3(-9.07, 2, 0.));//translate framework glow
-	// this->meshes[11]->translate(Vec3(0, 2, 6.69));//translate framework framebuffer
-
-	// std::cout << this->meshes[0]->getShaderProgram() << " " << this->meshes[1]->getShaderProgram() << "\n";
+	
+	for (unsigned int i = 0; i < (int)E_RENDERBUFFER + 1; i++)
+	{
+		if (loadLight(g_lightPos[i]))
+			return (1);
+	}
+	this->meshes[8]->translate(Vec3(-9.07, 2, 0.));//translate framework glow
 	this->time.setTime();
 	return (0);
 }
 
 void				Shaderpixel::update(Camera &cam)
 {
-	float	time = this->time.getTimeSeconds();
-	Vec3	lightPos = Vec3(1. * cos(time * 0.5), 1., 1. * sin(time * 0.5));
-	int		winWidth, winHeight;
+	float		time = this->time.getTimeSeconds();
+	int			winWidth, winHeight;
+
+	Vec3		lightTranslate[]
+	{
+		Vec3(0., 0., 0.),
+		Vec3(cos(time * 0.5) * 1.4, cos(time * 0.1), sin(time * 0.5) * 1.4), // MANDELBULB
+		Vec3(2. * cos(time * 0.5), sin(time), 2 * sin(time * 0.5)), // MANDELBOX
+		Vec3(cos(time), sin(time), 0.8 - cos(time / 4.)), // REFRACT
+		Vec3(-1., 1 + cos(time * 0.25) / 2., -.5), // CLOUD
+		Vec3(0., 0., 0.), // FIELD
+		Vec3(cos(time * 0.1), 1.5, sin(time * 0.1)), // ASTEROID
+		Vec3(cos(time * 0.5), 1., sin(time * 0.5)), // METABALLS
+		Vec3(0., 0., 0.), // GLOW
+		Vec3(0., 0., 0.), // FRAMEBUFFER
+		Vec3(0., 0., 0.) // RENDERBUFFER
+	};
 
 	glfwGetFramebufferSize(this->getWindow(), &winWidth, &winHeight);
-	this->meshes[0]->setPosition(lightPos);
+	
+	for (unsigned int i = 0; i < this->lights.size(); i++)
+	{
+		this->lights[i]->setPosition(g_lightPos[i]);
+		this->lights[i]->translate(lightTranslate[i]);
+	}
 
 	for (unsigned int i = 0; i < this->meshes.size(); i++)
-		this->meshes[i]->render(cam, time, lightPos, Vec2(winWidth, winHeight));
+		this->meshes[i]->render(cam, time, this->lights, Vec2(winWidth, winHeight));
+	for (unsigned int i = 0; i < this->lights.size(); i++)
+		this->lights[i]->render(cam, time, this->lights, Vec2(winWidth, winHeight));
 	this->currentFrameNb++;
 }
 
@@ -227,13 +266,13 @@ void				Shaderpixel::fieldKeys(void)
 	if (this->meshes.size() <= 8)
 		return;
 	if (glfwGetKey(this->window, GLFW_KEY_RIGHT) == GLFW_PRESS)
-		this->meshes[8]->translate(E_RIGHT, -SPEED);
+		this->meshes[7]->translate(E_RIGHT, -SPEED);
 	if (glfwGetKey(this->window, GLFW_KEY_LEFT) == GLFW_PRESS)
-		this->meshes[8]->translate(E_RIGHT, SPEED);
+		this->meshes[7]->translate(E_RIGHT, SPEED);
 	if (glfwGetKey(this->window, GLFW_KEY_UP) == GLFW_PRESS)
-		this->meshes[8]->translate(E_FRONT, -SPEED);
+		this->meshes[7]->translate(E_FRONT, -SPEED);
 	if (glfwGetKey(this->window, GLFW_KEY_DOWN) == GLFW_PRESS)
-		this->meshes[8]->translate(E_FRONT, SPEED);
+		this->meshes[7]->translate(E_FRONT, SPEED);
 }
 
 void				Shaderpixel::getKeys(void)
@@ -254,6 +293,8 @@ void				Shaderpixel::getKeys(void)
 		this->cam.translate(E_UP, -SPEED);
 	fieldKeys();
 	this->inputKey(GLFW_KEY_APOSTROPHE);
+	this->inputKey(GLFW_KEY_1);
+	this->inputKey(GLFW_KEY_2);
 }
 
 void				Shaderpixel::checkKeys(void)
@@ -270,6 +311,16 @@ void				Shaderpixel::checkKeys(void)
 				? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
 			glfwSetCursorPosCallback(this->window, this->isCursor
 				? NULL : mouse_callback);
+		}
+		else if (i == GLFW_KEY_1)
+		{
+			if (this->refract)
+				this->refract->switchDiffuse();
+		}
+		else if (i == GLFW_KEY_2)
+		{
+			if (this->refract)
+				this->refract->switchSpecular();
 		}
 		this->keys[(int)i] = KEY_DONE;
 		this->queue.pop();
@@ -306,6 +357,8 @@ Shaderpixel::~Shaderpixel()
 {
 	for (unsigned int i = 0; i < this->meshes.size(); i++)
 		delete meshes[i];
+	for (unsigned int i = 0; i < this->lights.size(); i++)
+		delete lights[i];
 	glfwDestroyWindow(this->window);
 	glfwTerminate();
 }

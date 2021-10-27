@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 12:11:30 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/27 16:36:46 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/26 13:44:29 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,10 @@ bool	RenderBufferMesh::loadMesh(t_objPath pathMesh, std::string pathVertex, std:
 	return (false);
 }
 
-void	RenderBufferMesh::render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution)
+void	RenderBufferMesh::render(Camera &cam, float timeS, std::vector<Mesh*> &lights, Vec2 resolution)
 {
-	(void)lightPos;
-	
+	Vec3	lightPos = lights[this->type]->getPosition();
+
 	for (unsigned int i = 0 ; i < this->m_Entries.size() ; i++)
 	{
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, this->frameBufferInput);

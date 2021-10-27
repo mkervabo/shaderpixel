@@ -9,34 +9,38 @@ in	vec4	pos;
 uniform sampler2D	text;
 uniform vec3		colorMat;
 uniform int			isText;
-uniform vec3		u_lightPos;
+uniform vec3		u_lightPos[11];
 uniform vec3		eye;
 
 uniform float		K_S;
-// uniform float		K_D;
 
 #define AMBIENT_COEF 0.1 
 #define LIGHT_COL vec3(1.0, 1.0, 1.0)
 
 #define K_SHIN 10.;
+#define DISTANCE 10.
 
 void	main()
 {
-	vec3	ambient = AMBIENT_COEF * LIGHT_COL;
-	vec3	lightDir = normalize(u_lightPos - pos.xyz);
+	float	dist = 0.;
+	vec3	lightDir = vec3(0.);
 	vec3	vPToEye = normalize(eye - pos.xyz);
-	float	diff = max(dot(lightDir, norm), 0.0);
+	vec3	ambient = AMBIENT_COEF * LIGHT_COL;
+	float	diff = 0.;
+	float	spec = 0.;
+	vec3	rL = vec3(0.);
 
-	vec3 rL = reflect(lightDir, norm);
-	float spec = max(dot(-rL, vPToEye), 0.);
+	for (int i = 0; i < 11; i++)
+	{
+		dist = 1. - min(distance(u_lightPos[i], pos.xyz), DISTANCE) / DISTANCE;
+		lightDir = normalize(u_lightPos[i] - pos.xyz);
+		diff += max(dot(lightDir, norm), 0.0) * dist;
+		rL = reflect(lightDir, norm);
+		spec += max(dot(-rL, vPToEye), 0.) * dist;
+	}
 
-	// if (diffuse < EPSILON)
-	// 	return (vec3(0., 0., 0.));
-	// if (specular < EPSILON)
-	// 	return (light.intensity * (colorObj * diffuse * K_D));
-
-	vec3	diffuse = LIGHT_COL * diff * 1.;
-	vec3	specular = LIGHT_COL * pow(spec, K_S) * 0.;
+	vec3	diffuse = LIGHT_COL * min(diff, 1.) * 1.;
+	vec3	specular = LIGHT_COL * pow(min(spec, 1.), K_S) * 0.;
 
 	if (isText == 1)
 	{

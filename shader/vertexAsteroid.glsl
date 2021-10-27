@@ -11,6 +11,6 @@ out vec4			pos;
 
 void main()
 {
-	pos = model * vec4(aPos * 2., 1.0);
+	pos = model * vec4(aPos * 1., 1.0);
 	gl_Position = projection * view * pos;
 }

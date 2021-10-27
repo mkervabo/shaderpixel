@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:14:59 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/20 14:15:09 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/26 13:04:31 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ class FrameBufferMesh: public Mesh
 	public:
 		FrameBufferMesh();
 		virtual bool	loadMesh(t_objPath pathMesh, std::string pathVertex, std::string pathFragment);
-		virtual void	render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution);
+		virtual void	render(Camera &cam, float timeS, std::vector<Mesh*> &lights, Vec2 resolution);
 		virtual ~FrameBufferMesh();
 };
 

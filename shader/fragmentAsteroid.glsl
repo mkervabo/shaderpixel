@@ -120,7 +120,7 @@ vec2 sdFbm( vec3 p, float d)
 vec2 DistanceEstimation(vec3 p)
 {
 	p -= modelPos;
-	p  = (modelMat * vec4(p, 1.)).xyz;
+	p = (modelMat * vec4(p, 1.)).xyz;
 	float sphere = sphereDE(p, 0.5);
 		
 	vec2 dt = sdFbm(p, sphere);
@@ -148,7 +148,7 @@ vec2 iBox( in vec3 ro, in vec3 rd, in vec3 rad )
 vec2 ShortestDistanceToSurface(vec3 eyeP, vec3 marchinDir, float start,
 	float end)
 {
-	vec2 ret;
+	vec2 ret = vec2(0.);
 	//bounding volume
 	vec2 dis = iBox(eyeP, marchinDir, vec3(1.0));
 	if( dis.y < 0.0 )
@@ -204,7 +204,7 @@ float calcSoftShadow(vec3 ro, vec3 rd, float tmin, float tmax, float w)
 	for (int i = 0; i < IT_SHADOWS; i++)
 	{
 		float h = DistanceEstimation(ro + rd * t).x;
-		res = min( res, h/(w*t) );
+		res = min( res, h / (w * t) );
 		t += clamp(h, 0.005, 1.);
 		if (res < -1.0 || t > tmax)
 			break;
@@ -226,7 +226,7 @@ vec3 phongLight(s_light light, vec3 eye, vec3 dir, vec3 norm, vec3 pos, float ma
 	if (diffuse < EPSILON)
 		return (vec3(0., 0., 0.));
 
-	diffuse *= calcSoftShadow(pos + norm * 0.01, normalize(light.pos), MIN_DIST, MAX_DIST, 0.003);
+	diffuse *= calcSoftShadow(pos + norm * 0.01, normalize(light.pos - pos), MIN_DIST, MAX_DIST, 0.003);
 	diffuse = clamp(diffuse, 0., 1.);
 	vec3 ret;
 	
@@ -256,13 +256,12 @@ vec3 calculateColor(s_light light, vec3 eye, vec3 dir, vec3 pos, vec3 norm, floa
 
 void main(void)
 {
-	float d = distance(eye, modelPos) - 1.5;
+	float d = distance(eye, modelPos);
 	vec3 dir = calculateMarchinDir(u_fov, u_resolution, gl_FragCoord.xy);
-	// vec3 eye = vec3(cos(iTime * 0.025), 1., sin(iTime * 0.025));
 
 	vec3 worldDir = (inverseView * vec4(dir, 0.0)).xyz;
 		
-	vec2 dt = ShortestDistanceToSurface(eye, worldDir, MIN_DIST, MAX_DIST);
+	vec2 dt = ShortestDistanceToSurface(eye, worldDir, d - 1.5, MAX_DIST);
 
 	vec3 posHit = eye + worldDir * dt.x;
 	vec3 norm = estimateNormal(posHit);
@@ -274,7 +273,7 @@ void main(void)
 		return ;
 	}
 	s_light light;
-	light.pos = vec3(cos(time * 0.1), 2., sin(time * 0.1));
+	light.pos = u_lightPos;
 	light.colorLight = vec3(1.0, 1.0, 1.0);
 	light.intensity = 1.;
 		

@@ -6,7 +6,7 @@
 /*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 17:01:05 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/25 14:34:14 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/10/27 13:45:27 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,27 @@
 # include "Shader.hpp"
 
 enum e_meshType {E_DEFAULT_MESH, E_MANDELBULB, E_MANDELBOX, E_REFRACT, E_CLOUD, E_FIELD,
-	E_ASTEROID, E_METABALLS, E_GLOW, E_FRAMEBUFFER, E_RENDERBUFFER};
+	E_ASTEROID, E_METABALLS, E_GLOW, E_FRAMEBUFFER, E_RENDERBUFFER, E_LIGHT};
+
+static Vec3		g_lightPos[]
+{
+	Vec3(100., 2., 0.),
+	Vec3(-11., 2., -26.), // MANDELBULB
+	Vec3(11., 1.8, -26.), // MANDELBOX
+	Vec3(0., 2., -51.), // REFRACT
+	Vec3(7., 2., -45.), // CLOUD
+	Vec3(100., 0., 0.), // FIELD
+	Vec3(-8., 2., -46.), // ASTEROID
+	Vec3(0., 2., -20.), // METABALLS
+	Vec3(100., 0., 0.), // GLOW
+	Vec3(100., 0., 0.), // FRAMEBUFFER
+	Vec3(100., 0., 0.) // RENDERBUFFER
+};
 
 # define NEAR_Z 0.1f
 # define FAR_Z 100.f
 # define WIDTH 500.
 # define HEIGHT 500.
-# define RENDER_DIST_SHADER 80.
 
 class Mesh
 {
@@ -49,12 +63,13 @@ class Mesh
 		float			distance(Vec3 pToCompare);
 		bool			loadMesh(t_objPath pathMesh);
 		virtual bool	loadMesh(t_objPath pathMesh, std::string pathVertex, std::string pathFragment);
-		virtual void	render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution);
+		virtual void	render(Camera &cam, float timeS, std::vector<Mesh*> &lights, Vec2 resolution);
 		void			clear(void);
 		void			translate(Vec3 t);
 		void			rotate(Vec3 r);
 		virtual void	translate(e_axes axe, float speed);
 		void			setPosition(Vec3 p);
+		Vec3			getPosition(void);
 		unsigned int	getShaderProgram(void);
 		e_meshType		getType(void);
 		unsigned int	getEntriesSize(void);

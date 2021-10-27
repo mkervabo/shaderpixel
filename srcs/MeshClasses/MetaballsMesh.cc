@@ -1,5 +1,17 @@
-	#include "MetaballsMesh.hpp"
-	#include "Receiver.hpp"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   MetaballsMesh.cc                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/10/26 13:13:55 by gperez            #+#    #+#             */
+/*   Updated: 2021/10/26 13:13:59 by gperez           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "MetaballsMesh.hpp"
+#include "Receiver.hpp"
 
 MetaballsMesh::MetaballsMesh()
 {
@@ -82,11 +94,12 @@ void	MetaballsMesh::addNbBalls(int new_nb_balls)
 	this->nb_balls += new_nb_balls;
 }
 
-	void	MetaballsMesh::render(Camera &cam, float timeS, Vec3 &lightPos, Vec2 resolution)
+	void	MetaballsMesh::render(Camera &cam, float timeS, std::vector<Mesh*> &lights, Vec2 resolution)
 {
 	Vec3	camPos;
 	float	farNear[2] = {FAR_Z, NEAR_Z};
 	float	fov = FOV;
+	Vec3	lightPos = lights[this->type]->getPosition();
 
 	if (this->distance(cam.getPosition()) > 10 - PREC)
 		this->vol->setVolume((ik_f32)0.);

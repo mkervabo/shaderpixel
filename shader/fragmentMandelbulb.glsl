@@ -140,13 +140,6 @@ vec3 estimateNormal(vec3 p)
 	float dy = DistanceEstimation(p + vec3(0, EPSILON, 0));
 	float dz = DistanceEstimation(p + vec3(0, 0, EPSILON));
 	return (normalize(vec3(dx - n, dy - n, dz - n)));
-
-	// return (normalize(vec3(DistanceEstimation(vec3(p.x + EPSILON, p.y, p.z))
-	// 	- DistanceEstimation(vec3(p.x - EPSILON, p.y, p.z)),
-	// 		DistanceEstimation(vec3(p.x, p.y + EPSILON, p.z))
-	// 	- DistanceEstimation(vec3(p.x, p.y - EPSILON, p.z)),
-	// 		DistanceEstimation(vec3(p.x, p.y, p.z + EPSILON))
-	// 	- DistanceEstimation(vec3(p.x, p.y, p.z - EPSILON)))));
 }
 
 vec3 phongLight(s_light light, vec3 vEP, vec3 norm, vec3 pos, vec3 colorObj)
