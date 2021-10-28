@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   GlowMesh.cc                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 13:05:14 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/26 13:43:35 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/28 14:39:12 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,6 @@ void	GlowMesh::render(Camera &cam, float timeS, std::vector<Mesh*> &lights, Vec2
 			"u_fov"), 1, (const GLfloat*)&fov);
 		glUniform2fv(glGetUniformLocation(this->shader.getProgram(),
 			"u_resolution"), 1, (const GLfloat*)&resolution);
-		Vec3 modelPos = mat.getPosition();
-		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
-			"modelPos"), 1, (const GLfloat*)&modelPos);
 		glDrawElements(GL_TRIANGLES, this->m_Entries[i].getNumIndices(), GL_UNSIGNED_INT, NULL);
 	}
 }

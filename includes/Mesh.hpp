@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Mesh.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 17:01:05 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/28 10:30:33 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/28 15:20:46 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ static Vec3		g_lightPos[]
 	Vec3(100., 0., 0.), // FIELD
 	Vec3(-8., 2., -46.), // ASTEROID
 	Vec3(0., 2., -20.), // METABALLS
-	Vec3(100., 0., 0.), // GLOW
-	Vec3(100., 0., 0.), // FRAMEBUFFER
-	Vec3(100., 0., 0.) // RENDERBUFFER
+	Vec3(-8., 3., 0.), // GLOW
+	Vec3(0., 3., 5.), // FRAMEBUFFER
+	Vec3(8., 3., 0.) // RENDERBUFFER
 };
 
 # define NEAR_Z 0.1f

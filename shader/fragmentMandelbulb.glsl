@@ -8,7 +8,6 @@ uniform mat4	modelMat;
 uniform mat4	view;
 uniform vec3	eye;
 uniform vec3	modelPos;
-uniform float	time;
 
 uniform mat4	inverseView;
 uniform mat4	projection;
@@ -93,10 +92,7 @@ float sphereDE(vec3 p, float rayon)
 float DistanceEstimation(vec3 p)
 {
 	p -= modelPos;
-	// return (MandelbulbDE((modelMat * vec4(p, 1.)).xyz, 8.));
 	return (MandelbulbDE((modelMat * vec4(p * SCALE, 1.)).xyz, 8.) / SCALE);
-
-	// return (MandelbulbDE(p, 8.));
 }
 
 float refShortestDistanceToSurface(vec3 eyeP, vec3 marchinDir, float start, float end)
@@ -253,11 +249,6 @@ vec3 calculateColor(s_light light, vec3 eye, vec3 pos, vec3 norm)
 
 vec3	calculateMarchinDir(float fov, vec2 resolutionSize, vec2 fragCoord)
 {
-
-	// vec2 xy = fragCoord - resolutionSize / 2.0 ;
-	// float z = resolutionSize.y / tan(radians(fov));
-	// return (normalize(vec3(xy, -z)));
-
 	float	ratio = resolutionSize.x / resolutionSize.y;
 	vec2	xy = (fragCoord - 0.5) / resolutionSize;
 	//from [0,1] to [-1, 1]
@@ -290,25 +281,6 @@ void	main(void)
 	light[0].intensity = 0.5;
 
 	vec3 color = calculateColor(light[0], eye, posHit, norm);
-
-	// for (int i = 0; i < MAX_REFLECTIONS; i++) // Reflexion
-	// {
-	// 	worldDir = reflect(worldDir, norm);
-	// 	posHit += norm * 0.03;
-	// 	dist = refShortestDistanceToSurface(posHit, worldDir, MIN_DIST, MAX_DIST);
-
-	// 	posHit = posHit + worldDir * dist;
-	// 	norm = estimateNormal(posHit);
-
-	// 	if (dist > MAX_DIST - EPSILON_REF)
-	// 	{
-	// 		fragColor = vec4(color + K_R * texture(iChannel0, worldDir).xyz, 1.);
-	// 		return;
-	// 	}
-	// 	else 
-	// 		color += K_R * calculateColor(light, eye, posHit, norm) * float((MAX_REFLECTIONS - i) / MAX_REFLECTIONS);
-	// }
-
 	float	p10 = projection[2].z;
 	float	p11 = projection[3].z;
 	float eyeHitZ  = -dist * dot(worldDir, (vec3(0.,0.,-1.) * mat3(view)));

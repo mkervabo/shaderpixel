@@ -4,7 +4,7 @@ FrameBufferMesh::FrameBufferMesh()
 {
 	Mesh();
 	this->type = E_FRAMEBUFFER;
-	this->translate(Vec3(0, 2, 6.70));
+	this->translate(Vec3(0, 2, 6.7));
 }
 
 bool	FrameBufferMesh::loadMesh(t_objPath pathMesh, std::string pathVertex, std::string pathFragment)
@@ -34,8 +34,6 @@ bool	FrameBufferMesh::loadMesh(t_objPath pathMesh, std::string pathVertex, std::
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_RGB, WIDTH, HEIGHT);
 
 	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, this->frameTexture, 0);
-	// glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_RENDERBUFFER, this->renderBuffer);
-
 	GLenum i;
 	if((i = glCheckFramebufferStatus(GL_FRAMEBUFFER)) != GL_FRAMEBUFFER_COMPLETE)
 	{
@@ -49,8 +47,8 @@ bool	FrameBufferMesh::loadMesh(t_objPath pathMesh, std::string pathVertex, std::
 
 void	FrameBufferMesh::render(Camera &cam, float timeS, std::vector<Mesh*> &lights, Vec2 resolution)
 {
-	Vec3	lightPos = lights[this->type]->getPosition();
-	
+	(void)lights;
+
 	for (unsigned int i = 0 ; i < this->m_Entries.size() ; i++)
 	{
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, this->frame);
@@ -62,14 +60,7 @@ void	FrameBufferMesh::render(Camera &cam, float timeS, std::vector<Mesh*> &light
 			"time"), 1, (const GLfloat*)&timeS);
 		glUniform2fv(glGetUniformLocation(this->bufferA.getShaderProgram(),
 			"u_resolution"), 1, (const GLfloat*)&resolution);
-		glUniformMatrix4fv(glGetUniformLocation(this->bufferA.getShaderProgram(),
-			"model"), 1, GL_FALSE, &(mat.getMatrix(false).inverse()[0][0]));
-		glUniformMatrix4fv(glGetUniformLocation(this->bufferA.getShaderProgram(),
-			"view"), 1, GL_FALSE, &(cam.getMatrix(false)[0][0]));
-		glUniformMatrix4fv(glGetUniformLocation(this->bufferA.getShaderProgram(),
-			"projection"), 1, GL_FALSE, &(cam.getProjMatrix()[0][0]));
 		glDrawElements(GL_TRIANGLES, this->m_Entries[i].getNumIndices(), GL_UNSIGNED_INT, NULL);
-		
 		
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 		glBindVertexArray(this->m_Entries[i].getVao());
@@ -88,12 +79,6 @@ void	FrameBufferMesh::render(Camera &cam, float timeS, std::vector<Mesh*> &light
 			"view"), 1, GL_FALSE, &(cam.getMatrix(false)[0][0]));
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
 			"projection"), 1, GL_FALSE, &(cam.getProjMatrix()[0][0]));
-		glUniform1fv(glGetUniformLocation(this->shader.getProgram(),
-			"time"), 1, (const GLfloat*)&timeS);
-		glUniform2fv(glGetUniformLocation(this->shader.getProgram(),
-			"u_resolution"), 1, (const GLfloat*)&resolution);
-		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
-			"u_lightPos"), 1, (const GLfloat*)&lightPos);
 		glDrawElements(GL_TRIANGLES, this->m_Entries[i].getNumIndices(), GL_UNSIGNED_INT, NULL);
 	}
 }

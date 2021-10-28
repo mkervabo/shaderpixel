@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 15:39:27 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/28 15:30:26 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/28 15:38:44 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,11 +191,11 @@ bool				Shaderpixel::init(void)
 		|| load(E_PCUBE, VERTEX_MANDELBOX, FRAGMENT_MANDELBOX, E_MANDELBOX)
 		|| load(E_PCUBE, VERTEX_FIELD, FRAGMENT_FIELD, E_FIELD)
 		|| load(E_PCUBE, VERTEX_TETRAHEDRON, FRAGMENT_TETRAHEDRON, E_TETRAHEDRON)
-		// || load(E_PFRAMEWORK, VERTEX, FRAGMENT, E_DEFAULT_MESH) // 9
-		// || load(E_PPLANES, VERTEX_GLOW, FRAGMENT_GLOW, E_GLOW)
-		// || load(E_PFRAMEWORK, VERTEX, FRAGMENT, E_DEFAULT_MESH) // 11
-		// || load(E_PPLANES, VERTEX_FRAMEBUFFER, FRAGMENT_FRAMEBUFFER, E_FRAMEBUFFER)
-		// || load(E_PFRAMEWORK, VERTEX, FRAGMENT, E_DEFAULT_MESH) // 14
+		|| load(E_PFRAMEWORK, VERTEX, FRAGMENT, E_DEFAULT_MESH) // 9
+		|| load(E_PPLANES, VERTEX_GLOW, FRAGMENT_GLOW, E_GLOW)
+		|| load(E_PFRAMEWORK2, VERTEX, FRAGMENT, E_DEFAULT_MESH) // 11
+		|| load(E_PPLANE, VERTEX_FRAMEBUFFER, FRAGMENT_FRAMEBUFFER, E_FRAMEBUFFER)
+		|| load(E_PFRAMEWORK, VERTEX, FRAGMENT, E_DEFAULT_MESH) // 13
 		|| load(E_PPLANE, VERTEX_RENDERBUFFER, FRAGMENT_RENDERBUFFER, E_RENDERBUFFER)
 		)
 			return (1);
@@ -205,9 +205,9 @@ bool				Shaderpixel::init(void)
 		if (loadLight(g_lightPos[i]))
 			return (1);
 	}
-	// this->meshes[9]->translate(Vec3(-9.07, 2, 0.));//translate framework glow
-	// this->meshes[11]->translate(Vec3(9.07, 2, 0.));//translate frameworkframebuffer
-	// this->meshes[13]->translate(Vec3(9.07, 2, 0.));//translate frameworkrenderbuffer
+	this->meshes[9]->translate(Vec3(-9.07, 2, 0.));//translate framework glow
+	this->meshes[11]->translate(Vec3(0., 2, 6.7));//translate frameworkframebuffer
+	this->meshes[13]->translate(Vec3(8.78, 2, 0.));//translate frameworkrenderbuffer
 	this->time.setTime();
 	return (0);
 }

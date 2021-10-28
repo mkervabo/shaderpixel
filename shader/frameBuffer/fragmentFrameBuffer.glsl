@@ -2,15 +2,7 @@
 
 out vec4 fragColor;
 
-uniform vec2	u_resolution;
-uniform float	u_fov;
-uniform mat4	projection;
-uniform mat4	view;
-uniform vec3	eye;
-uniform mat4	inverseView;
-uniform float	farNear[2];
-
-uniform sampler2D	bufferA;//buffer
+uniform sampler2D	bufferA;
 uniform sampler2D	img;
 
 float waterStrength = 0.8;

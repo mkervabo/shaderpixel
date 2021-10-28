@@ -8,7 +8,6 @@ uniform mat4	modelMat;
 uniform vec3	modelPos;
 uniform mat4	view;
 uniform vec3	eye;
-uniform float	time;
 
 uniform mat4	inverseView;
 uniform mat4	projection;

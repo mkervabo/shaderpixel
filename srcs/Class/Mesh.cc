@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 16:57:27 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/28 15:26:00 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/28 15:38:06 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,7 +230,7 @@ void			Mesh::render(Camera &cam, float timeS, std::vector<Mesh*> &lights, Vec2 r
 		glUniform1i(glGetUniformLocation(this->shader.getProgram(),
 			"isText"), (GLuint)boolValue);
 		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
-			"u_lightPos"), 11, (const GLfloat*)&lightPos);
+			"u_lightPos"), 12, (const GLfloat*)&lightPos);
 		glDrawElements(GL_TRIANGLES, this->m_Entries[i].getNumIndices(), GL_UNSIGNED_INT, NULL);
 	}
 }

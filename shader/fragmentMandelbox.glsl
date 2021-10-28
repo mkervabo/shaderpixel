@@ -1,6 +1,5 @@
 #version 410 core
 
-// uniform float	time;
 uniform vec2	u_resolution;
 uniform mat4	inverseView;
 uniform float	u_fov;
@@ -139,17 +138,8 @@ vec3 phongIllumination(vec3 k_a, vec3 k_d, vec3 k_s, float alpha, vec3 p, vec3 e
     
     color += phongContribForLight(k_d, k_s, alpha, p, eye,
                                   light1Pos,
-                                  light1Intensity);
-    
-    // vec3 light2Pos = vec3(20.0 * sin(time),
-    //                       40.0 * cos(time),
-    //                       50.0);
-    // vec3 light2Intensity = vec3(0.4, 0.4, 0.4);
-    
-    // color += phongContribForLight(k_d, k_s, alpha, p, eye,
-    //                               light2Pos,
-    //                               light2Intensity);    
-    return color;
+                                  light1Intensity);    
+    return (color);
 }
 
 mat4 viewMatrixTest(vec3 eye, vec3 center, vec3 up) {
@@ -166,11 +156,6 @@ mat4 viewMatrixTest(vec3 eye, vec3 center, vec3 up) {
 
 vec3	calculateMarchinDir(float fov, vec2 resolutionSize, vec2 fragCoord)
 {
-
-	// vec2 xy = fragCoord - resolutionSize / 2.0 ;
-	// float z = resolutionSize.y / tan(radians(fov));
-	// return (normalize(vec3(xy, -z)));
-
 	float	ratio = resolutionSize.x / resolutionSize.y;
 	vec2	xy = (fragCoord - 0.5) / resolutionSize;
 	//from [0,1] to [-1, 1]

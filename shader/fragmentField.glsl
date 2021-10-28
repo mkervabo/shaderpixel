@@ -6,14 +6,11 @@ out vec4		FragColor;
 uniform vec3	eyeInField;
 uniform mat4	view;
 uniform vec3	eye;
-uniform float	time;
 
 uniform mat4	inverseView;
 uniform mat4	projection;
-uniform float	farNear[2];
 uniform float	u_fov;
 uniform vec2	u_resolution;
-uniform vec3	u_lightPos;
 uniform vec3	modelPos;
 
 
@@ -221,7 +218,6 @@ void main(void)
 	}
 	s_light light;
 	light.pos = vec3(0., 10., 0.);
-	// light.pos = vec3(u_lightPos);
 	light.colorLight = vec3(1.0, 1.0, 1.0);
 	light.intensity = 0.5;
 

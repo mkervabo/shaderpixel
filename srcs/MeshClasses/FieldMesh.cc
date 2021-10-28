@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   FieldMesh.cc                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 22:35:15 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/26 13:43:28 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/28 15:25:38 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,18 +22,20 @@ FieldMesh::FieldMesh()
 void	FieldMesh::render(Camera &cam, float timeS, std::vector<Mesh*> &lights, Vec2 resolution)
 {
 	Vec3	camPos = cam.getPosition();
-	Vec3	lightPos = lights[this->type]->getPosition();
-	float	farNear[2] = {FAR_Z, NEAR_Z};
 	float	fov = FOV;
 	Vec3	rotCam = cam.getRotation();
 	matInField.setRotation(Vec3(0., rotCam.getY(), rotCam.getZ()));
 	Vec3	eyeInField = matInField.getPosition();
+
+	(void)timeS;
+	(void)lights;
 
 	for (unsigned int i = 0 ; i < this->m_Entries.size() ; i++)
 	{
 		glBindVertexArray(this->m_Entries[i].getVao());
  		glUseProgram(this->shader.getProgram());
 
+		Vec3 modelPos = mat.getPosition();
 		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
 			"eyeInField"), 1, (const GLfloat*)&eyeInField);
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
@@ -47,16 +49,9 @@ void	FieldMesh::render(Camera &cam, float timeS, std::vector<Mesh*> &lights, Vec
 		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
 			"eye"), 1, (const GLfloat*)&camPos);
 		glUniform1fv(glGetUniformLocation(this->shader.getProgram(),
-			"time"), 1, (const GLfloat*)&timeS);
-		glUniform1fv(glGetUniformLocation(this->shader.getProgram(),
-			"farNear"), 2, (const GLfloat*)&farNear);
-		glUniform1fv(glGetUniformLocation(this->shader.getProgram(),
 			"u_fov"), 1, (const GLfloat*)&fov);
 		glUniform2fv(glGetUniformLocation(this->shader.getProgram(),
 			"u_resolution"), 1, (const GLfloat*)&resolution);
-		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
-			"u_lightPos"), 1, (const GLfloat*)&lightPos);
-		Vec3 modelPos = mat.getPosition();
 		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
 			"modelPos"), 1, (const GLfloat*)&modelPos);
 		glDrawElements(GL_TRIANGLES, this->m_Entries[i].getNumIndices(), GL_UNSIGNED_INT, NULL);
@@ -67,7 +62,6 @@ void	FieldMesh::translate(e_axes axe, float speed)
 {
 	this->matInField.translate(axe, speed);
 }
-
 
 FieldMesh::~FieldMesh()
 {

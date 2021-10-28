@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   AsteroidMesh.cc                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 09:05:56 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/27 13:56:10 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/28 10:59:31 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ void	AsteroidMesh::render(Camera &cam, float timeS, std::vector<Mesh*> &lights, 
 		glBindVertexArray(this->m_Entries[i].getVao());
  		glUseProgram(this->shader.getProgram());
 
+		camPos = cam.getPosition();
+		modelPos = mat.getPosition();
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
 			"modelMat"), 1, GL_FALSE, &(modelMat.getInverseMat()[0][0]));
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
@@ -43,14 +45,10 @@ void	AsteroidMesh::render(Camera &cam, float timeS, std::vector<Mesh*> &lights, 
 			"projection"), 1, GL_FALSE, &(cam.getProjMatrix()[0][0]));
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
 			"inverseView"), 1, GL_FALSE, &(cam.getInverseMat()[0][0]));
-		camPos = cam.getPosition();
-		modelPos = mat.getPosition();
 		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
 			"modelPos"), 1, (const GLfloat*)&modelPos);
 		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
 			"eye"), 1, (const GLfloat*)&camPos);
-		glUniform1fv(glGetUniformLocation(this->shader.getProgram(),
-			"time"), 1, (const GLfloat*)&timeS);
 		glUniform1fv(glGetUniformLocation(this->shader.getProgram(),
 			"farNear"), 2, (const GLfloat*)&farNear);
 		glUniform1fv(glGetUniformLocation(this->shader.getProgram(),

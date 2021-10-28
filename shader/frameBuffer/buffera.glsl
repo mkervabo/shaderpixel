@@ -1,10 +1,11 @@
 #version 410 core
 
-out vec4 fragColor;
-uniform vec2		u_resolution;
-
-uniform float	time;
+out vec4		fragColor;
 in vec2			tCoords;
+
+uniform vec2	u_resolution;
+uniform float	time;
+
 
 const mat2 coef = mat2(0.80,  0.60, -0.60,  0.60);
 

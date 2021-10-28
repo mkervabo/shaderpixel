@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 12:11:30 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/28 15:19:46 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/28 15:39:27 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ RenderBufferMesh::RenderBufferMesh()
 {
 	Mesh();
 	this->type = E_RENDERBUFFER;
-	this->mat.translate(Vec3(3., 1., 0.));
+	this->mat.translate(Vec3(8.8, 2, 0.));
 	this->bufferA.translate(Vec3(-1., -0.25, -5.));
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MetaballsMesh.cc                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 13:13:55 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/26 13:13:59 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/28 15:26:00 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,6 @@
 MetaballsMesh::MetaballsMesh()
 {
 	Mesh();
-	this->type = E_METABALLS;
-	this->size = 0.2;
-	this->velocity = 0.5;
-	this->max_size = 0.3;
-	this->min_size = 0.1;
-	this->nb_balls = 5;
 	// irrklang:
 	// start the sound engine with default parameters
 	this->engine = createIrrKlangDevice();
@@ -44,59 +38,10 @@ bool	MetaballsMesh::loadMesh(t_objPath pathMesh, std::string pathVertex, std::st
 	return (false);
 }
 
-void	MetaballsMesh::setSize(float new_size)
-{
-	this->size = new_size;
-}
-
-void	MetaballsMesh::setVelocity(float new_velocity)
-{
-	this->velocity = new_velocity;
-}
-
-void	MetaballsMesh::setMaxSize(float new_max_size)
-{
-	this->max_size = new_max_size;
-}
-
-void   MetaballsMesh::setMinize(float new_min_size)
-{
-	this->min_size = new_min_size;
-}
-
-void	MetaballsMesh::setNbBalls(unsigned int new_nb_balls)
-{
-	this->nb_balls = new_nb_balls;
-}
-
-void	MetaballsMesh::addSize(float new_size)
-{
-	this->size += new_size;
-}
-
-void	MetaballsMesh::addVelocity(float new_velocity)
-{
-	this->velocity += new_velocity;
-}
-
-void	MetaballsMesh::addMaxSize(float new_max_size)
-{
-	this->max_size += new_max_size;
-}
-
-void   MetaballsMesh::addMinize(float new_min_size)
-{
-	this->min_size += new_min_size;
-}
-
-void	MetaballsMesh::addNbBalls(int new_nb_balls)
-{
-	this->nb_balls += new_nb_balls;
-}
-
 	void	MetaballsMesh::render(Camera &cam, float timeS, std::vector<Mesh*> &lights, Vec2 resolution)
 {
 	Vec3	camPos;
+	Vec3	modelPos;
 	float	farNear[2] = {FAR_Z, NEAR_Z};
 	float	fov = FOV;
 	Vec3	lightPos = lights[this->type]->getPosition();
@@ -105,7 +50,6 @@ void	MetaballsMesh::addNbBalls(int new_nb_balls)
 		this->vol->setVolume((ik_f32)0.);
 	else
 		this->vol->setVolume((ik_f32)((10 - this->distance(cam.getPosition()))) / 20);
-	// this->vol->setVolume((ik_f32)(0));
 	for (unsigned int i = 0 ; i < this->m_Entries.size() ; i++)
 	{	
 		glBindTexture(GL_TEXTURE_1D, this->songText);
@@ -118,6 +62,8 @@ void	MetaballsMesh::addNbBalls(int new_nb_balls)
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_1D, this->songText);
 
+		camPos = cam.getPosition();
+		modelPos = mat.getPosition();
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
 			"model"), 1, GL_FALSE, &(mat.getMatrix(false).inverse()[0][0]));
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
@@ -126,7 +72,6 @@ void	MetaballsMesh::addNbBalls(int new_nb_balls)
 			"projection"), 1, GL_FALSE, &(cam.getProjMatrix()[0][0]));
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
 			"inverseView"), 1, GL_FALSE, &(cam.getInverseMat()[0][0]));
-		camPos = cam.getPosition();
 		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
 			"eye"), 1, (const GLfloat*)&camPos);
 		glUniform1fv(glGetUniformLocation(this->shader.getProgram(),
@@ -139,29 +84,8 @@ void	MetaballsMesh::addNbBalls(int new_nb_balls)
 			"u_resolution"), 1, (const GLfloat*)&resolution);
 		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
 			"u_lightPos"), 1, (const GLfloat*)&lightPos);
-		Vec3 modelPos = mat.getPosition();
 		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
 			"modelPos"), 1, (const GLfloat*)&modelPos);
-
-		// this->songData = this->receiver->getFrequency();
-		// glActiveTexture(GL_TEXTURE0);
-		// glBindTexture(GL_TEXTURE_2D, this->songText);
-
-		float offset = this->size;
-		glUniform1fv(glGetUniformLocation(this->shader.getProgram(),
-			"metaSize"), 1, (const GLfloat*)&offset);
-		offset = this->velocity;
-		glUniform1fv(glGetUniformLocation(this->shader.getProgram(),
-			"metaVelocity"), 1, (const GLfloat*)&offset);
-		offset = this->max_size;
-		glUniform1fv(glGetUniformLocation(this->shader.getProgram(),
-			"metaMaxSize"), 1, (const GLfloat*)&offset);
-		offset = this->min_size;
-		glUniform1fv(glGetUniformLocation(this->shader.getProgram(),
-			"metaMinSize"), 1, (const GLfloat*)&offset);
-		unsigned int nbBalls = this->nb_balls;
-		glUniform1i(glGetUniformLocation(this->shader.getProgram(),
-			"metaNbBalls"), (GLuint)nbBalls);
 		glDrawElements(GL_TRIANGLES, this->m_Entries[i].getNumIndices(), GL_UNSIGNED_INT, NULL);
 	}
 }
