@@ -13,17 +13,17 @@ uniform vec3	modelPos;
 const int MAX_STEPS_REF = 10;
 const int MAX_ITERATIONS = 10;
 const int MAX_STEPS = 60;
-const float EPSILON = 0.003;
+const float EPSILON = 0.005;
 const int MAX_AO_STEPS = 5;
 const int MAX_REFLECTIONS = 1;
 const float EPSILON_REF = 0.01;
 
-const vec3 COLOR_OBJ = vec3(0.8, 1., 1.);
+const vec3 COLOR_OBJ = vec3(0.7, 0.5, 0.9);
 
-#define K_A 0.1
+#define K_A 0.3
 #define K_S 10.
 #define K_R 0.8
-#define K_D 0.2
+#define K_D 0.6
 
 struct s_light
 {
@@ -88,12 +88,11 @@ float ShortestDistanceToSurface(vec3 eyeP, vec3 marchinDir, float start, float e
 
 vec3 estimateNormal(vec3 p)
 {
-	return (normalize(vec3(DistanceEstimation(vec3(p.x + EPSILON, p.y, p.z))
-		- DistanceEstimation(vec3(p.x - EPSILON, p.y, p.z)),
-			DistanceEstimation(vec3(p.x, p.y + EPSILON, p.z))
-		- DistanceEstimation(vec3(p.x, p.y - EPSILON, p.z)),
-			DistanceEstimation(vec3(p.x, p.y, p.z + EPSILON))
-		- DistanceEstimation(vec3(p.x, p.y, p.z - EPSILON)))));
+	float n = DistanceEstimation(p);
+	float dx = DistanceEstimation(p + vec3(EPSILON, 0, 0));
+	float dy = DistanceEstimation(p + vec3(0, EPSILON, 0));
+	float dz = DistanceEstimation(p + vec3(0, 0, EPSILON));
+	return (normalize(vec3(dx - n, dy - n, dz - n)));
 }
 
 vec3 phongLight(s_light light, vec3 vEP, vec3 norm, vec3 pos, vec3 colorObj)

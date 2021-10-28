@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 10:03:52 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/28 10:30:37 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/28 10:47:17 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	TetrahedronMesh::render(Camera &cam, float timeS, std::vector<Mesh*> &light
 	float	fov = FOV;
 	Vec3	lightPos = lights[this->type]->getPosition();
 
-	this->modelMat.setRotation(Vec3(0., timeS * 10., 0.));
+	this->modelMat.setRotation(Vec3(timeS * 2., timeS * 2., 0.));
 	for (unsigned int i = 0 ; i < this->m_Entries.size() ; i++)
 	{
 		glBindVertexArray(this->m_Entries[i].getVao());
