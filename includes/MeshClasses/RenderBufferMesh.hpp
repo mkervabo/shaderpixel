@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 12:10:16 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/26 13:08:58 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/28 14:43:31 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include "Mesh.hpp"
 
-# define PATH_RENDERBUFFER_BUFFER_A "shader/renderBuffer/buffera.glsl"
+# define PATH_RENDERBUFFER_FRAGMENT_BUFFER_A "shader/renderBuffer/buffera.glsl"
 # define PATH_RENDERBUFFER_VERTEX_BUFFER_A "shader/renderBuffer/vertexBufferA.glsl"
 
 class RenderBufferMesh : public Mesh

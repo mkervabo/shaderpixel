@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 15:39:27 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/28 10:42:32 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/28 15:30:26 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,7 +182,7 @@ bool				Shaderpixel::init(void)
 	if (this->hud.init())
 		return (1);
 	if (
-	load(E_PCHURCHE, VERTEX, FRAGMENT, E_DEFAULT_MESH)
+		load(E_PCHURCHE, VERTEX, FRAGMENT, E_DEFAULT_MESH)
 		|| load(E_PCUBE, VERTEX_ASTEROID, FRAGMENT_ASTEROID, E_ASTEROID)
 		|| load(E_PCUBE, VERTEX_CLOUD, FRAGMENT_CLOUD, E_CLOUD)
 		|| load(E_PCUBE, VERTEX_REFRACT, FRAGMENT_REFRACT, E_REFRACT)
@@ -196,7 +196,7 @@ bool				Shaderpixel::init(void)
 		// || load(E_PFRAMEWORK, VERTEX, FRAGMENT, E_DEFAULT_MESH) // 11
 		// || load(E_PPLANES, VERTEX_FRAMEBUFFER, FRAGMENT_FRAMEBUFFER, E_FRAMEBUFFER)
 		// || load(E_PFRAMEWORK, VERTEX, FRAGMENT, E_DEFAULT_MESH) // 14
-		// || load(E_PPLANES, VERTEX_FRAMEBUFFER, FRAGMENT_FRAMEBUFFER, E_FRAMEBUFFER)
+		|| load(E_PPLANE, VERTEX_RENDERBUFFER, FRAGMENT_RENDERBUFFER, E_RENDERBUFFER)
 		)
 			return (1);
 	
@@ -229,8 +229,8 @@ void				Shaderpixel::update(Camera &cam)
 		Vec3(cos(time * 0.1), 1.5, sin(time * 0.1)), // ASTEROID
 		Vec3(cos(time * 0.5), 1., sin(time * 0.5)), // METABALLS
 		Vec3(0., 0., 0.), // GLOW
-		Vec3(0., 0., 0.), // FRAMEBUFFER
-		Vec3(0., 0., 0.) // RENDERBUFFER
+		Vec3(cos(time * 0.5), 1., sin(time * 0.5)), // FRAMEBUFFER
+		Vec3() // RENDERBUFFER
 	};
 
 	glfwGetFramebufferSize(this->getWindow(), &winWidth, &winHeight);

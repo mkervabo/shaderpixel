@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Mesh.cc                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 16:57:27 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/27 10:45:01 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/28 15:26:00 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,7 +182,7 @@ void			Mesh::render(Camera &cam, float timeS, std::vector<Mesh*> &lights, Vec2 r
 	Vec3	camPos;
 	(void)resolution;
 	float	specularCoef;
-	Vec3	lightPos[11] = {
+	Vec3	lightPos[12] = {
 		lights[0]->getPosition(),
 		lights[1]->getPosition(),
 		lights[2]->getPosition(),
@@ -193,7 +193,8 @@ void			Mesh::render(Camera &cam, float timeS, std::vector<Mesh*> &lights, Vec2 r
 		lights[7]->getPosition(),
 		lights[8]->getPosition(),
 		lights[9]->getPosition(),
-		lights[10]->getPosition()
+		lights[10]->getPosition(),
+		lights[11]->getPosition()
 	};
 
 	camPos = cam.getPosition();

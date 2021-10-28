@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 12:11:30 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/27 16:54:03 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/28 15:19:46 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,21 +16,21 @@ RenderBufferMesh::RenderBufferMesh()
 {
 	Mesh();
 	this->type = E_RENDERBUFFER;
-	// this->mat.translate(Vec3(0., 0., -15.));
-	this->bufferA.translate(Vec3(-0.5,-0.5, -10.));
+	this->mat.translate(Vec3(3., 1., 0.));
+	this->bufferA.translate(Vec3(-1., -0.25, -5.));
 }
 
 bool	RenderBufferMesh::loadMesh(t_objPath pathMesh, std::string pathVertex, std::string pathFragment)
 {
 	if (Mesh::loadMesh(pathMesh, pathVertex, pathFragment))
 		return (true);
-	if (this->bufferA.loadMesh(g_objPath[E_PBALL], PATH_RENDERBUFFER_VERTEX_BUFFER_A, FRAGMENT))
+	if (this->bufferA.loadMesh(g_objPath[E_PTREE], PATH_RENDERBUFFER_VERTEX_BUFFER_A, PATH_RENDERBUFFER_FRAGMENT_BUFFER_A))
 		return (true);
 
 	glGenFramebuffers(1, &this->frameBufferInput);
 	glBindFramebuffer(GL_FRAMEBUFFER, this->frameBufferInput);
 
-	int	msaa = 1;
+	int	msaa = 16;
 	glGenRenderbuffers(1, &this->renderBufferInput);
 	glBindRenderbuffer(GL_RENDERBUFFER, this->renderBufferInput);
 	glRenderbufferStorageMultisample(GL_RENDERBUFFER, msaa, GL_RGB, WIDTH, HEIGHT);
@@ -65,7 +65,8 @@ bool	RenderBufferMesh::loadMesh(t_objPath pathMesh, std::string pathVertex, std:
 
 void	RenderBufferMesh::render(Camera &cam, float timeS, std::vector<Mesh*> &lights, Vec2 resolution)
 {
-	Vec3	lightPos = lights[this->type]->getPosition();
+	// Vec3	lightPos = lights[this->type]->getPosition();
+	Vec3	lightPos = Vec3(0., 0., 0.);
 
 	for (unsigned int i = 0 ; i < this->m_Entries.size() ; i++)
 	{
@@ -73,22 +74,6 @@ void	RenderBufferMesh::render(Camera &cam, float timeS, std::vector<Mesh*> &ligh
 		glClearColor(0., 0., 0., 1.);
 		glClear(GL_COLOR_BUFFER_BIT);
 		this->bufferA.render(cam, timeS, lights, resolution);
-		// for (unsigned int iBuffer = 0; iBuffer < this->bufferA.getEntriesSize(); iBuffer++)
-		// {
-		// 	glUseProgram(this->bufferA.getShaderProgram());
-		// 	glBindVertexArray(this->bufferA.getVao(iBuffer));
-		// 	glUniform1fv(glGetUniformLocation(this->bufferA.getShaderProgram(),
-		// 		"time"), 1, (const GLfloat*)&timeS);
-		// 	glUniform2fv(glGetUniformLocation(this->bufferA.getShaderProgram(),
-		// 		"u_resolution"), 1, (const GLfloat*)&resolution);
-		// 	glUniformMatrix4fv(glGetUniformLocation(this->bufferA.getShaderProgram(),
-		// 		"model"), 1, GL_FALSE, &(this->bufferA.getMat().getMatrix(false)[0][0]));
-		// 	glUniformMatrix4fv(glGetUniformLocation(this->bufferA.getShaderProgram(),
-		// 		"view"), 1, GL_FALSE, &(cam.getMatrix(false).inverse()[0][0]));
-		// 	glUniformMatrix4fv(glGetUniformLocation(this->bufferA.getShaderProgram(),
-		// 		"projection"), 1, GL_FALSE, &(cam.getProjMatrix()[0][0]));
-		// 	glDrawElements(GL_TRIANGLES, this->bufferA.getNumIndices(iBuffer), GL_UNSIGNED_INT, NULL);
-		// }
 
 		glBindFramebuffer(GL_READ_FRAMEBUFFER, this->frameBufferInput); // src FBO (multi-sample)
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, this->frameBufferOutput);     // dst FBO (single-sample)

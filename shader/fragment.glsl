@@ -9,7 +9,7 @@ in	vec4	pos;
 uniform sampler2D	text;
 uniform vec3		colorMat;
 uniform int			isText;
-uniform vec3		u_lightPos[11];
+uniform vec3		u_lightPos[12];
 uniform vec3		eye;
 
 uniform float		K_S;
@@ -30,7 +30,7 @@ void	main()
 	float	spec = 0.;
 	vec3	rL = vec3(0.);
 
-	for (int i = 0; i < 11; i++)
+	for (int i = 0; i < 12; i++)
 	{
 		dist = 1. - min(distance(u_lightPos[i], pos.xyz), DISTANCE) / DISTANCE;
 		lightDir = normalize(u_lightPos[i] - pos.xyz);
