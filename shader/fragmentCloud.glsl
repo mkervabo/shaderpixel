@@ -151,12 +151,11 @@ s_obj DistanceEstimation(vec3 p, int typeTouch)
 
 vec3 estimateNormal(vec3 p, int typeHit)
 {
-	return (normalize(vec3(DistanceEstimation(vec3(p.x + EPSILON, p.y, p.z), typeHit).dist
-		- DistanceEstimation(vec3(p.x - EPSILON, p.y, p.z), typeHit).dist,
-			DistanceEstimation(vec3(p.x, p.y + EPSILON, p.z), typeHit).dist
-		- DistanceEstimation(vec3(p.x, p.y - EPSILON, p.z), typeHit).dist,
-			DistanceEstimation(vec3(p.x, p.y, p.z + EPSILON), typeHit).dist
-		- DistanceEstimation(vec3(p.x, p.y, p.z - EPSILON), typeHit).dist)));
+	float n = DistanceEstimation(p, typeHit).dist;
+	float dx = DistanceEstimation(p + vec3(EPSILON, 0, 0), typeHit).dist;
+	float dy = DistanceEstimation(p + vec3(0, EPSILON, 0), typeHit).dist;
+	float dz = DistanceEstimation(p + vec3(0, 0, EPSILON), typeHit).dist;
+	return (normalize(vec3(dx - n, dy - n, dz - n)));
 }
 
 ///// DENSITY /////

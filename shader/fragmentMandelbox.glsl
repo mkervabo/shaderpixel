@@ -92,12 +92,13 @@ float shortestDistanceToSurface(vec3 eye, vec3 marchingDirection, float start, f
 //     return normalize(vec3(xy, -z));
 // }
 
-vec3 estimateNormal(vec3 p) {
-    return normalize(vec3(
-        sceneSDF(vec3(p.x + EPSILON, p.y, p.z)) - sceneSDF(vec3(p.x - EPSILON, p.y, p.z)),
-        sceneSDF(vec3(p.x, p.y + EPSILON, p.z)) - sceneSDF(vec3(p.x, p.y - EPSILON, p.z)),
-        sceneSDF(vec3(p.x, p.y, p.z  + EPSILON)) - sceneSDF(vec3(p.x, p.y, p.z - EPSILON))
-    ));
+vec3 estimateNormal(vec3 p)
+{
+	float n = sceneSDF(p);
+	float dx = sceneSDF(p + vec3(EPSILON, 0, 0));
+	float dy = sceneSDF(p + vec3(0, EPSILON, 0));
+	float dz = sceneSDF(p + vec3(0, 0, EPSILON));
+	return (normalize(vec3(dx - n, dy - n, dz - n)));
 }
 
 vec3 phongContribForLight(vec3 k_d, vec3 k_s, float alpha, vec3 p, vec3 eye,

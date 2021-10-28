@@ -127,12 +127,11 @@ vec3 calculateMarchinDir(float fov, vec2 resolutionSize, vec2 fragCoord)
 
 vec3 estimateNormal(vec3 p, float octaves)
 {
-	return (normalize(vec3(DistanceEstimation(vec3(p.x + EPSILON, p.y, p.z), octaves)
-		- DistanceEstimation(vec3(p.x - EPSILON, p.y, p.z), octaves),
-			DistanceEstimation(vec3(p.x, p.y + EPSILON, p.z), octaves)
-		- DistanceEstimation(vec3(p.x, p.y - EPSILON, p.z), octaves),
-			DistanceEstimation(vec3(p.x, p.y, p.z + EPSILON), octaves)
-		- DistanceEstimation(vec3(p.x, p.y, p.z - EPSILON), octaves))));
+	float n = DistanceEstimation(p, octaves);
+	float dx = DistanceEstimation(p + vec3(EPSILON, 0, 0), octaves);
+	float dy = DistanceEstimation(p + vec3(0, EPSILON, 0), octaves);
+	float dz = DistanceEstimation(p + vec3(0, 0, EPSILON), octaves);
+	return (normalize(vec3(dx - n, dy - n, dz - n)));
 }
 
 vec3 phongLight(s_light light, vec3 vPToEye, vec3 norm, vec3 pos, vec3 colorObj)

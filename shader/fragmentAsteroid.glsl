@@ -181,12 +181,11 @@ vec3 calculateMarchinDir(float fov, vec2 resolutionSize, vec2 fragCoord)
 
 vec3 estimateNormal(vec3 p)
 {
-	return (normalize(vec3(DistanceEstimation(vec3(p.x + EPSILON, p.y, p.z)).x
-		- DistanceEstimation(vec3(p.x - EPSILON, p.y, p.z)).x,
-			DistanceEstimation(vec3(p.x, p.y + EPSILON, p.z)).x
-		- DistanceEstimation(vec3(p.x, p.y - EPSILON, p.z)).x,
-			DistanceEstimation(vec3(p.x, p.y, p.z + EPSILON)).x
-		- DistanceEstimation(vec3(p.x, p.y, p.z - EPSILON)).x)));
+	float n = DistanceEstimation(p).x;
+	float dx = DistanceEstimation(p + vec3(EPSILON, 0, 0)).x;
+	float dy = DistanceEstimation(p + vec3(0, EPSILON, 0)).x;
+	float dz = DistanceEstimation(p + vec3(0, 0, EPSILON)).x;
+	return (normalize(vec3(dx - n, dy - n, dz - n)));
 }
 
 float calcSoftShadow(vec3 ro, vec3 rd, float tmin, float tmax, float w)
