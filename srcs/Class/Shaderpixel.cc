@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Shaderpixel.cc                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 15:39:27 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/27 20:07:24 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/10/28 10:27:52 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,15 +182,15 @@ bool				Shaderpixel::init(void)
 	if (this->hud.init())
 		return (1);
 	if (
-	// load(E_PCHURCHE, VERTEX, FRAGMENT, E_DEFAULT_MESH)
-	// 	|| load(E_PCUBE, VERTEX_ASTEROID, FRAGMENT_ASTEROID, E_ASTEROID)
-	// 	|| load(E_PCUBE, VERTEX_CLOUD, FRAGMENT_CLOUD, E_CLOUD)
-	// 	|| load(E_PCUBE, VERTEX_REFRACT, FRAGMENT_REFRACT, E_REFRACT)
-	// 	|| load(E_PCUBE, VERTEX_METABALLS, FRAGMENT_METABALLS, E_METABALLS)
-	// 	|| load(E_PCUBE, VERTEX_MANDELBULB, FRAGMENT_MANDELBULB, E_MANDELBULB)
-	// 	|| load(E_PCUBE, VERTEX_MANDELBOX, FRAGMENT_MANDELBOX, E_MANDELBOX)
-	// 	|| load(E_PCUBE, VERTEX_FIELD, FRAGMENT_FIELD, E_FIELD)
-		load(E_PCUBE, VERTEX_TETRAHEDRON, FRAGMENT_TETRAHEDRON, E_TETRAHEDRON)
+	load(E_PCHURCHE, VERTEX, FRAGMENT, E_DEFAULT_MESH)
+		|| load(E_PCUBE, VERTEX_ASTEROID, FRAGMENT_ASTEROID, E_ASTEROID)
+		|| load(E_PCUBE, VERTEX_CLOUD, FRAGMENT_CLOUD, E_CLOUD)
+		|| load(E_PCUBE, VERTEX_REFRACT, FRAGMENT_REFRACT, E_REFRACT)
+		|| load(E_PCUBE, VERTEX_METABALLS, FRAGMENT_METABALLS, E_METABALLS)
+		|| load(E_PCUBE, VERTEX_MANDELBULB, FRAGMENT_MANDELBULB, E_MANDELBULB)
+		|| load(E_PCUBE, VERTEX_MANDELBOX, FRAGMENT_MANDELBOX, E_MANDELBOX)
+		|| load(E_PCUBE, VERTEX_FIELD, FRAGMENT_FIELD, E_FIELD)
+		|| load(E_PCUBE, VERTEX_TETRAHEDRON, FRAGMENT_TETRAHEDRON, E_TETRAHEDRON)
 		// || load(E_PFRAMEWORK, VERTEX, FRAGMENT, E_DEFAULT_MESH) // 9
 		// || load(E_PPLANES, VERTEX_GLOW, FRAGMENT_GLOW, E_GLOW)
 		// || load(E_PFRAMEWORK, VERTEX, FRAGMENT, E_DEFAULT_MESH) // 11
@@ -200,11 +200,11 @@ bool				Shaderpixel::init(void)
 		)
 			return (1);
 	
-	// for (unsigned int i = 0; i < (int)E_RENDERBUFFER + 1; i++)
-	// {
-	// 	if (loadLight(g_lightPos[i]))
-	// 		return (1);
-	// }
+	for (unsigned int i = 0; i < (int)E_RENDERBUFFER + 1; i++)
+	{
+		if (loadLight(g_lightPos[i]))
+			return (1);
+	}
 	// this->meshes[9]->translate(Vec3(-9.07, 2, 0.));//translate framework glow
 	// this->meshes[11]->translate(Vec3(9.07, 2, 0.));//translate frameworkframebuffer
 	// this->meshes[13]->translate(Vec3(9.07, 2, 0.));//translate frameworkrenderbuffer
@@ -221,6 +221,7 @@ void				Shaderpixel::update(Camera &cam)
 	{
 		Vec3(0., 0., 0.),
 		Vec3(cos(time * 0.5) * 1.4, cos(time * 0.1), sin(time * 0.5) * 1.4), // MANDELBULB
+		Vec3(cos(time * 0.5), sin(time), sin(time * 0.5)), // TETRAHEDRON
 		Vec3(2. * cos(time * 0.5), sin(time), 2 * sin(time * 0.5)), // MANDELBOX
 		Vec3(cos(time), sin(time), 0.8 - cos(time / 4.)), // REFRACT
 		Vec3(-1., 1 + cos(time * 0.25) / 2., -.5), // CLOUD

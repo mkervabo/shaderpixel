@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Mesh.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 17:01:05 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/27 18:25:18 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/10/28 10:30:33 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,14 @@
 # include "Camera.hpp"
 # include "Shader.hpp"
 
-enum e_meshType {E_DEFAULT_MESH, E_MANDELBULB, E_MANDELBOX, E_REFRACT, E_CLOUD, E_FIELD,
-	E_ASTEROID, E_METABALLS, E_GLOW, E_FRAMEBUFFER, E_RENDERBUFFER, E_TETRAHEDRON, E_LIGHT};
+enum e_meshType {E_DEFAULT_MESH, E_MANDELBULB, E_TETRAHEDRON, E_MANDELBOX, E_REFRACT, E_CLOUD, E_FIELD,
+	E_ASTEROID, E_METABALLS, E_GLOW, E_FRAMEBUFFER, E_RENDERBUFFER, E_LIGHT};
 
 static Vec3		g_lightPos[]
 {
 	Vec3(100., 2., 0.),
 	Vec3(-11., 2., -26.), // MANDELBULB
+	Vec3(0., 2, -34.), // TETRAHEDRON
 	Vec3(11., 1.8, -26.), // MANDELBOX
 	Vec3(0., 2., -51.), // REFRACT
 	Vec3(7., 2., -45.), // CLOUD

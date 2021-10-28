@@ -1,11 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   TetrahedronMesh.cc                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/10/28 10:03:52 by gperez            #+#    #+#             */
+/*   Updated: 2021/10/28 10:30:37 by gperez           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "TetrahedronMesh.hpp"
 
 TetrahedronMesh::TetrahedronMesh()
 {
 	Mesh();
 	this->type = E_TETRAHEDRON;
-	// this->translate(Vec3(0., 2, -26.));
-	this->translate(Vec3(0., 0, -2.));
+	this->translate(Vec3(0., 2, -34.));
 }
 
 void	TetrahedronMesh::render(Camera &cam, float timeS, std::vector<Mesh*> &lights, Vec2 resolution)
@@ -14,13 +25,16 @@ void	TetrahedronMesh::render(Camera &cam, float timeS, std::vector<Mesh*> &light
 	Vec3	modelPos;
 	float	farNear[2] = {FAR_Z, NEAR_Z};
 	float	fov = FOV;
-	// Vec3	lightPos = lights[this->type]->getPosition();
+	Vec3	lightPos = lights[this->type]->getPosition();
 
+	this->modelMat.setRotation(Vec3(0., timeS * 10., 0.));
 	for (unsigned int i = 0 ; i < this->m_Entries.size() ; i++)
 	{
 		glBindVertexArray(this->m_Entries[i].getVao());
 		glUseProgram(this->shader.getProgram());
 
+		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
+			"modelMat"), 1, GL_FALSE, &(modelMat.getInverseMat()[0][0]));
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
 			"model"), 1, GL_FALSE, &(mat.getMatrix(false).inverse()[0][0]));
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
@@ -44,8 +58,8 @@ void	TetrahedronMesh::render(Camera &cam, float timeS, std::vector<Mesh*> &light
 			"u_fov"), 1, (const GLfloat*)&fov);
 		glUniform2fv(glGetUniformLocation(this->shader.getProgram(),
 			"u_resolution"), 1, (const GLfloat*)&resolution);
-		// glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
-			// "u_lightPos"), 1, (const GLfloat*)&lightPos);
+		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
+			"u_lightPos"), 1, (const GLfloat*)&lightPos);
 
 		glDrawElements(GL_TRIANGLES, this->m_Entries[i].getNumIndices(), GL_UNSIGNED_INT, NULL);
 	}

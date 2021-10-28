@@ -13,14 +13,14 @@ uniform vec3	modelPos;
 const int MAX_STEPS_REF = 10;
 const int MAX_ITERATIONS = 10;
 const int MAX_STEPS = 60;
-const float EPSILON = 0.00125;
+const float EPSILON = 0.003;
 const int MAX_AO_STEPS = 5;
 const int MAX_REFLECTIONS = 1;
 const float EPSILON_REF = 0.01;
 
 const vec3 COLOR_OBJ = vec3(0.8, 1., 1.);
 
-#define K_A 0.5
+#define K_A 0.1
 #define K_S 10.
 #define K_R 0.8
 #define K_D 0.2
@@ -49,7 +49,7 @@ float DistanceEstimation(vec3 p)
 {
 	p -= modelPos;
 	// return (TetrahedronDE((modelMat * vec4(p, 1.)).xyz, 8.));
-	return (TetrahedronDE((modelMat * vec4(p / 0.2, 1.)).xyz, 2., vec3(2.)) * 0.2);
+	return (TetrahedronDE((modelMat * vec4(p / 0.5, 1.)).xyz, 2., vec3(2.)) * 0.5);
 }
 
 float refShortestDistanceToSurface(vec3 eyeP, vec3 marchinDir, float start, float end)
@@ -105,13 +105,12 @@ vec3 phongLight(s_light light, vec3 vEP, vec3 norm, vec3 pos, vec3 colorObj)
 	float specular = dot(vReflectLN, vEP);
 		
 	if (diffuse < EPSILON)
-		return (vec3(0., 1., 0.));
+		return (vec3(0., 0., 0.));
 	if (specular < EPSILON)
-	return (vec3(0., 1., 1.));
-		// return (light.intensity * (colorObj * diffuse * K_D));
-	return (vec3(0., 0., 1.));
-	// return (light.intensity * (colorObj * diffuse * K_D
-		// + light.colorLight * pow(specular, K_S)));
+		return (light.intensity * (colorObj * diffuse * K_D));
+
+	return (light.intensity * (colorObj * diffuse * K_D
+		+ light.colorLight * pow(specular, K_S)));
 }
 
 
@@ -189,7 +188,6 @@ float shadows(in vec3 posHit, in vec3 vPL, float minDist, float maxDist, float k
 vec3 calculateColor(s_light light, vec3 eye, vec3 pos, vec3 norm)
 {
 	vec3 colorObj = COLOR_OBJ;
-	// vec3 ambiantLight = colorObj * K_A; // * ambientOcclusion(pos, norm, 2., 1.2) * K_A;
 	vec3 ambiantLight = colorObj * ambientOcclusion(pos, norm, 2., 1.2) * K_A;
 	vec3 vEP = normalize(eye - pos);
 	vec3 color = vec3(0.);
@@ -226,7 +224,6 @@ vec3	calculateMarchinDir(float fov, vec2 resolutionSize, vec2 fragCoord)
 void	main()
 {
 	vec3	dir = calculateMarchinDir(u_fov, u_resolution, gl_FragCoord.xy);
-	float	cosA = dir.z;
 	vec3	worldDir = (inverseView * vec4(dir, 0.0)).xyz;
 
 	float	dist = ShortestDistanceToSurface(eye, worldDir, farNear[1], farNear[0]);
@@ -237,37 +234,15 @@ void	main()
 	if (dist > farNear[0] - EPSILON)
 	{
 		gl_FragDepth = farNear[0];
-		FragColor = vec4(1., 1., 0., 0.);
+		FragColor = vec4(0.);
 		return ;
 	}
-	s_light light[2];
-	light[0].pos = vec3(1.,1.,1.);
-	light[0].colorLight = vec3(1.0, 1.0, 1.0);
-	light[0].intensity = 0.5;
+	s_light light;
+	light.pos = u_lightPos;
+	light.colorLight = vec3(1.0, 1.0, 1.0);
+	light.intensity = 0.5;
 
-	vec3 color = calculateColor(light[0], eye, posHit, norm);
-
-	// for (int i = 0; i < MAX_REFLECTIONS; i++) // Reflexion
-	// {
-	// 	worldDir = reflect(worldDir, norm);
-	// 	posHit += norm * 0.03;
-	// 	dist = refShortestDistanceToSurface(posHit, worldDir, MIN_DIST, MAX_DIST);
-
-	// 	posHit = posHit + worldDir * dist;
-	// 	norm = estimateNormal(posHit);
-
-	// 	if (dist > MAX_DIST - EPSILON_REF)
-	// 	{
-	// 		fragColor = vec4(color + K_R * texture(iChannel0, worldDir).xyz, 1.);
-	// 		return;
-	// 	}
-	// 	else 
-	// 		color += K_R * calculateColor(light, eye, posHit, norm) * float((MAX_REFLECTIONS - i) / MAX_REFLECTIONS);
-	// }
-
-	// float zc = (projection * vec4( posHit, 1.0 ) ).z;
-	// float wc = (projection * vec4( posHit, 1.0 ) ).w;
-	// gl_FragDepth = zc/wc;
+	vec3 color = calculateColor(light, eye, posHit, norm);
 
 	float	p10 = projection[2].z;
 	float	p11 = projection[3].z;
