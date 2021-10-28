@@ -6,7 +6,7 @@
 /*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 15:39:27 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/28 15:38:44 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/28 15:42:17 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,8 +229,8 @@ void				Shaderpixel::update(Camera &cam)
 		Vec3(cos(time * 0.1), 1.5, sin(time * 0.1)), // ASTEROID
 		Vec3(cos(time * 0.5), 1., sin(time * 0.5)), // METABALLS
 		Vec3(0., 0., 0.), // GLOW
-		Vec3(cos(time * 0.5), 1., sin(time * 0.5)), // FRAMEBUFFER
-		Vec3() // RENDERBUFFER
+		Vec3(0., 0., 0.), // FRAMEBUFFER
+		Vec3(0., 0., 0.) // RENDERBUFFER
 	};
 
 	glfwGetFramebufferSize(this->getWindow(), &winWidth, &winHeight);

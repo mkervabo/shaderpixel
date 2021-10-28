@@ -31,5 +31,5 @@ vec3	rotateX(vec3 p, float theta)
 void main()
 {
 	tCoords = aTex;
-	gl_Position = projection * view * model * vec4(rotateX(rotateZ(aPos, radians(90.)), radians(-90.)), 1.0);
+	gl_Position = projection * view * model * vec4(rotateX(rotateZ(aPos * 0.5, radians(90.)), radians(-90.)), 1.0);
 }
