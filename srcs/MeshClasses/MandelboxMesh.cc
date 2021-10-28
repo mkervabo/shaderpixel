@@ -15,11 +15,15 @@ void	MandelboxMesh::render(Camera &cam, float timeS, std::vector<Mesh*> &lights,
 	float	fov = FOV;
 	Vec3	lightPos = lights[this->type]->getPosition();
 
+	(void)timeS;
+
 	for (unsigned int i = 0 ; i < this->m_Entries.size() ; i++)
 	{
 		glBindVertexArray(this->m_Entries[i].getVao());
 		glUseProgram(this->shader.getProgram());
-
+		
+		camPos = cam.getPosition();
+		modelPos = mat.getPosition();
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
 			"model"), 1, GL_FALSE, &(mat.getMatrix(false).inverse()[0][0]));
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
@@ -28,15 +32,10 @@ void	MandelboxMesh::render(Camera &cam, float timeS, std::vector<Mesh*> &lights,
 			"projection"), 1, GL_FALSE, &(cam.getProjMatrix()[0][0]));
 		glUniformMatrix4fv(glGetUniformLocation(this->shader.getProgram(),
 			"inverseView"), 1, GL_FALSE, &(cam.getInverseMat()[0][0]));
-
-		camPos = cam.getPosition();
-		modelPos = mat.getPosition();
 		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
 			"eye"), 1, (const GLfloat*)&camPos);
 		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
 			"modelPos"), 1, (const GLfloat*)&modelPos);
-		glUniform1fv(glGetUniformLocation(this->shader.getProgram(),
-			"time"), 1, (const GLfloat*)&timeS);
 		glUniform1fv(glGetUniformLocation(this->shader.getProgram(),
 			"farNear"), 2, (const GLfloat*)&farNear);
 		glUniform1fv(glGetUniformLocation(this->shader.getProgram(),

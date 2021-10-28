@@ -1,14 +1,16 @@
 #version 410 core
 
 out vec4 fragColor;
-uniform float metaSize;
-uniform float metaVelocity;
-uniform float metaMaxSize;
-uniform float metaMinSize;
-uniform int metaNbBalls;
+
 float s[20];
+const float METASIZE = 0.2;
+const float METAVELOCITY = 0.5;
+const float METAMAXSIZE = 0.3;
+const float METAMINSIZE = 0.1;
+const int METANBALLS = 5;
+
 const float EPSILON = 0.0025;
-const int MAX_STEPS = 100; // 100
+const int MAX_STEPS = 100;
 
 uniform float	time;
 uniform vec2	u_resolution;
@@ -44,16 +46,16 @@ float makeScene(vec3 pos, vec2 coord) {
 	pos -= modelPos;
 	vec3 pos2 = pos;
 	float song = texture(songText, coord.x / u_resolution.x).x;
-	for (int i = 0; i < metaNbBalls; i++)
+	for (int i = 0; i < METANBALLS; i++)
 	{
 		float h = float(i) / 8.0;
-		pos2 = pos + metaVelocity * vec3(cos(hash(h * 0.7) * hash(h * 0.6) * time));
-		s[i] = sphere(pos2, clamp(h * metaSize + song / 10, metaMinSize, metaMaxSize));
+		pos2 = pos + METAVELOCITY * vec3(cos(hash(h * 0.7) * hash(h * 0.6) * time));
+		s[i] = sphere(pos2, clamp(h * METASIZE + song / 10, METAMINSIZE, METAMAXSIZE));
 	}
 	// MakeBlobs
 	float k = -4.0;
 	float blob = 0.0;
-	for (int i = 0; i < metaNbBalls; i++)
+	for (int i = 0; i < METANBALLS; i++)
 	{
 		blob += exp(k * s[i]);
 	}

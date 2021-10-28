@@ -1,14 +1,18 @@
 #version 410 core
 
 out vec4		FragColor;
-in	vec2		textureCoord;
 in	vec3		norm;
 
 uniform mat4	modelMat;
 uniform mat4	view;
 uniform vec3	eye;
-uniform float	time;
 uniform vec3	modelPos;
+uniform mat4	inverseView;
+uniform mat4	projection;
+uniform float	farNear[2];
+uniform float	u_fov;
+uniform vec2	u_resolution;
+uniform vec3	u_lightPos;
 
 const int MAX_STEPS_REF = 10;
 const int MAX_ITERATIONS = 10;
@@ -48,7 +52,6 @@ float TetrahedronDE(vec3 p, float scale, vec3 offset)
 float DistanceEstimation(vec3 p)
 {
 	p -= modelPos;
-	// return (TetrahedronDE((modelMat * vec4(p, 1.)).xyz, 8.));
 	return (TetrahedronDE((modelMat * vec4(p / 0.5, 1.)).xyz, 2., vec3(2.)) * 0.5);
 }
 
@@ -202,13 +205,6 @@ vec3 calculateColor(s_light light, vec3 eye, vec3 pos, vec3 norm)
 	return (color);
 
 }
-
-uniform mat4	inverseView;
-uniform mat4	projection;
-uniform float	farNear[2];
-uniform float	u_fov;
-uniform vec2	u_resolution;
-uniform vec3	u_lightPos;
 
 vec3	calculateMarchinDir(float fov, vec2 resolutionSize, vec2 fragCoord)
 {

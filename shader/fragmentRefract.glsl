@@ -6,11 +6,8 @@ in	vec3		norm;
 
 uniform mat4	view;
 uniform vec3	eye;
-uniform float	time;
-
 uniform int		u_isSpecular;
 uniform int		u_isDiffuse;
-
 uniform mat4	inverseView;
 uniform mat4	projection;
 uniform float	farNear[2];

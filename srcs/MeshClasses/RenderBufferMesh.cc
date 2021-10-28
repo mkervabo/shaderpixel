@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RenderBufferMesh.cc                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 12:11:30 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/27 16:54:03 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/28 15:13:08 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ RenderBufferMesh::RenderBufferMesh()
 {
 	Mesh();
 	this->type = E_RENDERBUFFER;
-	// this->mat.translate(Vec3(0., 0., -15.));
+	this->mat.translate(Vec3(8.8, 2, 0.));
 	this->bufferA.translate(Vec3(-0.5,-0.5, -10.));
 }
 

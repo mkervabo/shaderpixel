@@ -5,7 +5,6 @@ out vec4 fragColor;
 uniform vec2	u_resolution;
 uniform float	u_fov;
 uniform vec3	eye;
-uniform vec3	modelPos;
 uniform mat4	inverseView;
 
 #define MAX_DIST 500.0
