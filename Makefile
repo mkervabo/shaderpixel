@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gperez <gperez@student.42.fr>              +#+  +:+       +#+         #
+#    By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/06 13:36:11 by gperez            #+#    #+#              #
-#    Updated: 2021/10/21 14:17:13 by gperez           ###   ########.fr        #
+#    Updated: 2021/10/27 19:22:13 by maiwenn          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = Shaderpixel
 
 FLAGCPP = -std=c++11
 
-FLAG = -Wall -Wextra #-g -fsanitize=address
+FLAG = -Wall -Wextra -g -fsanitize=address
 
 FLAG_OPENGL = -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo -lz
 
@@ -41,6 +41,7 @@ SRC =	srcs/main.cc \
 		srcs/MeshClasses/RefractMesh.cc \
 		srcs/MeshClasses/MandelbulbMesh.cc \
 		srcs/MeshClasses/MandelboxMesh.cc \
+		srcs/MeshClasses/TetrahedronMesh.cc \
 		srcs/MeshClasses/FieldMesh.cc \
 		srcs/MeshClasses/AsteroidMesh.cc \
 		srcs/MeshClasses/MetaballsMesh.cc \
@@ -109,6 +110,7 @@ INC =	includes/Shaderpixel.hpp \
 		includes/MeshClasses/RefractMesh.hpp \
 		includes/MeshClasses/MandelbulbMesh.hpp \
 		includes/MeshClasses/MandelboxMesh.hpp \
+		includes/MeshClasses/TetrahedronMesh.hpp \
 		includes/MeshClasses/FieldMesh.hpp \
 		includes/MeshClasses/AsteroidMesh.hpp \
 		includes/MeshClasses/MetaballsMesh.hpp \
