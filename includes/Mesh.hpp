@@ -6,7 +6,7 @@
 /*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 17:01:05 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/28 15:20:46 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/10/28 16:54:07 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include <iostream>
 # include <string>
-# include <assimp/Importer.hpp>		// C++ importer interface
+# include <assimp/Importer.hpp>			// C++ importer interface
 # include <assimp/scene.h>				// Output data structure
 # include <assimp/postprocess.h>		// Post processing flags
 
@@ -28,17 +28,17 @@ enum e_meshType {E_DEFAULT_MESH, E_MANDELBULB, E_TETRAHEDRON, E_MANDELBOX, E_REF
 static Vec3		g_lightPos[]
 {
 	Vec3(100., 2., 0.),
-	Vec3(-11., 2., -26.), // MANDELBULB
-	Vec3(0., 2, -34.), // TETRAHEDRON
-	Vec3(11., 1.8, -26.), // MANDELBOX
-	Vec3(0., 2., -51.), // REFRACT
-	Vec3(7., 2., -45.), // CLOUD
-	Vec3(100., 0., 0.), // FIELD
-	Vec3(-8., 2., -46.), // ASTEROID
-	Vec3(0., 2., -20.), // METABALLS
-	Vec3(-8., 3., 0.), // GLOW
-	Vec3(0., 3., 5.), // FRAMEBUFFER
-	Vec3(8., 3., 0.) // RENDERBUFFER
+	Vec3(-11., 2., -26.),	// MANDELBULB
+	Vec3(0., 2, -34.),		// TETRAHEDRON
+	Vec3(11., 1.8, -26.),	// MANDELBOX
+	Vec3(0., 2., -51.),		// REFRACT
+	Vec3(7., 2., -45.),		// CLOUD
+	Vec3(100., 0., 0.),		// FIELD
+	Vec3(-8., 2., -46.),	// ASTEROID
+	Vec3(0., 2., -20.),		// METABALLS
+	Vec3(-8., 3., 0.),		// GLOW
+	Vec3(0., 3., 5.),		// FRAMEBUFFER
+	Vec3(8., 3., 0.)		// RENDERBUFFER
 };
 
 # define NEAR_Z 0.1f

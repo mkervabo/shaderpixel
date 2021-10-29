@@ -19,14 +19,12 @@ const int MAX_ITERATIONS = 10;
 const int MAX_STEPS = 60;
 const float EPSILON = 0.005;
 const int MAX_AO_STEPS = 5;
-const int MAX_REFLECTIONS = 1;
 const float EPSILON_REF = 0.01;
 
 const vec3 COLOR_OBJ = vec3(0.7, 0.5, 0.9);
 
 #define K_A 0.3
 #define K_S 10.
-#define K_R 0.8
 #define K_D 0.6
 
 struct s_light

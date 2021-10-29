@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RenderBufferMesh.cc                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 12:11:30 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/28 15:39:27 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/28 17:53:08 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ bool	RenderBufferMesh::loadMesh(t_objPath pathMesh, std::string pathVertex, std:
 	glGenFramebuffers(1, &this->frameBufferInput);
 	glBindFramebuffer(GL_FRAMEBUFFER, this->frameBufferInput);
 
-	int	msaa = 16;
+	int	msaa = 8;
 	glGenRenderbuffers(1, &this->renderBufferInput);
 	glBindRenderbuffer(GL_RENDERBUFFER, this->renderBufferInput);
 	glRenderbufferStorageMultisample(GL_RENDERBUFFER, msaa, GL_RGB, WIDTH, HEIGHT);

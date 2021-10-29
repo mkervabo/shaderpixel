@@ -13,8 +13,6 @@ uniform vec3	modelPos;
 
 
 const int MAX_MARCHING_STEPS = 200;
-// const float MIN_DIST = 0.0;
-// const float MAX_DIST = 500.0;
 const float EPSILON = 0.008;
 const float MIN_RAD = 0.4;
 const float FIXED_RAD = 2.0;

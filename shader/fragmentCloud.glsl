@@ -15,20 +15,20 @@ uniform vec2		u_resolution;
 uniform vec3		u_lightPos;
 uniform vec3		modelPos;
 
-const int MAX_REFLECTIONS = 1;
-const int MAX_STEPS = 400;
-const int MAX_STEPS_REF = 100;
-const int MAX_STEPS_DENSITY = 64; // 32
-const int MAX_STEPS_SHADOWS = 16; // 32
-const int MAX_AO_STEPS = 32;
-const float MIN_DIST = 0.1;
-const float MAX_DIST = 100.0;
-const float EPSILON = 0.0025;
-const float EPSILON_REF = 0.0025;
-const int T_SIZEX = 12;
-const int T_SIZEY = 12;
+// const int			MAX_REFLECTIONS = 1;
+const int			MAX_STEPS = 400;
+// const int			MAX_STEPS_REF = 100;
+const int			MAX_STEPS_DENSITY = 64; // 32
+const int			MAX_STEPS_SHADOWS = 16; // 32
+// const int			MAX_AO_STEPS = 32;
+const float			MIN_DIST = 0.1;
+const float			MAX_DIST = 100.0;
+const float			EPSILON = 0.0025;
+// const float			EPSILON_REF = 0.0025;
+const int			T_SIZEX = 12;
+const int			T_SIZEY = 12;
 
-const float BOUND = .5;
+const float			BOUND = .5;
 
 #define K_A 0.4
 #define K_S 50.
@@ -224,14 +224,14 @@ struct s_cloud
 
 void shadowCloud(inout s_cloud cloud, vec3 lightDir, float sh)
 {
-	float DensityFactor = DENS_F * cloud.stepSize;
-	float ShadowDensityFactor = SHAD_DENS_F * cloud.shadowStepSize;
-	float shadowtransmittance = 0.;
+	float	DensityFactor = DENS_F * cloud.stepSize;
+	float	ShadowDensityFactor = SHAD_DENS_F * cloud.shadowStepSize;
+	float	shadowtransmittance = 0.;
 	vec3	absorbedLight = vec3(0.);
-	
-	float MaxShadowDist = float(MAX_STEPS_SHADOWS) / 1.5;
-	float shadowDist;
-	float curShadowVolTxt;
+
+	float	MaxShadowDist = float(MAX_STEPS_SHADOWS) / 1.5;
+	float	shadowDist;
+	float	curShadowVolTxt;
 	
 	shadowDist = 0.;
 	cloud.lPos = cloud.curPos;

@@ -2,8 +2,8 @@
 
 out vec4 fragColor;
 
-uniform sampler2D	bufferA;
-uniform sampler2D	img;
+uniform sampler2D bufferA;
+uniform sampler2D img;
 
 float waterStrength = 0.8;
 float waterDye = 0.5;
@@ -31,8 +31,8 @@ void main()
 	vec3 norm = cross(p2 - p1, p3 - p1);
 	norm.z *= 40. / waterStrength;
 	float reflection = smoothstep(
-	0.99, 1.0, refract(-normalize(norm), 
-	normalize(vec3(uv - vec2(0.5,0.5), -1.)), 0.6).z
+		0.99, 1.0, refract(-normalize(norm), 
+		normalize(vec3(uv - vec2(0.5,0.5), -1.)), 0.6).z
 	);
 	norm.z *= ((1. - depth) * 50.) / waterStrength;
 	norm = normalize(norm);  
@@ -48,7 +48,7 @@ void main()
 	vec3 rockNorm = normalize(cross(p2-p1, p3-p1) * vec3(1., 0.5, 1.));
 	vec3 norm1 = normalize(cross(p1 - rockHeight, p1 - rockHeight));
 	float rockDiffuse = 0.3 + clamp(reflect(rockNorm, normalize(vec3(uv -  vec2(0.5,0.5), -1.))).z, -.1, 1.),
-		lightPow = 1.5 - distance(uv,  vec2(0.5, 0.5));
+	lightPow = 1.5 - distance(uv,  vec2(0.5, 0.5));
 	vec2 smp = uvtime + rockNorm.xy * 0.03;
 
 	//draw

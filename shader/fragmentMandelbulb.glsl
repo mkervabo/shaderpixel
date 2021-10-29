@@ -21,7 +21,6 @@ const int MAX_ITERATIONS = 7; // 7
 const int MAX_STEPS = 100; // 100
 const int MAX_STEPS_REF = 10;
 const int MAX_AO_STEPS = 5;
-const int MAX_REFLECTIONS = 1;
 const float EPSILON = 0.0025; // "/ SCALE"
 const float EPSILON_REF = 0.01;
 const float SCALE = 1.;
@@ -64,8 +63,6 @@ float MandelbulbDE(vec3 pos, float power)
 		phi *= power;
 		
 		// convert back to cartesian coordinates
-		//z = zr * vec3(sin(theta) * cos(phi), sin(theta) * sin(phi), cos(theta)); // real
-		//z = zr * vec3(cos(theta) * cos(phi), cos(phi) * sin(theta), cos(theta)); // modify
 		z = zr * vec3(cos(theta) * cos(phi), cos(theta) * sin(phi), sin(theta)); // symetry
 		z += pos;
 	}
@@ -230,7 +227,6 @@ float shadows(in vec3 posHit, in vec3 vPL, float minDist, float maxDist, float k
 vec3 calculateColor(s_light light, vec3 eye, vec3 pos, vec3 norm)
 {
 	vec3 colorObj = COLOR_OBJ;
-	// vec3 ambiantLight = colorObj * K_A;
 	vec3 ambiantLight = colorObj * ambientOcclusion(pos, norm, 2., 1.2) * K_A;
 	vec3 vEP = normalize(eye - pos);
 	vec3 color = vec3(0.);

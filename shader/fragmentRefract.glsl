@@ -19,7 +19,6 @@ uniform vec3	modelPos;
 const int MAX_REFLECTIONS = 1;
 const int MAX_STEPS = 200;
 const int MAX_STEPS_REF = 50;
-const int MAX_AO_STEPS = 30;
 const float MIN_DIST = 0.1;
 const float MAX_DIST = 100.0;
 const float EPSILON = 0.0025;

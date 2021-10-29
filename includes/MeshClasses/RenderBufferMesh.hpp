@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RenderBufferMesh.hpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 12:10:16 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/28 14:43:31 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/28 16:51:59 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@
 class RenderBufferMesh : public Mesh
 {
 	private:
-		Mesh bufferA;
-		GLuint frameBufferInput;
-		GLuint renderBufferInput;
-		GLuint frameBufferOutput;
-		GLuint bufferTexture;
+		Mesh	bufferA;
+		GLuint	frameBufferInput;
+		GLuint	renderBufferInput;
+		GLuint	frameBufferOutput;
+		GLuint	bufferTexture;
 	public:
 		RenderBufferMesh();
 		virtual bool	loadMesh(t_objPath pathMesh, std::string pathVertex, std::string pathFragment);

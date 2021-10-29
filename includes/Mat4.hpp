@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Mat4.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/16 16:47:07 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/03 21:09:01 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/28 16:54:09 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,6 @@ class Mat4
     float       m[4][4];
 };
 
-Mat4            perspective(float fov, float ar, float near, float far);
+Mat4    perspective(float fov, float ar, float near, float far);
 
 #endif

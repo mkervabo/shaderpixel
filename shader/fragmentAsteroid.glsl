@@ -16,21 +16,20 @@ uniform float	u_fov;
 uniform vec2	u_resolution;
 uniform vec3	u_lightPos;
 
-const int MAX_ITERATIONS = 10;
-const int MAX_STEPS = 100;
-const int MAX_AO_STEPS = 10;
-const float MIN_DIST = 0.001;
-const float MAX_DIST = 100.;
-const float EPSILON = 0.001;
+const int		MAX_ITERATIONS = 10;
+const int		MAX_STEPS = 100;
+const int		MAX_AO_STEPS = 10;
+const float		MIN_DIST = 0.001;
+const float		MAX_DIST = 100.;
+const float		EPSILON = 0.001;
+const vec3		COLOR_SPHERE = vec3(0.6, 0.35, 0.2);
 
-const vec3 COLOR_SPHERE = vec3(0.6, 0.35, 0.2);
-
-#define K_A 0.2
-#define K_SHIN 3.
-#define K_S 0.3
-#define K_D 0.8
-#define IT_SHADOWS 100
-#define I_TERRAIN 8
+#define			K_A 0.2
+#define			K_SHIN 3.
+#define			K_S 0.3
+#define			K_D 0.8
+#define			IT_SHADOWS 100
+#define			I_TERRAIN 8
 
 struct s_light
 {
@@ -54,7 +53,7 @@ float smax( float a, float b, float k )
 
 float random (in vec2 st) {
 	return fract(sin(dot(st.xy,
-						 vec2(12.9898,78.233)))*
+		vec2(12.9898,78.233)))*
 		43758.5453123);
 }
 
@@ -91,7 +90,7 @@ float sdBase(vec3 p)
 				  sph(i,f,vec3(0,0,1))),
 				  min(sph(i,f,vec3(0,1,0)),
 					  sph(i,f,vec3(0,1,1)))),
-			  min(min(sph(i,f,vec3(1,0,0)),
+			  	min(min(sph(i,f,vec3(1,0,0)),
 					  sph(i,f,vec3(1,0,1))),
 				  min(sph(i,f,vec3(1,1,0)),
 					  sph(i,f,vec3(1,1,1)))));
@@ -171,8 +170,9 @@ vec2 ShortestDistanceToSurface(vec3 eyeP, vec3 marchinDir, float start,
 
 vec3 calculateMarchinDir(float fov, vec2 resolutionSize, vec2 fragCoord)
 {
-	float	ratio = resolutionSize.x / resolutionSize.y;
+	float 	ratio = resolutionSize.x / resolutionSize.y;
 	vec2	xy = (fragCoord - 0.5) / resolutionSize;
+	
 	//from [0,1] to [-1, 1]
 	xy.x = (2 * xy.x - 1) * ratio * tan(radians(fov / 2.));
 	xy.y = (2 * xy.y - 1) * tan(radians(fov / 2.));

@@ -6,7 +6,7 @@
 /*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/16 16:47:02 by gperez            #+#    #+#             */
-/*   Updated: 2021/06/17 17:07:17 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/10/28 16:49:37 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,10 +149,10 @@ Mat4			Mat4::inverse()
 	Mat4   	adju = adjugate(*this);
 	for (size_t i = 0; i < 4; i++)
 	{
-	for(size_t j = 0; j < 4; j++)
-	{
-	inverse[i][j] = (1 / deter) * adju[i][j];
-	}
+		for(size_t j = 0; j < 4; j++)
+		{
+			inverse[i][j] = (1 / deter) * adju[i][j];
+		}
 	}
 	return(inverse);
 }
@@ -190,16 +190,16 @@ Mat4			Mat4::operator*(Mat4 b)
 	i = 0;
 	while (i < 4)
 	{
-	j = 0;
-	while (j < 4)
-	{
+		j = 0;
+		while (j < 4)
+		{
 			res.m[i][j] = b.m[i][0] * this->m[0][j]
 				+ b.m[i][1] * this->m[1][j]
 				+ b.m[i][2] * this->m[2][j]
 				+ b.m[i][3] * this->m[3][j];
-	j++;
-	} 
-	i++;
+			j++;
+		} 
+		i++;
 	}
 	return(res);
 }
@@ -207,10 +207,10 @@ Mat4			Mat4::operator*(Mat4 b)
 Mat4			Mat4::operator+(Mat4 b)
 {
 	return(Mat4((float[4][4]){
-	{this->m[0][0] + b[0][0], this->m[0][1] + b[0][1], this->m[0][2] + b[0][2], this->m[0][3] + b[0][3]},
-	{this->m[1][0] + b[1][0], this->m[1][1] + b[1][1], this->m[1][2] + b[1][2], this->m[1][3] + b[1][3]},
-	{this->m[2][0] + b[2][0], this->m[2][1] + b[2][1], this->m[2][2] + b[2][2], this->m[2][3] + b[2][3]},
-	{this->m[3][0] + b[3][0], this->m[3][1] + b[3][1], this->m[3][2] + b[3][2], this->m[3][3] + b[3][3]}
+		{this->m[0][0] + b[0][0], this->m[0][1] + b[0][1], this->m[0][2] + b[0][2], this->m[0][3] + b[0][3]},
+		{this->m[1][0] + b[1][0], this->m[1][1] + b[1][1], this->m[1][2] + b[1][2], this->m[1][3] + b[1][3]},
+		{this->m[2][0] + b[2][0], this->m[2][1] + b[2][1], this->m[2][2] + b[2][2], this->m[2][3] + b[2][3]},
+		{this->m[3][0] + b[3][0], this->m[3][1] + b[3][1], this->m[3][2] + b[3][2], this->m[3][3] + b[3][3]}
 	}));
 }
 float			*Mat4::operator[](int i)

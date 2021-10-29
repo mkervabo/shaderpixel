@@ -63,7 +63,5 @@ Receiver::~Receiver()
 {
 	fftwf_free(this->in); 
 	fftwf_free(this->out);
-
-	fftwf_destroy_plan(this->p);
-	
+	fftwf_destroy_plan(this->p);	
 }

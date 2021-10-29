@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Mat.cc                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/04 23:19:34 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/18 11:30:36 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/28 16:50:01 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void	Mat::calc()
 	this->setFront(
 	Vec3(cos(radians(this->getEuler(YAW))) * cos(radians(this->getEuler(PITCH))),
 		sin(radians(this->getEuler(PITCH))),
-			sin(radians(this->getEuler(YAW))) * cos(radians(this->getEuler(PITCH)))).norm());
+		sin(radians(this->getEuler(YAW))) * cos(radians(this->getEuler(PITCH)))).norm());
 	this->lookAt(this->getPosition() - this->vecFront);
 }
 
@@ -163,7 +163,7 @@ void	Mat::translate(float x, float y, float z)
 void	Mat::rotate(Vec3 rotEuler)
 {
 	this->rot = this->rot + rotEuler;
-		this->calc();
+	this->calc();
 }
 
 void	Mat::scale(Vec3 s)

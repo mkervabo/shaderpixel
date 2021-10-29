@@ -46,63 +46,61 @@ enum	e_stateKey {KEY_PRESS, KEY_DONE, KEY_RELEASE};
 class Shaderpixel
 {
 	private:
-		GLFWwindow					*window;
-		Hud							hud;
-		TimeMs						time;
-		int							frameNb;
-		int							currentFrameNb;
-		float						lastTime;
-		float						deltaTime;
-		float						addedTime;
+		GLFWwindow			*window;
+		Hud					hud;
+		TimeMs				time;
+		int					frameNb;
+		int					currentFrameNb;
+		float				lastTime;
+		float				deltaTime;
+		float				addedTime;
 
-		Camera						cam;
-		bool						isCursor;
-		Vec2						mouseLastPos;
-		bool						firstMoove;
+		Camera				cam;
+		bool				isCursor;
+		Vec2				mouseLastPos;
+		bool				firstMoove;
 
 		// Keys //
-		std::queue<char>			queue;
-		char						keys[GLFW_KEY_END];
-		void						setKey(unsigned int key, char state);
-		void						inputKey(unsigned int key);
-		void						fieldKeys(void);
+		std::queue<char>	queue;
+		char				keys[GLFW_KEY_END];
+		void				setKey(unsigned int key, char state);
+		void				inputKey(unsigned int key);
+		void				fieldKeys(void);
 
-		bool						load(e_pathObj enu, std::string pathVertex, std::string pathFragment, e_meshType type);
-		std::vector<Mesh*>			lights;
-		std::vector<Mesh*>			meshes;
-		RefractMesh					*refract;
+		bool				load(e_pathObj enu, std::string pathVertex, std::string pathFragment, e_meshType type);
+		std::vector<Mesh*>	lights;
+		std::vector<Mesh*>	meshes;
+		RefractMesh			*refract;
 
 	public:
 		Shaderpixel();
-		void						initWindow(void);
-		bool						init(void);
-		void						update(Camera &cam);
-		void						displayHud(void);
-		void						checkKeys(void);
-		void 						loadVBO(void);
-		bool						loadMesh(t_objPath obj);
-		bool						loadMesh(t_objPath obj, std::string pathVertex, std::string pathFragment, e_meshType type);
+		void				initWindow(void);
+		bool				init(void);
+		void				update(Camera &cam);
+		void				displayHud(void);
+		void				checkKeys(void);
+		void 				loadVBO(void);
+		bool				loadMesh(t_objPath obj);
+		bool				loadMesh(t_objPath obj, std::string pathVertex, std::string pathFragment, e_meshType type);
 
-		bool						loadLight(Vec3 posL);
+		bool				loadLight(Vec3 posL);
 
+		void				getKeys(void);
+		unsigned int		getState(unsigned int k);
+		GLFWwindow			*getWindow(void);
+		Camera				&getCam(void);
+		Vec2				getMouseLastPos(void);
 
-		void						getKeys(void);
-		unsigned int				getState(unsigned int k);
-		GLFWwindow					*getWindow(void);
-		Camera						&getCam(void);
-		Vec2						getMouseLastPos(void);
-
-		void						setMouseLastPos(Vec2 pos);
-		void						setFirst(bool isFirst);
+		void				setMouseLastPos(Vec2 pos);
+		void				setFirst(bool isFirst);
 		
-		void						generateBuffers(void);
+		void				generateBuffers(void);
 		
-		bool						isFirst(void);
+		bool				isFirst(void);
 
-		void						calcTime(void);
-		bool						isTimeToDisplay(void);
-		int							getFrameNb(void);
+		void				calcTime(void);
+		bool				isTimeToDisplay(void);
+		int					getFrameNb(void);
 		~Shaderpixel();
 };
-
 #endif

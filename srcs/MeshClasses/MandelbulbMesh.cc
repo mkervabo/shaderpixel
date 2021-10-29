@@ -47,8 +47,7 @@ void	MandelbulbMesh::render(Camera &cam, float timeS, std::vector<Mesh*> &lights
 			"u_lightPos"), 1, (const GLfloat*)&lightPos);
 
 		glDrawElements(GL_TRIANGLES, this->m_Entries[i].getNumIndices(), GL_UNSIGNED_INT, NULL);
-	}
-	
+	}	
 }
 
 MandelbulbMesh::~MandelbulbMesh()
