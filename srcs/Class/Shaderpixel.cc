@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Shaderpixel.cc                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 15:39:27 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/28 15:42:17 by gperez           ###   ########.fr       */
+/*   Updated: 2021/10/29 17:50:27 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,7 +219,7 @@ void				Shaderpixel::update(Camera &cam)
 
 	Vec3		lightTranslate[]
 	{
-		Vec3(0., 0., 0.),
+		Vec3(0, cos(time * 0.5), sin(time * 0.5)), // MANDELBOX
 		Vec3(cos(time * 0.5) * 1.4, cos(time * 0.1), sin(time * 0.5) * 1.4), // MANDELBULB
 		Vec3(cos(time * 0.2), sin(time * 0.1), sin(time * 0.2)), // TETRAHEDRON
 		Vec3(2. * cos(time * 0.5), sin(time), 2 * sin(time * 0.5)), // MANDELBOX

@@ -8,7 +8,7 @@ uniform vec3	eye;
 uniform mat4	projection;
 out vec4		fragColor;
 uniform float	farNear[2];
-uniform vec3	u_lightPos;
+uniform vec3	u_lightPos[2];
 uniform vec3	modelPos;
 
 
@@ -132,12 +132,17 @@ vec3 phongIllumination(vec3 k_a, vec3 k_d, vec3 k_s, float alpha, vec3 p, vec3 e
     const vec3 ambientLight = 0.5 * vec3(1.0, 1.0, 1.0);
     vec3 color = ambientLight * k_a;
     
-    vec3 light1Pos =  u_lightPos;
+    vec3 light1Pos =  u_lightPos[0];
+    vec3 light2Pos =  u_lightPos[1];
     vec3 light1Intensity = vec3(0.1, 0.1, 0.1);
     
     color += phongContribForLight(k_d, k_s, alpha, p, eye,
                                   light1Pos,
-                                  light1Intensity);    
+                                  light1Intensity);
+
+    color += phongContribForLight(k_d, k_s, alpha, p, eye,
+                                  light2Pos,
+                                  light1Intensity);
     return (color);
 }
 

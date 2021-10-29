@@ -6,7 +6,7 @@
 /*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 17:01:05 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/28 16:54:07 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/10/29 17:47:17 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ enum e_meshType {E_DEFAULT_MESH, E_MANDELBULB, E_TETRAHEDRON, E_MANDELBOX, E_REF
 
 static Vec3		g_lightPos[]
 {
-	Vec3(100., 2., 0.),
+	Vec3(9., 1.8, -26.),	// MANDELBOX
 	Vec3(-11., 2., -26.),	// MANDELBULB
 	Vec3(0., 2, -34.),		// TETRAHEDRON
 	Vec3(11., 1.8, -26.),	// MANDELBOX

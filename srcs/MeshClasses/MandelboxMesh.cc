@@ -13,7 +13,7 @@ void	MandelboxMesh::render(Camera &cam, float timeS, std::vector<Mesh*> &lights,
 	Vec3	modelPos;
 	float	farNear[2] = {FAR_Z, NEAR_Z};
 	float	fov = FOV;
-	Vec3	lightPos = lights[this->type]->getPosition();
+	Vec3	lightPos[2] = {lights[0]->getPosition(), lights[this->type]->getPosition()};
 
 	(void)timeS;
 
@@ -43,7 +43,7 @@ void	MandelboxMesh::render(Camera &cam, float timeS, std::vector<Mesh*> &lights,
 		glUniform2fv(glGetUniformLocation(this->shader.getProgram(),
 			"u_resolution"), 1, (const GLfloat*)&resolution);
 		glUniform3fv(glGetUniformLocation(this->shader.getProgram(),
-			"u_lightPos"), 1, (const GLfloat*)&lightPos);
+			"u_lightPos"), 2, (const GLfloat*)&lightPos);
 
 		glDrawElements(GL_TRIANGLES, this->m_Entries[i].getNumIndices(), GL_UNSIGNED_INT, NULL);
 	}	
