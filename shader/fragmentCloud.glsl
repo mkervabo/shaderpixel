@@ -483,7 +483,6 @@ void main(void)
 	vec4 dColorObj = vec4(vec3(0.), 1.);
 
 	env.light.pos = u_lightPos;
-	// env.light.pos = vec3(-4., 2., -1.);
 	env.light.colorLight = vec3(0.25, 0., 0.45);
 	env.light.intensity = 0.5;
 	s_hit hit = ShortestDistanceToSurface(env, MIN_DIST, MAX_DIST, dColorObj);

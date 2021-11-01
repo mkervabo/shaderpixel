@@ -6,7 +6,7 @@
 /*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 12:11:30 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/28 17:53:08 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/11/02 09:07:54 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ bool	RenderBufferMesh::loadMesh(t_objPath pathMesh, std::string pathVertex, std:
 
 void	RenderBufferMesh::render(Camera &cam, float timeS, std::vector<Mesh*> &lights, Vec2 resolution)
 {
-	// Vec3	lightPos = lights[this->type]->getPosition();
 	Vec3	lightPos = Vec3(0., 0., 0.);
 
 	for (unsigned int i = 0 ; i < this->m_Entries.size() ; i++)

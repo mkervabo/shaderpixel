@@ -71,7 +71,7 @@ float fbms(vec2 p)
 	vec2 n = fbm2Vec2(3.0 * o);
 	float f = 0.3 + 0.3 * fbm1(1.8 * p + 7.0 * n);
 	return f;
-	}
+}
 
 
 void main()

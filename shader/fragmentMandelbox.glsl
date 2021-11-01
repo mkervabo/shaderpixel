@@ -16,6 +16,7 @@ const int MAX_MARCHING_STEPS = 200;
 const float EPSILON = 0.008;
 const float MIN_RAD = 0.4;
 const float FIXED_RAD = 2.0;
+
 void sphereFold(inout vec3 z, inout float dz)
 {
 	float r2 = dot(z,z);
@@ -48,7 +49,7 @@ float mandelboxSDF(vec3 z) {
     {
 		boxFold(z,dr);          // Reflect
 		sphereFold(z,dr);       // Sphere Inversion
-        z = scale * z + offset; // Sphere Inversion
+        z = scale * z + offset;
         dr = dr * abs(scale) + 1.0;
 	}
 	float r = length(z);
@@ -60,7 +61,6 @@ float sceneSDF(vec3 samplePoint) {
     float mandelboxDist = mandelboxSDF(samplePoint / 0.25) * 0.25;
     return (mandelboxDist);
 }
-
 
 // eye: the eye point, acting as the origin of the ray
 // marchingDirection: the normalized direction to march in
@@ -81,14 +81,6 @@ float shortestDistanceToSurface(vec3 eye, vec3 marchingDirection, float start, f
     return end;
 }
             
-// // fieldOfView: vertical field of view in degrees
-// // size: resolution of the output image
-// // fragCoord: the x,y coordinate of the pixel in the output image
-// vec3 rayDirection(float fieldOfView, vec2 size, vec2 fragCoord) {
-//     vec2 xy = fragCoord - size / 2.0;
-//     float z = size.y / tan(radians(fieldOfView) / 2.0);
-//     return normalize(vec3(xy, -z));
-// }
 
 vec3 estimateNormal(vec3 p)
 {

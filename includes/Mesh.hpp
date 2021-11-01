@@ -6,7 +6,7 @@
 /*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 17:01:05 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/29 17:47:17 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/10/29 19:19:18 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ static Vec3		g_lightPos[]
 
 # define NEAR_Z 0.1f
 # define FAR_Z 100.f
-# define WIDTH 500.
-# define HEIGHT 500.
+# define WIDTH 1024.
+# define HEIGHT 768.
 
 class Mesh
 {

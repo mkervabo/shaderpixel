@@ -15,8 +15,7 @@ void main()
 {
 	vec2 px = vec2(0.003),
 	uv = tCoords,
-	time = vec2(0., 0.1),
-	uvtime = uv + time;
+	uvtime = uv;
 
 	//compute water normal, depth, height, light and distorsion
 	vec3 p1 = vec3(uv, texture(bufferA, uv).r);
@@ -41,10 +40,10 @@ void main()
 	//compute rock height map, normal, light 
 	vec3 rockHeight = vec3(uv, texture(img, uvtime + displacement).r);
 	uv.y += px.y;
-	p1 = vec3(uv, texture(img, uv + time + displacement).r);
-	p2 = vec3(uv, texture(img, uv + time + displacement).r); 
+	p1 = vec3(uv, texture(img, uv + displacement).r);
+	p2 = vec3(uv, texture(img, uv + displacement).r); 
 	uv.x -= px.x * sin120 * 2.;
-	p3 = vec3(uv, texture(img, uv + time + displacement).r);
+	p3 = vec3(uv, texture(img, uv + displacement).r);
 	vec3 rockNorm = normalize(cross(p2-p1, p3-p1) * vec3(1., 0.5, 1.));
 	vec3 norm1 = normalize(cross(p1 - rockHeight, p1 - rockHeight));
 	float rockDiffuse = 0.3 + clamp(reflect(rockNorm, normalize(vec3(uv -  vec2(0.5,0.5), -1.))).z, -.1, 1.),

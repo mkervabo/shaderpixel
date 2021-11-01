@@ -30,18 +30,13 @@ float subtractionSDF(float d1, float d2)
 	return max(-d1,d2); 
 }
 
-float intersectionSDF(float d1, float d2)
-{ 
-	return max(d1,d2);  
-}
-
 vec3 opCheapBend(in vec3 p)
 {
 	const float k = 10.0; // or some other amount
 	float c = cos(k*p.x);
 	float s = sin(k*p.x);
-	mat2  m = mat2(c,-s,s,c);
-	vec3  q = vec3(m*p.xy,p.z);
+	mat2  m = mat2(c, -s, s, c);
+	vec3  q = vec3(m * p.xy, p.z);
 	return q;
 }
 
@@ -78,7 +73,7 @@ float mushroomSDF(in vec3 pt, in vec3 pos, in float neg)
 float planeSDF( vec3 p, vec3 n, float h )
 {
   // n must be normalized
-  return dot(p,n) + h;
+  return dot(p, n) + h;
 }
 
 float DE(in vec3 z, in vec3 pt, in float neg)
@@ -169,9 +164,6 @@ void main()
 
 	dir = (inverseView * vec4(dir, 0.0)).xyz;
 
-	// mat3 tilt = mat3(1.0, 0.0, 0.0,
-	// 			 0.0, 0.28, -0.96,
-	// 			 0.0, 1.0, 0.28); 
 	mat3 tilt = rotateX(radians(90.));
 	orig = tilt * orig;
 	dir = tilt * dir;

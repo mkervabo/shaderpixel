@@ -92,16 +92,9 @@ vec3 calcNormal( in vec3 pos, vec2 coord) {
 }
 
 vec3 ambient(vec3 k_a) {
-	const vec3 ambientLight = 1.0 * vec3(1.0, 1.0, 1.0);
+	const vec3 ambientLight = 1.0 * vec3(0.5, 0.5, 0.5);
 	vec3 color = ambientLight * k_a;
 	return color;
-}
-
-mat3 calcLookAtMatrix( in vec3 camPos, in vec3 camTar, in float roll ) {
-	vec3 w = normalize(camTar - camPos);
-	vec3 u = normalize(cross(w, vec3(sin(roll), cos(roll), 0.0)));
-	vec3 v = normalize(cross(u, w));
-	return mat3(u, v, w);
 }
 
 vec3 rotY(vec3 p, float theta)
@@ -112,6 +105,17 @@ vec3 rotY(vec3 p, float theta)
 		vec3(-sin(theta), 0., cos(theta))));
 }
 
+vec3 light(vec3 objColor, vec3 p) {
+	const vec3 ambientLight = vec3(0.1);
+	
+	vec3 norm = calcNormal(p, vec2(1));
+	vec3 lightPos =  u_lightPos;
+	vec3 lightDir = normalize(lightPos - p);
+	float diffuseLight = max(dot(norm, lightDir), 0.0);
+	
+	vec3 color = (ambientLight + diffuseLight) * objColor;
+	return color;
+}
 vec3	calculateMarchinDir(float fov, vec2 resolutionSize, vec2 fragCoord)
 {
 	float	ratio = resolutionSize.x / resolutionSize.y;
@@ -122,17 +126,6 @@ vec3	calculateMarchinDir(float fov, vec2 resolutionSize, vec2 fragCoord)
 	return (normalize(vec3(xy, -1)));
 }
 
-vec3 light(vec3 objColor, vec3 p) {
-	const vec3 ambientLight = 0.1 * vec3(1.0, 1.0, 1.0);
-	
-	vec3 norm = calcNormal(p, vec2(1));
-	vec3 lightPos =  u_lightPos;
-	vec3 lightDir = normalize(lightPos - p);
-	float diffuseLight = max(dot(norm, lightDir), 0.0);
-	
-	vec3 color = (ambientLight + diffuseLight) * objColor;
-	return color;
-}
 
 void main()
 {
@@ -159,6 +152,4 @@ void main()
 	gl_FragDepth = dep;
 
 	fragColor = vec4(color, 1.0);
-	// fragColor = vec4(0.0, 0.0, 1.0, 1.0);
-	// fragColor = vec4(texture(songText, gl_FragCoord.x).rgb, 1.0);
 }
