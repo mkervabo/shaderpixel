@@ -6,7 +6,7 @@
 /*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 12:11:30 by gperez            #+#    #+#             */
-/*   Updated: 2021/11/02 09:07:54 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/11/02 11:24:27 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ RenderBufferMesh::RenderBufferMesh()
 	Mesh();
 	this->type = E_RENDERBUFFER;
 	this->mat.translate(Vec3(8.8, 2, 0.));
-	this->bufferA.translate(Vec3(-1., -0.25, -5.));
+	this->bufferA.translate(Vec3(0., 0.8, -2.5));
 }
 
 bool	RenderBufferMesh::loadMesh(t_objPath pathMesh, std::string pathVertex, std::string pathFragment)

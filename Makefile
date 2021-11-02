@@ -6,7 +6,7 @@
 #    By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/06 13:36:11 by gperez            #+#    #+#              #
-#    Updated: 2021/10/27 19:22:13 by maiwenn          ###   ########.fr        #
+#    Updated: 2021/11/02 11:16:47 by maiwenn          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -135,13 +135,6 @@ $(NAME) : $(OBJ)
 	@install_name_tool -add_rpath @executable_path/libs/fftw-3.3.10/ $(NAME)
 	@install_name_tool -change /usr/local/lib/libfftw3f.3.6.9.dylib @rpath/libfftw3f.3.6.9.dylib $(NAME)
 	@printf "$(BOLD)$(COLOR1)%20s : $(RS_BL)$(RS_BO)$(GREEN)succesfuly made!$(NC)%20s\n" $(NAME)
-
-libs/assimp/CMakeLists.txt :
-	git clone https://github.com/assimp/assimp.git libs/assimp --depth 1
-
-$(LIB_ASSIMP) : libs/assimp/CMakeLists.txt
-	cmake libs/assimp/CMakeLists.txt -D BUILD_SHARED_LIBS=ON
-	cmake --build libs/assimp/.  #build faster
 
 %.o : %.cc $(INC)
 	@printf "$(BOLD)$(COLOR1)%20s : $(RS_BO)$(COLOR2)%20s$(WHITE) ...$(NC)" $(NAME) $(<F)
