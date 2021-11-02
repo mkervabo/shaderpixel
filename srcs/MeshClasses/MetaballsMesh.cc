@@ -6,7 +6,7 @@
 /*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 13:13:55 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/28 15:26:00 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/11/02 11:06:28 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 MetaballsMesh::MetaballsMesh()
 {
 	Mesh();
+	this->type = E_METABALLS;
 	// irrklang:
 	// start the sound engine with default parameters
 	this->engine = createIrrKlangDevice();

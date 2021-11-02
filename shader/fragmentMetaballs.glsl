@@ -91,12 +91,6 @@ vec3 calcNormal( in vec3 pos, vec2 coord) {
 
 }
 
-vec3 ambient(vec3 k_a) {
-	const vec3 ambientLight = 1.0 * vec3(0.5, 0.5, 0.5);
-	vec3 color = ambientLight * k_a;
-	return color;
-}
-
 vec3 rotY(vec3 p, float theta)
 {
 	return (p * mat3(
@@ -106,14 +100,20 @@ vec3 rotY(vec3 p, float theta)
 }
 
 vec3 light(vec3 objColor, vec3 p) {
-	const vec3 ambientLight = vec3(0.1);
-	
-	vec3 norm = calcNormal(p, vec2(1));
+	vec3 ambientLight = vec3(0.2) *  objColor;
+	vec3 color = ambientLight;
+
+	vec3 N = calcNormal(p, vec2(1));
 	vec3 lightPos =  u_lightPos;
-	vec3 lightDir = normalize(lightPos - p);
-	float diffuseLight = max(dot(norm, lightDir), 0.0);
+    vec3 L = normalize(lightPos - p);
+	vec3 lightIntensity = vec3(0.8);
+	float dotLN = dot(L, N);
+	if (dotLN < 0.0) {
+        return (color);
+    }
+	vec3 diffuseLight = lightIntensity * (objColor * dotLN);
 	
-	vec3 color = (ambientLight + diffuseLight) * objColor;
+	color += diffuseLight;
 	return color;
 }
 vec3	calculateMarchinDir(float fov, vec2 resolutionSize, vec2 fragCoord)
