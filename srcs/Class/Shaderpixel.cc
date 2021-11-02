@@ -6,7 +6,7 @@
 /*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 15:39:27 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/29 17:50:27 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/11/02 09:15:19 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -252,7 +252,6 @@ void				Shaderpixel::displayHud(void)
 {
 	if (this->isTimeToDisplay())
 	{
-		std::cout << this->frameNb << "\n";
 		this->frameNb = currentFrameNb;
 		this->currentFrameNb = 0;
 	}

@@ -6,7 +6,7 @@
 /*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 16:57:27 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/28 16:48:05 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/11/02 09:15:51 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ bool			Mesh::initMaterials(const aiScene* pScene, const t_objPath& path) // Gene
 	bool	ret = false;
 	(void)pScene;
 
-	std::cout << "Number Materials " << pScene->mNumMaterials << "\n";
 	for (unsigned int i = 0 ; i < pScene->mNumMaterials ; i++)
 	{
 		const aiMaterial* pMaterial = pScene->mMaterials[i];
@@ -95,7 +94,6 @@ bool			Mesh::initMaterials(const aiScene* pScene, const t_objPath& path) // Gene
 					std::string Dir = path.textPath;
 					std::string fullPath = Dir + pathFromAssimp.data; // On ajoute le chemin relatif afin de le transformer en chemin absolue
 					this->m_Materials[i].newTexture();
-					std::cout << fullPath << "\n";
 					if (this->m_Materials[i].load(GL_TEXTURE_2D, (char*)fullPath.c_str())) // On charge la texture et la genere pour openGL
 					{
 						printf("Error loading texture '%s'\n", fullPath.c_str());
@@ -153,7 +151,6 @@ bool			Mesh::loadMesh(t_objPath pathMesh, std::string pathVertex, std::string pa
 	this->clear();
 	if (this->shader.loadShader(pathVertex, pathFragment))
 		return (true);
-	std::cout << this->shader.getProgram() << "\n";
 	const aiScene* pScene = importer.ReadFile(pathMesh.path.c_str(), // On lit le fichier et on le stock dans une scene avec les faces triangulé.
 		aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs);
 	if (pScene)

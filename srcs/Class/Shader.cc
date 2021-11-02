@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Shader.cc                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/25 17:47:10 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/05 16:08:56 by gperez           ###   ########.fr       */
+/*   Updated: 2021/11/02 09:15:08 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,6 @@ int				Shader::createShader(const std::string vertex_path, const std::string fra
 
 int				Shader::loadShader(std::string vertexPath, std::string fragPath)
 {
-	std::cout << vertexPath << " " << fragPath << "\n";
 	if (vertexPath.size() && fragPath.size())
 	{
 		if (createShader(vertexPath, fragPath))
