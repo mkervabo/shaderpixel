@@ -79,21 +79,11 @@ float fbm (in vec2 st, float octaves)
 	return value;
 }
 
-vec4 unionSDF(vec4 a, vec4 b)
-{
-	return (a.w < b.w ? a : b);
-}
-
-float sphereDE(vec3 p, float rayon)
-{
-	return (length(p) - rayon);
-}
-
 float DistanceEstimation(vec3 p, float octaves)
 {
 	p -= modelPos;
-	float terrain = fbm(p.xz, octaves) * 0.3; // 5 * 0.3 => 1.5
-	terrain = 0.4 * (p.y + terrain * 2.5 - 1.5);// (p.y - 1.) * 0.8
+	float terrain = fbm(p.xz, octaves) * 0.3;
+	terrain = 0.4 * (p.y + terrain * 2.5 - 1.5);
 	return (terrain);
 }
 
@@ -155,20 +145,6 @@ vec3 phongLight(s_light light, vec3 vPToEye, vec3 norm, vec3 pos, vec3 colorObj)
 	return (ret);
 }
 
-
-mat4 viewMatrix(vec3 eye, vec3 pToLook, vec3 up)
-{
-	vec3 front = normalize(pToLook - eye);
-	vec3 right = normalize(cross(front, up));
-	vec3 newUp = normalize(cross(right, front));
-	return (mat4(
-		vec4(right, 0.),
-		vec4(newUp, 0.),
-		vec4(-front, 0.),
-		vec4(vec3(0.0), 1.0)
-	));
-}
-
 vec3 calculateColor(s_light light, vec3 eye, vec3 norm, vec3 pos, float dist, vec3 skyColor)
 {
 	pos -= modelPos;
@@ -189,7 +165,6 @@ vec3 calculateColor(s_light light, vec3 eye, vec3 norm, vec3 pos, float dist, ve
 
 void main(void)
 {
-	float	d = distance(eye, modelPos);
 	vec3 dir = calculateMarchinDir(u_fov, u_resolution, gl_FragCoord.xy);
 	
 	float moove = 0.;
