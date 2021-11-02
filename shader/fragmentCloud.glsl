@@ -127,8 +127,8 @@ s_obj DistanceEstimation(vec3 p, int typeTouch)
 
 	s_obj sphere;
 	sphere.type = SPHERE;
-	sphere.color = vec4(0.1, 0.5, 0.7, 1.);
-	sphere.dist = sphereDE(vec3(-1., -0.25, 0.) + rotY(p, time * 0.5), 0.1);
+	sphere.color = vec4(0.3, 0.6, 0.1, 1.);
+	sphere.dist = sphereDE(p + vec3(0.7, -0.25, 0.2), 0.1);
 	s_obj scene = unionSDF(cube, sphere);
 
 	s_obj sphere2;
