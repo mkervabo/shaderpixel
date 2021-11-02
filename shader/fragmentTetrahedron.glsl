@@ -34,15 +34,19 @@ struct s_light
 
 float TetrahedronDE(vec3 p, float scale, vec3 offset)
 {
-    int i = 0;
-    while (i < MAX_ITERATIONS) {
-       if(p.x + p.y<0.) p.xy = -p.yx; // fold 1
-       if(p.x + p.z<0.) p.xz = -p.zx; // fold 2
-       if(p.y + p.z<0.) p.zy = -p.yz; // fold 3	
-       p = p * scale - offset * (scale - 1.0);
-       i++;
-    }
-    return (length(p)) * pow(scale, -float(i));
+	int i = 0;
+	while (i < MAX_ITERATIONS)
+	{
+		if(p.x + p.y < 0.)
+			p.xy = -p.yx; // fold 1
+		if(p.x + p.z < 0.)
+			p.xz = -p.zx; // fold 2
+		if(p.y + p.z < 0.)
+			p.zy = -p.yz; // fold 3
+		p = p * scale - offset * (scale - 1.0);
+		i++;
+	}
+	return (length(p)) * pow(scale, -float(i));
 }
 
 float DistanceEstimation(vec3 p)

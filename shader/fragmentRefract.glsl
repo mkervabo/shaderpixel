@@ -120,7 +120,7 @@ s_obj DistanceEstimation(vec3 p, int typeTouch)
 	s_obj sphere;
 	sphere.type = SPHERE;
 	sphere.color = vec4(0.6, 0., 0.7, 0.6);
-	sphere.dist = sphereDE(p, 0.5);
+	sphere.dist = sphereDE(p - vec3(0., 0., 1.), 0.5);
 		
 	s_obj plan; // bottom
 	plan.type = CUBE;

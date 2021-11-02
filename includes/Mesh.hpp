@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Mesh.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gperez <gperez@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 17:01:05 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/29 19:19:18 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/11/02 16:05:08 by gperez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static Vec3		g_lightPos[]
 	Vec3(-11., 2., -26.),	// MANDELBULB
 	Vec3(0., 2, -34.),		// TETRAHEDRON
 	Vec3(11., 1.8, -26.),	// MANDELBOX
-	Vec3(0., 2., -51.),		// REFRACT
+	Vec3(0., 2., -50.),		// REFRACT
 	Vec3(7., 2., -45.),		// CLOUD
 	Vec3(100., 0., 0.),		// FIELD
 	Vec3(-8., 2., -46.),	// ASTEROID
@@ -43,8 +43,8 @@ static Vec3		g_lightPos[]
 
 # define NEAR_Z 0.1f
 # define FAR_Z 100.f
-# define WIDTH 1024.
-# define HEIGHT 768.
+# define WIDTH 250.
+# define HEIGHT 250.
 
 class Mesh
 {
