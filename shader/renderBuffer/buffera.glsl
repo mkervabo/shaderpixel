@@ -11,6 +11,7 @@ uniform int			isText;
 uniform vec3		eye;
 
 uniform float		K_S;
+uniform float		time;
 
 #define AMBIENT_COEF 0.1 
 #define LIGHT_COL vec3(1.0, 1.0, 1.0)
@@ -39,7 +40,7 @@ void	main()
 
 	dist = 1. - min(distance(lightPos, pos.xyz), DISTANCE) / DISTANCE;
 	lightDir = normalize(lightPos - pos.xyz);
-	diff += max(dot(lightDir, norm), 0.0) * dist;
+	diff += max(dot(lightDir, norm) * max(sin(time * 1.5) + 1, 0.3), 0.0) * dist;
 	rL = reflect(lightDir, norm);
 	spec += max(dot(-rL, vPToEye), 0.) * dist;
 

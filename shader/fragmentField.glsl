@@ -206,7 +206,7 @@ void main(void)
 	else if (dist < 8.)
 		octaves = 64.; // 64
 	else
-		octaves = 8.; // 8
+		octaves = 16.; // 8
 	
 	vec3 norm = estimateNormal(posHit, octaves);
 

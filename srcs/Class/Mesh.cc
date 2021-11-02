@@ -6,7 +6,7 @@
 /*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 16:57:27 by gperez            #+#    #+#             */
-/*   Updated: 2021/11/02 09:15:51 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/11/02 10:48:03 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -240,7 +240,6 @@ void			Mesh::clear(void)
 	this->m_Entries.clear();
 	this->clearTextures();
 	this->m_Materials.clear();
-	// Rajouter le reste
 }
 
 void			Mesh::rotate(Vec3 r)

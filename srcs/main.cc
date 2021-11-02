@@ -6,7 +6,7 @@
 /*   By: maiwenn <maiwenn@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 15:29:41 by gperez            #+#    #+#             */
-/*   Updated: 2021/10/29 18:27:45 by maiwenn          ###   ########.fr       */
+/*   Updated: 2021/11/02 10:20:29 by maiwenn          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ int		main(void)
 {
 	Shaderpixel	env;
 	Camera		&cam = env.getCam();
-	int			winWidth, winHeight;
 
 	// Init //
 	try{
@@ -52,8 +51,6 @@ int		main(void)
 		std::cout << "Error in the initialization\n";
 		return (1);
 	}
-	// glfwGetFramebufferSize(env.getWindow(), &winWidth, &winHeight);
-	// glViewport(0., 0., winWidth, winHeight);
 
 	// Boucle Exec //
 	while(!glfwWindowShouldClose(env.getWindow()))
