@@ -51,16 +51,6 @@ float smax( float a, float b, float k )
 	return max(a, b) + h*h*0.25/k;
 }
 
-float random (in vec2 st) {
-	return fract(sin(dot(st.xy,
-		vec2(12.9898,78.233)))*
-		43758.5453123);
-}
-
-vec4 unionSDF(vec4 a, vec4 b)
-{
-	return (a.w < b.w ? a : b);
-}
 
 float sphereDE(vec3 p, float rayon)
 {
