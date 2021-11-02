@@ -14,12 +14,10 @@ uniform float	u_fov;
 uniform vec2	u_resolution;
 uniform vec3	u_lightPos;
 
-const int MAX_STEPS_REF = 10;
 const int MAX_ITERATIONS = 10;
 const int MAX_STEPS = 60;
 const float EPSILON = 0.005;
 const int MAX_AO_STEPS = 5;
-const float EPSILON_REF = 0.01;
 
 const vec3 COLOR_OBJ = vec3(0.7, 0.5, 0.9);
 
@@ -51,23 +49,6 @@ float DistanceEstimation(vec3 p)
 {
 	p -= modelPos;
 	return (TetrahedronDE((modelMat * vec4(p / 0.5, 1.)).xyz, 2., vec3(2.)) * 0.5);
-}
-
-float refShortestDistanceToSurface(vec3 eyeP, vec3 marchinDir, float start, float end)
-{
-	float depth = start;
-	float dist;
-	for (int i = 0; i < MAX_STEPS_REF; i++)
-	{
-		dist = DistanceEstimation(eyeP + marchinDir * depth);
-		if (dist < EPSILON_REF)
-			return (depth);
-		depth += dist;
-		if (depth > end ||
-			(depth > end - EPSILON_REF && depth < end + EPSILON_REF))
-			return end;
-	}
-	return (end);
 }
 
 float ShortestDistanceToSurface(vec3 eyeP, vec3 marchinDir, float start, float end)

@@ -19,10 +19,8 @@ uniform vec3	u_lightPos;
 
 const int MAX_ITERATIONS = 7; // 7
 const int MAX_STEPS = 100; // 100
-const int MAX_STEPS_REF = 10;
 const int MAX_AO_STEPS = 5;
 const float EPSILON = 0.0025; // "/ SCALE"
-const float EPSILON_REF = 0.01;
 const float SCALE = 1.;
 
 const vec3 COLOR_OBJ = vec3(0.8, 1., 1.);
@@ -69,44 +67,10 @@ float MandelbulbDE(vec3 pos, float power)
 	return (0.5 * log(r) * r / dr);
 }
 
-float boxDE(vec3 p, vec3 b)
-{
-	vec3 q = abs(p) - b;
-	return (length(max(q, 0.0)) + min(max(q.x, max(q.y, q.z)), 0.0));
-}
-
-float planSphereDE(vec3 z)
-{
-	z.xy = mod((z.xy),1.0)-vec3(0.5).xy;	// instance on xy-plane
-	return length(z)-0.3;					// sphere DE
-}
-
-float sphereDE(vec3 p, float rayon)
-{
-	return (length(p) - rayon);
-}
-
 float DistanceEstimation(vec3 p)
 {
 	p -= modelPos;
 	return (MandelbulbDE((modelMat * vec4(p * SCALE, 1.)).xyz, 8.) / SCALE);
-}
-
-float refShortestDistanceToSurface(vec3 eyeP, vec3 marchinDir, float start, float end)
-{
-	float depth = start;
-	float dist;
-	for (int i = 0; i < MAX_STEPS_REF; i++)
-	{
-		dist = DistanceEstimation(eyeP + marchinDir * depth);
-		if (dist < EPSILON_REF)
-			return (depth);
-		depth += dist;
-		if (depth > end ||
-			(depth > end - EPSILON_REF && depth < end + EPSILON_REF))
-			return end;
-	}
-	return (end);
 }
 
 float ShortestDistanceToSurface(vec3 eyeP, vec3 marchinDir, float start, float end)
