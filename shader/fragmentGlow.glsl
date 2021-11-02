@@ -9,14 +9,6 @@ uniform mat4	inverseView;
 
 #define MAX_DIST 500.0
 
-// set to 0 to make the density of the glowy stuff 1/(distance^2)
-// by default it's 1/distance, which means the total glow contribution grows with MAX_DIST
-// I think it looks better with 1/distance
-// but, hey, neither of these functions come from "physics"
-// (or, if they do, it is only by coincidence)
-//
-// p.s. looks really nice when MAX_DIST is huge (thanks @CLPB for pointing this out)
-
 vec3 ball1;
 vec3 radii;
 

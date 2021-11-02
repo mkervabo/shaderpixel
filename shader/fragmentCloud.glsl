@@ -15,16 +15,12 @@ uniform vec2		u_resolution;
 uniform vec3		u_lightPos;
 uniform vec3		modelPos;
 
-// const int			MAX_REFLECTIONS = 1;
 const int			MAX_STEPS = 400;
-// const int			MAX_STEPS_REF = 100;
 const int			MAX_STEPS_DENSITY = 64; // 32
 const int			MAX_STEPS_SHADOWS = 16; // 32
-// const int			MAX_AO_STEPS = 32;
 const float			MIN_DIST = 0.1;
 const float			MAX_DIST = 100.0;
 const float			EPSILON = 0.0025;
-// const float			EPSILON_REF = 0.0025;
 const int			T_SIZEX = 12;
 const int			T_SIZEY = 12;
 
@@ -171,9 +167,7 @@ vec2 convert1dTo2d(float xsize, float index)
 vec4 pseudoVolumeTexture(vec3 pos)
 {
 	pos -= modelPos;
-	//float att = 30. + 10. * sin(time);
 	pos = pos + 0.5;// + 0.5; // / 2. permet le grossissement et 0.5 permet de le centré (le centre du cube est en 0.)
-	//pos = floor(pos * att) / att;
 	pos.z += 0.06;
 	pos.x = clamp(pos.x, 0., 1.);
 	pos.y = clamp(pos.y, 0., 1.);
@@ -292,7 +286,8 @@ s_density getDensity(s_env env, vec3 curP, vec3 dir, vec3 lightDir, float sh)
 		if (cloud.curVolTxt > 0.01) // light calcul
 			shadowCloud(cloud, lightDir, sh); //
 		cloud.curPos += dir;
-		if (cloud.transmittance < THRESHOLD) break;
+		if (cloud.transmittance < THRESHOLD)
+			break;
 	}
 	cloud.outPos = cloud.curPos;
 	return (ambiantCloud(cloud));
